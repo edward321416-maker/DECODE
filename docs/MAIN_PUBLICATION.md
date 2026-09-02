@@ -8,7 +8,9 @@ Evidence: operational SELF-BENCHMARK and observed GitHub receipts, not a model o
 - Public visibility and default branch main were read back from GitHub for repository ID 1354606878.
 - Empty bootstrap commit `cd3f428` established main; it contains no files.
 - [Issue #1](https://github.com/edward321416-maker/DECODE/issues/1) records the approved foundation scope.
-- Foundation merge receipt: PENDING. This pre-merge report does not claim the PR has merged. The receipt will be updated after observing GitHub's merged state.
+- [Foundation PR #2](https://github.com/edward321416-maker/DECODE/pull/2) was observed MERGED at 2026-09-02T10:44:59Z into main with merge commit `ec40210377242b95fa517004afbd2e5043338e3b` and reviewed head `08a0015a9779ed808a0ac687ab354cb1ec64d757`. GitHub reported MERGEABLE/CLEAN before the normal head-pinned merge.
+- The fetched merged main tree passed `node scripts/check-operating-docs.mjs --tracked`: 498/498 at 2026-09-02T10:45:07Z. Public visibility and default main were read back again after merge. The foundation PR diff has 33 files; legacy app/environment/private material is excluded.
+- This receipt is a subsequent documentation update, not a claim that its own future commit has already merged. GitHub's PR/main history is authoritative for later receipt revisions.
 
 ## Content review
 
@@ -21,7 +23,7 @@ Evidence: operational SELF-BENCHMARK and observed GitHub receipts, not a model o
 | Dataset/protocol | Eight expert fields, context split, twelve principles and thresholds remain LOCK CANDIDATE; planned slots are not actual cases |
 | Documentation | Relative links target published files; archived reports are labeled historical; latest handoff keeps all eight sections |
 | Verification | Working-file preflight passed 464/464 checks at 2026-09-02T10:41:31Z; historical 174/201 counts are not reused |
-| Enforcement | No rulesets were returned in the inspected repository; no protection/CI setup or independent approval is claimed |
+| Enforcement | main was unprotected and no rulesets were returned. CodeRabbit showed SUCCESS but its comment said review was skipped; no independent review or executed application CI is claimed |
 
 ## Executed checker self-tests
 
@@ -33,4 +35,4 @@ Seventeen non-publication baseline files retained identical SHA-256 values, incl
 
 Run the commands in [Publication Policy](PUBLICATION_POLICY.md). The published checker is for the operating-foundation boundary, not an annotation validator. Source originals and pre-edit hashes are retained in a private local baseline; preservation checks can compare that baseline but are not independently reproducible from public Git alone.
 
-No manifest scripts, application build/runtime, model API, expert session, VOD annotation, Google write or new graphics were executed. ACTUAL TEST: NOT YET TESTED. SIMULATED decision-data run: NOT TESTED. No experiment rows were added. Google operational logging remains local/pending with UNKNOWN task tokens.
+No manifest scripts, application build/runtime, model API, expert session, VOD annotation, Google write or new graphics were executed. ACTUAL TEST: NOT YET TESTED. SIMULATED decision-data run: NOT TESTED. No experiment rows were added. Google operational logging remains local/pending with UNKNOWN task tokens; event `decode-publication-20260902-01` records the observed foundation merge, not a cloud receipt.
