@@ -1,6 +1,6 @@
 # DECODE Current Status
 
-Snapshot: 2026-09-02 | Phase: public main operating-foundation publication; ③-A-1 implementation remains pending
+Snapshot: 2026-09-02 | Phase: operating foundation merged into public main; ③-A-1 implementation remains pending
 
 ## LOCKED
 
@@ -22,7 +22,7 @@ These are testable proposals, not approved performance claims. Definitions are i
 
 | Category | Current state | Limit |
 | --- | --- | --- |
-| IMPLEMENTED | Public repository, content-free main bootstrap and reviewed operating-foundation changes | Merge receipt and check scope: [Publication evidence](MAIN_PUBLICATION.md); no annotation application |
+| IMPLEMENTED | Public repository and 33-file operating foundation merged through PR #2 | Verified merge receipt and check scope: [Publication evidence](MAIN_PUBLICATION.md); no annotation application |
 | ACTUAL TEST | NOT YET TESTED | No consented VOD/expert session was supplied or run for ③-A-1 |
 | SELF-BENCHMARK | Policy-text review and publication integrity checks only | [Current publication checks](MAIN_PUBLICATION.md); earlier [Rules Review](RULES_REVIEW.md) is historical; not model or coach evaluation |
 | SIMULATED | Document-only checker fixtures executed; decision-data run NOT TESTED | Generated mutations tested the publication checker only; no synthetic decision records, VOD or expert results |
@@ -37,7 +37,7 @@ These are testable proposals, not approved performance claims. Definitions are i
 
 - ChatGPT Project: DECODE planning headquarters. Earlier setup verified project creation and then-current policy persistence; planning-chat membership remains unresolved and was not rechecked during publication. Public prompt-file updates do not update saved project instructions. No transcript/policy synchronization is claimed.
 - Codex: AI/Engineering Lead in the verified existing local DECODE checkout. Private task/project/chat bindings and local paths are excluded from the public repository.
-- GitHub: [public edward321416-maker/DECODE](https://github.com/edward321416-maker/DECODE), repository ID 1354606878, with main as default and canonical branch. See [Publication evidence](MAIN_PUBLICATION.md) for actual commit/PR receipts. Other branch proposals are not canonical until merged.
+- GitHub: [public edward321416-maker/DECODE](https://github.com/edward321416-maker/DECODE), repository ID 1354606878, with main as default and canonical branch. Foundation PR #2 merged at 2026-09-02T10:44:59Z; see [Publication evidence](MAIN_PUBLICATION.md) for exact commits and check receipts. Other branch proposals are not canonical until merged.
 - Google `AI_Execution_Log` spreadsheet ID, range binding, and schema-cache Drive folder ID: NOT CONFIGURED. No repository policy or designated execution log was found before setup. No matching credential/binding environment variable names were present in the current process; credential stores were not searched.
 - Prompt files are project policies, not modifications to a provider's system layer or global account settings. Google integration is a written protocol, not a deployed logger.
 
