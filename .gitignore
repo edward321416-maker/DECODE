@@ -1,0 +1,25 @@
+# dependencies
+/node_modules
+
+# Next.js build output
+/.next
+/out
+
+# generated TypeScript state
+*.tsbuildinfo
+next-env.d.ts
+
+# local environment files and private operating material
+.env
+.env.*
+!.env.example
+.agent-docs/
+/work/
+/outputs/
+/data/raw/
+/data/private/
+/experiments/private/
+
+# operating system files
+.DS_Store
+Thumbs.db
