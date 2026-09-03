@@ -2,7 +2,7 @@
 
 Snapshot: 2026-09-03 | Owner: AI/Engineering Lead
 Phase: 003-A-1 infrastructure implemented on codex/annotation-infrastructure; Product review required, NOT MERGED.
-Canonical baseline: public main e8e835718a9f95f02ce81682da2092db81249816. Issue: [#4](https://github.com/edward321416-maker/DECODE/issues/4).
+Canonical baseline: public main e8e835718a9f95f02ce81682da2092db81249816. Issue: [#4](https://github.com/edward321416-maker/DECODE/issues/4). Review: [PR #5](https://github.com/edward321416-maker/DECODE/pull/5), OPEN against main, NOT MERGED.
 
 ## LOCKED
 

@@ -2,7 +2,7 @@
 
 Version: 0.1.0-candidate | Owner: AI/Engineering Lead | Status: IMPLEMENTED CANDIDATE, PRODUCT REVIEW REQUIRED, NOT MERGED
 Authority: U-INFRA-2026-09-02, explicit Product/Business Lead implementation approval
-Baseline: public main e8e835718a9f95f02ce81682da2092db81249816 | Tracking: [Issue #4](https://github.com/edward321416-maker/DECODE/issues/4)
+Baseline: public main e8e835718a9f95f02ce81682da2092db81249816 | Tracking: [Issue #4](https://github.com/edward321416-maker/DECODE/issues/4) | [PR #5](https://github.com/edward321416-maker/DECODE/pull/5): OPEN, NOT MERGED
 
 ## Delivery gate
 

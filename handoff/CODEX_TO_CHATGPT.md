@@ -33,7 +33,7 @@ Real annotation time, expert agreement, context sufficiency, principle coverage,
 
 ## FILES CHANGED
 
-The scoped main-targeted PR unified diff is the change report; PR creation is pending at this checkpoint. [PUBLICATION_FILES.json](../docs/PUBLICATION_FILES.json) defines the public tree. No raw trace/store/access code/export, legacy app or root package is included. Historical reverse handoff is retained. All subsequent change reports remain unified diffs.
+[PR #5 unified diff](https://github.com/edward321416-maker/DECODE/pull/5.diff) is the change report. [PR #5](https://github.com/edward321416-maker/DECODE/pull/5) is open against main; NOT MERGED. Publication working checks passed 739/739 and staged checks 798/798; all 16 baseline legacy-app hashes remain unchanged. These are operational checks, not additional experiment cases. [PUBLICATION_FILES.json](../docs/PUBLICATION_FILES.json) defines the public tree. No raw trace/store/access code/export, legacy app or root package is included. Historical reverse handoff is retained. All subsequent change reports remain unified diffs.
 
 ## RECOMMENDED NEXT DECISION
 
