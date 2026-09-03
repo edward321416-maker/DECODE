@@ -1,38 +1,40 @@
 # Codex → ChatGPT
 
-Report ID: DECODE-PUBLICATION-2026-09-02 | Scope: public operating foundation and main integration
-Owner: AI/Engineering Lead | Source revision: see [publication evidence](../docs/MAIN_PUBLICATION.md)
-
-Prior report: [DECODE-REPOSITORY-2026-09-02](DECODE-REPOSITORY-2026-09-02.md). Preserve these eight sections in every future report.
+Report ID: DECODE-INFRA-2026-09-03 | Owner: AI/Engineering Lead
+Scope: candidate 003-A-1 infrastructure | Branch: codex/annotation-infrastructure
+Baseline: public main e8e835718a9f95f02ce81682da2092db81249816
+Prior report: [publication snapshot](DECODE-PUBLICATION-2026-09-02.md).
 
 ## IMPLEMENTED
 
-Changed DECODE to public and merged the 33-file operating foundation into main through [PR #2](https://github.com/edward321416-maker/DECODE/pull/2) at 2026-09-02T10:44:59Z. The verified merge commit is `ec40210377242b95fa517004afbd2e5043338e3b`. Main is the canonical policy source under D013; [publication evidence](../docs/MAIN_PUBLICATION.md) records exact scope and receipts. No annotation app, machine schema or model was implemented.
+Versioned 0.1.0-candidate JSON Schema and semantic validation; minimal local operator/reviewer tool with eight fields, Core/Extended context, uncertainty/alternatives, fixed independent-review gate, monotonic timing, save/resume, immutable submissions, import/export and preserved provenance. [Guide](../annotation/README.md), [design/review](../docs/ANNOTATION_IMPLEMENTATION.md). D014 approves implementation and PR only. Product review is required before merge; no candidate promotion.
 
 ## ACTUAL TEST
 
-NOT YET TESTED — no consented real VOD or independent expert session was run. No actual annotation-time, agreement, coverage or coaching-benefit measurements exist.
+NOT YET TESTED. No real consented VALORANT VOD or independent expert session was supplied or run. Current execution/export mode rejects ACTUAL TEST, including synthetic-origin promotion. No stress-test success is claimed.
 
 ## SELF-BENCHMARK
 
-Operational/documentation checks only: publication inventory, links, evidence/candidate boundaries, report structure, historical conflicts and basic privacy patterns. Working-file checks passed 464/464; staged and fetched merged-main checks each passed 498/498. The isolated checker audit passed 13/13 scenarios with 17 baseline files preserved. See [publication evidence](../docs/MAIN_PUBLICATION.md) for scope and timestamps; earlier 174/201 checks are historical, not this run.
+Executed run [annotation-self-2026-09-03t01-57-43-899z](../experiments/results/SELF_BENCHMARK/annotation-self-2026-09-03t01-57-43-899z.json): 36/36 Node tests, 8/8 actual browser tests (desktop 1280×900 and narrow 320×740), and 14/14 module syntax checks passed with zero final failures/skips/flaky results. Node 24.14.0, Chrome 152.0.7977.75; Ajv 8.20.0, Playwright Test 1.62.1. Commands, source/test/input/output hashes and null actual measurements are in that artifact. Reproduce with `node annotation/scripts/verify.mjs`. The CLI entrypoint was also started and its local route/banner verified, then stopped.
+
+Controlled clocks verify pause/interruption semantics; these are not expert annotation durations. Browser execution confirms UI behavior, not expert usability, human independence or full accessibility/security conformance. Publication checks are separate operational validation, not extra experiment cases.
 
 ## SIMULATED
 
-No synthetic decision fixtures or simulated stress run generated. SIMULATED document mutations were used only for the internal publication-checker SELF-BENCHMARK; they do not represent VOD or expert cases. The excluded local deterministic demo is unchanged.
+Exactly ten invented fixtures: clear 6 / ambiguous 4; Fight Selection 4 / Post-contact Decision 3 / Tradeability & Spacing 3. Separate illustrative labels include positive and uncertain judgments. Every source is SIMULATED; no real VOD/consent/player/expert/timing provenance was invented. Fixtures are software inputs, never gold training/evaluation labels.
 
 ## FAILED
 
-No final publication check or merge failure remains. Expected rejection results in the checker audit are not failed stress tests. CodeRabbit skipped automatic review despite a SUCCESS status, so it is not counted as completed review. Google sync remains BLOCKED by missing bindings.
+Initial test-first stubs failed as expected. Real-clock timestamp mismatch, select labeling, narrow 200% heading overflow, missing alternative constraints, transferable-state quota and overlapping timers were found and fixed, then rerun. No required final software test remains failing. No failed ACTUAL TEST is implied. Google logging is SYNC BLOCKED by missing bindings/authentication; no cloud write is claimed.
 
 ## NOT TESTED
 
-Application/runtime, model behavior, prompt obedience, accessibility/security conformance, expert measurements, Google writes and empirical token savings. No manifest scripts were executed. Written policy does not establish branch protection or CI.
+Real annotation time, expert agreement, context sufficiency, principle coverage, coaching effectiveness; real-mode session/adjudication/aggregate reporting; Linux/macOS or other browser engines; hosted deployment, encryption, disk-failure recovery, penetration testing, full WCAG/screen-reader compliance; model/prompt behavior, token savings, Google sync and planning-chat membership refresh. No root legacy scripts were executed.
 
 ## FILES CHANGED
 
-[PR #2 unified diff](https://github.com/edward321416-maker/DECODE/pull/2.diff) is the publication change report against the empty main bootstrap. Its exact file scope is [PUBLICATION_FILES.json](../docs/PUBLICATION_FILES.json). Excluded local app files remain untracked and preserved; the old local README is retained privately. Later corrections must also be reported as diffs or exact SEARCH/REPLACE.
+The scoped main-targeted PR unified diff is the change report; PR creation is pending at this checkpoint. [PUBLICATION_FILES.json](../docs/PUBLICATION_FILES.json) defines the public tree. No raw trace/store/access code/export, legacy app or root package is included. Historical reverse handoff is retained. All subsequent change reports remain unified diffs.
 
 ## RECOMMENDED NEXT DECISION
 
-Use the verified public main for subsequent planning and engineering. Review the queued annotation design and candidate nullability/timing/aggregation choices before implementation. Obtain consented VOD and independent experts before ACTUAL TEST. Google destinations/authentication and planning-chat membership remain separate unresolved items. No Alpha 50/150 expansion is authorized.
+Product/Business Lead reviews the PR, candidate schema/timing/nullability/limits and one native-form desktop/narrow treatment before deciding merge or revise. DO NOT MERGE automatically. Before actual ingestion/session, approve consent/use, restricted storage/access/retention/withdrawal, independent experts and measurement/adjudication protocol. Current mode remains internal-only; actual-mode enablement requires a separately reviewed change. Do not expand to 50/150 or implement full Coach Copilot.

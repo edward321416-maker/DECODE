@@ -39,6 +39,7 @@ Direct user decisions override older planning proposals. Assistant proposals are
 - U-RULES-2026-09-02: user requested development/documentation/graphics rules, review and storage.
 - U-REPO-2026-09-02: explicit repository-creation approval; historical private default.
 - U-PUBLIC-2026-09-02: explicit public visibility, verified main merge and canonical-main policy.
+- U-INFRA-2026-09-02: explicit scoped annotation implementation, synthetic fixtures, actual software checks and main PR; no merge before Product review.
 - P-MVP: private planning source for Coach Copilot revision, superseding the earlier six-screen/five-family proposal.
 - P-DATA: private planning source for Decision Case philosophy.
 - P-ALPHA: private planning source for candidate fields/principles; synthetic examples are not evidence.

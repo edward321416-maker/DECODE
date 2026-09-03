@@ -1,12 +1,12 @@
 # ChatGPT → Codex
 
-Handoff ID: DECODE-003-A-1 | Version: 0.4 | Owner: Product/Business Lead
+Handoff ID: DECODE-003-A-1 | Version: 0.5 | Owner: Product/Business Lead
 
 ## First development request
 
 Implement the annotation schema, tools, and test infrastructure required to execute **③-A-1 10-Case Schema Stress Test**. If actual consented VOD or independent expert data is unavailable, label all synthetic/mock-input testing **SIMULATED** and retain **ACTUAL TEST: NOT YET TESTED**. Never report simulated schema-test success as actual stress-test success.
 
-This file is the development queue, not an implementation-complete claim. U-PUBLIC-2026-09-02 authorizes publishing the operating foundation and merging it into public main, not running the queued experiment or building the annotation app. Before implementation, review the versioned design and unresolved candidate choices. Apply [Development Rules](../docs/DEVELOPMENT_RULES.md), [Documentation Rules](../docs/DOCUMENTATION_RULES.md), [Graphics Rules](../docs/GRAPHICS_RULES.md) and [Publication Policy](../docs/PUBLICATION_POLICY.md). [Rules Review](../docs/RULES_REVIEW.md) is historical policy-text evidence, not product validation.
+U-INFRA-2026-09-02 explicitly approves this scoped implementation, ten synthetic fixtures and actual software tests. Start from latest public main on codex/annotation-infrastructure and open a main-targeted PR. DO NOT MERGE before Product/Business Lead review, overriding earlier foundation-only merge permission for this task. [Candidate choices](../docs/ANNOTATION_IMPLEMENTATION.md) are not Product locks. Apply [Development Rules](../docs/DEVELOPMENT_RULES.md), [Documentation Rules](../docs/DOCUMENTATION_RULES.md), [Graphics Rules](../docs/GRAPHICS_RULES.md) and [Publication Policy](../docs/PUBLICATION_POLICY.md). [Rules Review](../docs/RULES_REVIEW.md) is historical policy-text evidence, not product validation.
 
 Internal developer/model evaluation must be labeled SELF-BENCHMARK with data origin disclosed separately. Synthetic inputs remain SIMULATED even within a SELF-BENCHMARK; neither category establishes ACTUAL TEST success. Unexecuted checks remain NOT YET TESTED.
 
@@ -22,7 +22,7 @@ Internal developer/model evaluation must be labeled SELF-BENCHMARK with data ori
 
 Eight expert fields; Core/Extended context; twelve seed principles; GO/STOP thresholds. Use versioned candidate schemas, surface unresolved choices, and request Product approval before promoting them. See [dataset contract](../docs/DECISION_DATASET_SPEC.md) and [protocol](../docs/EXPERIMENT_PROTOCOL.md).
 
-## Acceptance criteria for the future implementation
+## Approved implementation acceptance criteria
 
 1. Versioned machine-readable annotation schema with validation and explicit source type, consent, unknowns, alternatives and separate evidence mode/execution status.
 2. Minimal operator/expert tool: eight candidate expert fields, conditional context/uncertainty, blind label capture, auto timing, save/resume, import/export and preserved independent reviews. Do not create a full coaching product in this step.

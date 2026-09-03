@@ -1,0 +1,911 @@
+{
+  "kind": "DECODE_CASE_BUNDLE",
+  "schema_version": "0.1.0-candidate",
+  "data_origin": "SIMULATED",
+  "evaluation_mode": "SELF-BENCHMARK",
+  "actual_test_status": "NOT YET TESTED",
+  "cases": [
+    {
+      "schema_version": "0.1.0-candidate",
+      "case_id": "case-001",
+      "decision_family": "Fight Selection",
+      "description": "An attacker remains near the same corridor angle after a teammate eliminates an opponent. The player peeks the corridor again.",
+      "source": {
+        "origin": "SIMULATED",
+        "source_ref": "sim-scene-1",
+        "media_sha256": null,
+        "consent_status": "NOT_APPLICABLE_SIMULATED",
+        "consent_ref": null,
+        "patch": "SIMULATED-NOT-A-GAME-PATCH",
+        "clip_start_ms": 0,
+        "decision_ms": 12000,
+        "clip_end_ms": 20000,
+        "consent_scope": null
+      },
+      "context": {
+        "core": {
+          "side": {
+            "value": "ATTACK",
+            "provenance": "SIMULATED",
+            "note": null
+          },
+          "alive_state": {
+            "value": "3v1",
+            "provenance": "SIMULATED",
+            "note": null
+          },
+          "round_phase": {
+            "value": "MID_ROUND",
+            "provenance": "SIMULATED",
+            "note": null
+          },
+          "spike_state": {
+            "value": null,
+            "provenance": "UNKNOWN",
+            "note": "Not supplied in this synthetic scenario"
+          },
+          "location": {
+            "value": "Fictional lane 1",
+            "provenance": "SIMULATED",
+            "note": null
+          },
+          "trigger_event": {
+            "value": "Visible contact or positioning change",
+            "provenance": "SIMULATED",
+            "note": null
+          }
+        },
+        "extended": {
+          "time_remaining": {
+            "value": null,
+            "provenance": "UNKNOWN",
+            "note": "Not supplied in this synthetic scenario"
+          },
+          "economy_state": {
+            "value": null,
+            "provenance": "UNKNOWN",
+            "note": "Not supplied in this synthetic scenario"
+          },
+          "known_enemy_info": {
+            "value": null,
+            "provenance": "UNKNOWN",
+            "note": "Not supplied in this synthetic scenario"
+          },
+          "teammate_support": {
+            "value": null,
+            "provenance": "UNKNOWN",
+            "note": "Not supplied in this synthetic scenario"
+          },
+          "utility_state": {
+            "value": null,
+            "provenance": "UNKNOWN",
+            "note": "Not supplied in this synthetic scenario"
+          }
+        }
+      },
+      "metadata": {
+        "anonymous_player_id": null,
+        "map": null,
+        "agent": null,
+        "rank_bucket": null
+      }
+    },
+    {
+      "schema_version": "0.1.0-candidate",
+      "case_id": "case-002",
+      "decision_family": "Fight Selection",
+      "description": "The attacker moves toward the site with a visible short round timer. A defender contests the path to the plant area.",
+      "source": {
+        "origin": "SIMULATED",
+        "source_ref": "sim-scene-2",
+        "media_sha256": null,
+        "consent_status": "NOT_APPLICABLE_SIMULATED",
+        "consent_ref": null,
+        "patch": "SIMULATED-NOT-A-GAME-PATCH",
+        "clip_start_ms": 0,
+        "decision_ms": 12000,
+        "clip_end_ms": 20000,
+        "consent_scope": null
+      },
+      "context": {
+        "core": {
+          "side": {
+            "value": "ATTACK",
+            "provenance": "SIMULATED",
+            "note": null
+          },
+          "alive_state": {
+            "value": null,
+            "provenance": "UNKNOWN",
+            "note": "Not supplied in this synthetic scenario"
+          },
+          "round_phase": {
+            "value": "MID_ROUND",
+            "provenance": "SIMULATED",
+            "note": null
+          },
+          "spike_state": {
+            "value": "CARRIED",
+            "provenance": "SIMULATED",
+            "note": null
+          },
+          "location": {
+            "value": "Fictional lane 2",
+            "provenance": "SIMULATED",
+            "note": null
+          },
+          "trigger_event": {
+            "value": "Visible contact or positioning change",
+            "provenance": "SIMULATED",
+            "note": null
+          }
+        },
+        "extended": {
+          "time_remaining": {
+            "value": "6 seconds",
+            "provenance": "SIMULATED",
+            "note": null
+          },
+          "economy_state": {
+            "value": null,
+            "provenance": "UNKNOWN",
+            "note": "Not supplied in this synthetic scenario"
+          },
+          "known_enemy_info": {
+            "value": null,
+            "provenance": "UNKNOWN",
+            "note": "Not supplied in this synthetic scenario"
+          },
+          "teammate_support": {
+            "value": null,
+            "provenance": "UNKNOWN",
+            "note": "Not supplied in this synthetic scenario"
+          },
+          "utility_state": {
+            "value": null,
+            "provenance": "UNKNOWN",
+            "note": "Not supplied in this synthetic scenario"
+          }
+        }
+      },
+      "metadata": {
+        "anonymous_player_id": null,
+        "map": null,
+        "agent": null,
+        "rank_bucket": null
+      }
+    },
+    {
+      "schema_version": "0.1.0-candidate",
+      "case_id": "case-003",
+      "decision_family": "Fight Selection",
+      "description": "The player moves wide out of cover into a long lane. No opponent position is visible on the available view before contact.",
+      "source": {
+        "origin": "SIMULATED",
+        "source_ref": "sim-scene-3",
+        "media_sha256": null,
+        "consent_status": "NOT_APPLICABLE_SIMULATED",
+        "consent_ref": null,
+        "patch": "SIMULATED-NOT-A-GAME-PATCH",
+        "clip_start_ms": 0,
+        "decision_ms": 12000,
+        "clip_end_ms": 20000,
+        "consent_scope": null
+      },
+      "context": {
+        "core": {
+          "side": {
+            "value": "ATTACK",
+            "provenance": "SIMULATED",
+            "note": null
+          },
+          "alive_state": {
+            "value": null,
+            "provenance": "UNKNOWN",
+            "note": "Not supplied in this synthetic scenario"
+          },
+          "round_phase": {
+            "value": "MID_ROUND",
+            "provenance": "SIMULATED",
+            "note": null
+          },
+          "spike_state": {
+            "value": null,
+            "provenance": "UNKNOWN",
+            "note": "Not supplied in this synthetic scenario"
+          },
+          "location": {
+            "value": "Fictional lane 3",
+            "provenance": "SIMULATED",
+            "note": null
+          },
+          "trigger_event": {
+            "value": "Visible contact or positioning change",
+            "provenance": "SIMULATED",
+            "note": null
+          }
+        },
+        "extended": {
+          "time_remaining": {
+            "value": null,
+            "provenance": "UNKNOWN",
+            "note": "Not supplied in this synthetic scenario"
+          },
+          "economy_state": {
+            "value": null,
+            "provenance": "UNKNOWN",
+            "note": "Not supplied in this synthetic scenario"
+          },
+          "known_enemy_info": {
+            "value": null,
+            "provenance": "UNKNOWN",
+            "note": "Not supplied in this synthetic scenario"
+          },
+          "teammate_support": {
+            "value": null,
+            "provenance": "UNKNOWN",
+            "note": "Not supplied in this synthetic scenario"
+          },
+          "utility_state": {
+            "value": null,
+            "provenance": "UNKNOWN",
+            "note": "Not supplied in this synthetic scenario"
+          }
+        }
+      },
+      "metadata": {
+        "anonymous_player_id": null,
+        "map": null,
+        "agent": null,
+        "rank_bucket": null
+      }
+    },
+    {
+      "schema_version": "0.1.0-candidate",
+      "case_id": "case-004",
+      "decision_family": "Post-contact Decision",
+      "description": "After eliminating one opponent, the player moves behind nearby cover and holds a different angle.",
+      "source": {
+        "origin": "SIMULATED",
+        "source_ref": "sim-scene-4",
+        "media_sha256": null,
+        "consent_status": "NOT_APPLICABLE_SIMULATED",
+        "consent_ref": null,
+        "patch": "SIMULATED-NOT-A-GAME-PATCH",
+        "clip_start_ms": 0,
+        "decision_ms": 12000,
+        "clip_end_ms": 20000,
+        "consent_scope": null
+      },
+      "context": {
+        "core": {
+          "side": {
+            "value": "ATTACK",
+            "provenance": "SIMULATED",
+            "note": null
+          },
+          "alive_state": {
+            "value": null,
+            "provenance": "UNKNOWN",
+            "note": "Not supplied in this synthetic scenario"
+          },
+          "round_phase": {
+            "value": "MID_ROUND",
+            "provenance": "SIMULATED",
+            "note": null
+          },
+          "spike_state": {
+            "value": null,
+            "provenance": "UNKNOWN",
+            "note": "Not supplied in this synthetic scenario"
+          },
+          "location": {
+            "value": "Fictional lane 4",
+            "provenance": "SIMULATED",
+            "note": null
+          },
+          "trigger_event": {
+            "value": "Visible contact or positioning change",
+            "provenance": "SIMULATED",
+            "note": null
+          }
+        },
+        "extended": {
+          "time_remaining": {
+            "value": null,
+            "provenance": "UNKNOWN",
+            "note": "Not supplied in this synthetic scenario"
+          },
+          "economy_state": {
+            "value": null,
+            "provenance": "UNKNOWN",
+            "note": "Not supplied in this synthetic scenario"
+          },
+          "known_enemy_info": {
+            "value": null,
+            "provenance": "UNKNOWN",
+            "note": "Not supplied in this synthetic scenario"
+          },
+          "teammate_support": {
+            "value": null,
+            "provenance": "UNKNOWN",
+            "note": "Not supplied in this synthetic scenario"
+          },
+          "utility_state": {
+            "value": null,
+            "provenance": "UNKNOWN",
+            "note": "Not supplied in this synthetic scenario"
+          }
+        }
+      },
+      "metadata": {
+        "anonymous_player_id": null,
+        "map": null,
+        "agent": null,
+        "rank_bucket": null
+      }
+    },
+    {
+      "schema_version": "0.1.0-candidate",
+      "case_id": "case-005",
+      "decision_family": "Post-contact Decision",
+      "description": "After contact ends, the player follows a retreating opponent beyond nearby cover while teammates remain behind.",
+      "source": {
+        "origin": "SIMULATED",
+        "source_ref": "sim-scene-5",
+        "media_sha256": null,
+        "consent_status": "NOT_APPLICABLE_SIMULATED",
+        "consent_ref": null,
+        "patch": "SIMULATED-NOT-A-GAME-PATCH",
+        "clip_start_ms": 0,
+        "decision_ms": 12000,
+        "clip_end_ms": 20000,
+        "consent_scope": null
+      },
+      "context": {
+        "core": {
+          "side": {
+            "value": "ATTACK",
+            "provenance": "SIMULATED",
+            "note": null
+          },
+          "alive_state": {
+            "value": null,
+            "provenance": "UNKNOWN",
+            "note": "Not supplied in this synthetic scenario"
+          },
+          "round_phase": {
+            "value": "MID_ROUND",
+            "provenance": "SIMULATED",
+            "note": null
+          },
+          "spike_state": {
+            "value": null,
+            "provenance": "UNKNOWN",
+            "note": "Not supplied in this synthetic scenario"
+          },
+          "location": {
+            "value": "Fictional lane 5",
+            "provenance": "SIMULATED",
+            "note": null
+          },
+          "trigger_event": {
+            "value": "Visible contact or positioning change",
+            "provenance": "SIMULATED",
+            "note": null
+          }
+        },
+        "extended": {
+          "time_remaining": {
+            "value": null,
+            "provenance": "UNKNOWN",
+            "note": "Not supplied in this synthetic scenario"
+          },
+          "economy_state": {
+            "value": null,
+            "provenance": "UNKNOWN",
+            "note": "Not supplied in this synthetic scenario"
+          },
+          "known_enemy_info": {
+            "value": null,
+            "provenance": "UNKNOWN",
+            "note": "Not supplied in this synthetic scenario"
+          },
+          "teammate_support": {
+            "value": null,
+            "provenance": "UNKNOWN",
+            "note": "Not supplied in this synthetic scenario"
+          },
+          "utility_state": {
+            "value": null,
+            "provenance": "UNKNOWN",
+            "note": "Not supplied in this synthetic scenario"
+          }
+        }
+      },
+      "metadata": {
+        "anonymous_player_id": null,
+        "map": null,
+        "agent": null,
+        "rank_bucket": null
+      }
+    },
+    {
+      "schema_version": "0.1.0-candidate",
+      "case_id": "case-006",
+      "decision_family": "Tradeability & Spacing",
+      "description": "Two teammates see the same doorway and enter contact with a short visible offset. Both have a clear line to the doorway.",
+      "source": {
+        "origin": "SIMULATED",
+        "source_ref": "sim-scene-6",
+        "media_sha256": null,
+        "consent_status": "NOT_APPLICABLE_SIMULATED",
+        "consent_ref": null,
+        "patch": "SIMULATED-NOT-A-GAME-PATCH",
+        "clip_start_ms": 0,
+        "decision_ms": 12000,
+        "clip_end_ms": 20000,
+        "consent_scope": null
+      },
+      "context": {
+        "core": {
+          "side": {
+            "value": "ATTACK",
+            "provenance": "SIMULATED",
+            "note": null
+          },
+          "alive_state": {
+            "value": null,
+            "provenance": "UNKNOWN",
+            "note": "Not supplied in this synthetic scenario"
+          },
+          "round_phase": {
+            "value": "MID_ROUND",
+            "provenance": "SIMULATED",
+            "note": null
+          },
+          "spike_state": {
+            "value": null,
+            "provenance": "UNKNOWN",
+            "note": "Not supplied in this synthetic scenario"
+          },
+          "location": {
+            "value": "Fictional lane 6",
+            "provenance": "SIMULATED",
+            "note": null
+          },
+          "trigger_event": {
+            "value": "Visible contact or positioning change",
+            "provenance": "SIMULATED",
+            "note": null
+          }
+        },
+        "extended": {
+          "time_remaining": {
+            "value": null,
+            "provenance": "UNKNOWN",
+            "note": "Not supplied in this synthetic scenario"
+          },
+          "economy_state": {
+            "value": null,
+            "provenance": "UNKNOWN",
+            "note": "Not supplied in this synthetic scenario"
+          },
+          "known_enemy_info": {
+            "value": null,
+            "provenance": "UNKNOWN",
+            "note": "Not supplied in this synthetic scenario"
+          },
+          "teammate_support": {
+            "value": "Two visible players with shared line",
+            "provenance": "SIMULATED",
+            "note": null
+          },
+          "utility_state": {
+            "value": null,
+            "provenance": "UNKNOWN",
+            "note": "Not supplied in this synthetic scenario"
+          }
+        }
+      },
+      "metadata": {
+        "anonymous_player_id": null,
+        "map": null,
+        "agent": null,
+        "rank_bucket": null
+      }
+    },
+    {
+      "schema_version": "0.1.0-candidate",
+      "case_id": "case-007",
+      "decision_family": "Fight Selection",
+      "description": "After brief contact, the player remains near cover. Both the retreat path and the contested angle are visible; opponent follow-up is not visible.",
+      "source": {
+        "origin": "SIMULATED",
+        "source_ref": "sim-scene-7",
+        "media_sha256": null,
+        "consent_status": "NOT_APPLICABLE_SIMULATED",
+        "consent_ref": null,
+        "patch": "SIMULATED-NOT-A-GAME-PATCH",
+        "clip_start_ms": 0,
+        "decision_ms": 12000,
+        "clip_end_ms": 20000,
+        "consent_scope": null
+      },
+      "context": {
+        "core": {
+          "side": {
+            "value": "ATTACK",
+            "provenance": "SIMULATED",
+            "note": null
+          },
+          "alive_state": {
+            "value": null,
+            "provenance": "UNKNOWN",
+            "note": "Not supplied in this synthetic scenario"
+          },
+          "round_phase": {
+            "value": "MID_ROUND",
+            "provenance": "SIMULATED",
+            "note": null
+          },
+          "spike_state": {
+            "value": null,
+            "provenance": "UNKNOWN",
+            "note": "Not supplied in this synthetic scenario"
+          },
+          "location": {
+            "value": "Fictional lane 7",
+            "provenance": "SIMULATED",
+            "note": null
+          },
+          "trigger_event": {
+            "value": "Visible contact or positioning change",
+            "provenance": "SIMULATED",
+            "note": null
+          }
+        },
+        "extended": {
+          "time_remaining": {
+            "value": null,
+            "provenance": "UNKNOWN",
+            "note": "Not supplied in this synthetic scenario"
+          },
+          "economy_state": {
+            "value": null,
+            "provenance": "UNKNOWN",
+            "note": "Not supplied in this synthetic scenario"
+          },
+          "known_enemy_info": {
+            "value": null,
+            "provenance": "UNKNOWN",
+            "note": "Not supplied in this synthetic scenario"
+          },
+          "teammate_support": {
+            "value": null,
+            "provenance": "UNKNOWN",
+            "note": "Not supplied in this synthetic scenario"
+          },
+          "utility_state": {
+            "value": null,
+            "provenance": "UNKNOWN",
+            "note": "Not supplied in this synthetic scenario"
+          }
+        }
+      },
+      "metadata": {
+        "anonymous_player_id": null,
+        "map": null,
+        "agent": null,
+        "rank_bucket": null
+      }
+    },
+    {
+      "schema_version": "0.1.0-candidate",
+      "case_id": "case-008",
+      "decision_family": "Post-contact Decision",
+      "description": "The player breaks contact after an elimination. The POV does not reveal the remaining opponents or a complete minimap.",
+      "source": {
+        "origin": "SIMULATED",
+        "source_ref": "sim-scene-8",
+        "media_sha256": null,
+        "consent_status": "NOT_APPLICABLE_SIMULATED",
+        "consent_ref": null,
+        "patch": "SIMULATED-NOT-A-GAME-PATCH",
+        "clip_start_ms": 0,
+        "decision_ms": 12000,
+        "clip_end_ms": 20000,
+        "consent_scope": null
+      },
+      "context": {
+        "core": {
+          "side": {
+            "value": "ATTACK",
+            "provenance": "SIMULATED",
+            "note": null
+          },
+          "alive_state": {
+            "value": null,
+            "provenance": "UNKNOWN",
+            "note": "Not supplied in this synthetic scenario"
+          },
+          "round_phase": {
+            "value": "MID_ROUND",
+            "provenance": "SIMULATED",
+            "note": null
+          },
+          "spike_state": {
+            "value": null,
+            "provenance": "UNKNOWN",
+            "note": "Not supplied in this synthetic scenario"
+          },
+          "location": {
+            "value": "Fictional lane 8",
+            "provenance": "SIMULATED",
+            "note": null
+          },
+          "trigger_event": {
+            "value": "Visible contact or positioning change",
+            "provenance": "SIMULATED",
+            "note": null
+          }
+        },
+        "extended": {
+          "time_remaining": {
+            "value": null,
+            "provenance": "UNKNOWN",
+            "note": "Not supplied in this synthetic scenario"
+          },
+          "economy_state": {
+            "value": null,
+            "provenance": "UNKNOWN",
+            "note": "Not supplied in this synthetic scenario"
+          },
+          "known_enemy_info": {
+            "value": null,
+            "provenance": "UNKNOWN",
+            "note": "Not supplied in this synthetic scenario"
+          },
+          "teammate_support": {
+            "value": null,
+            "provenance": "UNKNOWN",
+            "note": "Not supplied in this synthetic scenario"
+          },
+          "utility_state": {
+            "value": null,
+            "provenance": "UNKNOWN",
+            "note": "Not supplied in this synthetic scenario"
+          }
+        }
+      },
+      "metadata": {
+        "anonymous_player_id": null,
+        "map": null,
+        "agent": null,
+        "rank_bucket": null
+      }
+    },
+    {
+      "schema_version": "0.1.0-candidate",
+      "case_id": "case-009",
+      "decision_family": "Tradeability & Spacing",
+      "description": "A teammate is nearby on the minimap. The POV does not establish whether a wall blocks the teammate's line to the contact.",
+      "source": {
+        "origin": "SIMULATED",
+        "source_ref": "sim-scene-9",
+        "media_sha256": null,
+        "consent_status": "NOT_APPLICABLE_SIMULATED",
+        "consent_ref": null,
+        "patch": "SIMULATED-NOT-A-GAME-PATCH",
+        "clip_start_ms": 0,
+        "decision_ms": 12000,
+        "clip_end_ms": 20000,
+        "consent_scope": null
+      },
+      "context": {
+        "core": {
+          "side": {
+            "value": "ATTACK",
+            "provenance": "SIMULATED",
+            "note": null
+          },
+          "alive_state": {
+            "value": null,
+            "provenance": "UNKNOWN",
+            "note": "Not supplied in this synthetic scenario"
+          },
+          "round_phase": {
+            "value": "MID_ROUND",
+            "provenance": "SIMULATED",
+            "note": null
+          },
+          "spike_state": {
+            "value": null,
+            "provenance": "UNKNOWN",
+            "note": "Not supplied in this synthetic scenario"
+          },
+          "location": {
+            "value": "Fictional lane 9",
+            "provenance": "SIMULATED",
+            "note": null
+          },
+          "trigger_event": {
+            "value": "Visible contact or positioning change",
+            "provenance": "SIMULATED",
+            "note": null
+          }
+        },
+        "extended": {
+          "time_remaining": {
+            "value": null,
+            "provenance": "UNKNOWN",
+            "note": "Not supplied in this synthetic scenario"
+          },
+          "economy_state": {
+            "value": null,
+            "provenance": "UNKNOWN",
+            "note": "Not supplied in this synthetic scenario"
+          },
+          "known_enemy_info": {
+            "value": null,
+            "provenance": "UNKNOWN",
+            "note": "Not supplied in this synthetic scenario"
+          },
+          "teammate_support": {
+            "value": null,
+            "provenance": "UNKNOWN",
+            "note": "Not supplied in this synthetic scenario"
+          },
+          "utility_state": {
+            "value": null,
+            "provenance": "UNKNOWN",
+            "note": "Not supplied in this synthetic scenario"
+          }
+        }
+      },
+      "metadata": {
+        "anonymous_player_id": null,
+        "map": null,
+        "agent": null,
+        "rank_bucket": null
+      }
+    },
+    {
+      "schema_version": "0.1.0-candidate",
+      "case_id": "case-010",
+      "decision_family": "Tradeability & Spacing",
+      "description": "The player pauses near a teammate before contact. Team voice communications and intended coordination are absent.",
+      "source": {
+        "origin": "SIMULATED",
+        "source_ref": "sim-scene-10",
+        "media_sha256": null,
+        "consent_status": "NOT_APPLICABLE_SIMULATED",
+        "consent_ref": null,
+        "patch": "SIMULATED-NOT-A-GAME-PATCH",
+        "clip_start_ms": 0,
+        "decision_ms": 12000,
+        "clip_end_ms": 20000,
+        "consent_scope": null
+      },
+      "context": {
+        "core": {
+          "side": {
+            "value": "ATTACK",
+            "provenance": "SIMULATED",
+            "note": null
+          },
+          "alive_state": {
+            "value": null,
+            "provenance": "UNKNOWN",
+            "note": "Not supplied in this synthetic scenario"
+          },
+          "round_phase": {
+            "value": "MID_ROUND",
+            "provenance": "SIMULATED",
+            "note": null
+          },
+          "spike_state": {
+            "value": null,
+            "provenance": "UNKNOWN",
+            "note": "Not supplied in this synthetic scenario"
+          },
+          "location": {
+            "value": "Fictional lane 10",
+            "provenance": "SIMULATED",
+            "note": null
+          },
+          "trigger_event": {
+            "value": "Visible contact or positioning change",
+            "provenance": "SIMULATED",
+            "note": null
+          }
+        },
+        "extended": {
+          "time_remaining": {
+            "value": null,
+            "provenance": "UNKNOWN",
+            "note": "Not supplied in this synthetic scenario"
+          },
+          "economy_state": {
+            "value": null,
+            "provenance": "UNKNOWN",
+            "note": "Not supplied in this synthetic scenario"
+          },
+          "known_enemy_info": {
+            "value": null,
+            "provenance": "UNKNOWN",
+            "note": "Not supplied in this synthetic scenario"
+          },
+          "teammate_support": {
+            "value": null,
+            "provenance": "UNKNOWN",
+            "note": "Not supplied in this synthetic scenario"
+          },
+          "utility_state": {
+            "value": null,
+            "provenance": "UNKNOWN",
+            "note": "Not supplied in this synthetic scenario"
+          }
+        }
+      },
+      "metadata": {
+        "anonymous_player_id": null,
+        "map": null,
+        "agent": null,
+        "rank_bucket": null
+      }
+    }
+  ],
+  "selection": [
+    {
+      "case_id": "case-001",
+      "slot": "S01",
+      "kind": "Clear"
+    },
+    {
+      "case_id": "case-002",
+      "slot": "S02",
+      "kind": "Clear"
+    },
+    {
+      "case_id": "case-003",
+      "slot": "S03",
+      "kind": "Clear"
+    },
+    {
+      "case_id": "case-004",
+      "slot": "S04",
+      "kind": "Clear"
+    },
+    {
+      "case_id": "case-005",
+      "slot": "S05",
+      "kind": "Clear"
+    },
+    {
+      "case_id": "case-006",
+      "slot": "S06",
+      "kind": "Clear"
+    },
+    {
+      "case_id": "case-007",
+      "slot": "S07",
+      "kind": "Ambiguous"
+    },
+    {
+      "case_id": "case-008",
+      "slot": "S08",
+      "kind": "Ambiguous"
+    },
+    {
+      "case_id": "case-009",
+      "slot": "S09",
+      "kind": "Ambiguous"
+    },
+    {
+      "case_id": "case-010",
+      "slot": "S10",
+      "kind": "Ambiguous"
+    }
+  ]
+}

@@ -1,6 +1,6 @@
 # DECODE Coach Copilot MVP v0.1
 
-Scope: LOCKED | Implementation: legacy demo only; Coach Copilot NOT IMPLEMENTED
+Scope: LOCKED | Implementation: candidate annotation infrastructure proposed; full Coach Copilot NOT IMPLEMENTED
 
 ## User and job
 

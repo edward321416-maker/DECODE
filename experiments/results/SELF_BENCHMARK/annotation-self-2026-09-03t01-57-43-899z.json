@@ -1,0 +1,146 @@
+{
+  "run_id": "annotation-self-2026-09-03t01-57-43-899z",
+  "timestamp": "2026-09-03T01:57:43.899Z",
+  "finished_at": "2026-09-03T01:57:55.376Z",
+  "evaluation_mode": "SELF-BENCHMARK",
+  "data_origin": "SIMULATED",
+  "actual_test_status": "NOT YET TESTED",
+  "execution_status": "PASSED",
+  "protocol_version": "0.1-candidate",
+  "schema_version": "0.1.0-candidate",
+  "code_revision": "sha256:7e7d444224b9f8852b4b349ec4beeb823c6b87658fd7b17cf3d97bd7ed06c118",
+  "software": {
+    "version": "0.1.0-candidate",
+    "source_sha256": "7e7d444224b9f8852b4b349ec4beeb823c6b87658fd7b17cf3d97bd7ed06c118"
+  },
+  "input_reference": "data/samples/SIMULATED/ten-cases.json",
+  "input_sha256": "174f9db6d660bcb1591fed24af7c30450875bb30e2eebba8b96e3b392e67f028",
+  "label_examples_sha256": "588df27e5291ca5b957f5961d6f39ce2f25fbcf43cb8b9e60acbe72633b22012",
+  "case_count": 10,
+  "evaluator_reference": "internal-engineering-automation",
+  "environment": {
+    "node": "v24.14.0",
+    "platform": "win32",
+    "architecture": "x64",
+    "browser": "chrome",
+    "browser_version": "152.0.7977.75"
+  },
+  "commands": [
+    {
+      "cwd": ".",
+      "command": "node --test --test-reporter=tap annotation/test/http.test.mjs annotation/test/publication.test.mjs annotation/test/schema.test.mjs annotation/test/workspace.test.mjs"
+    },
+    {
+      "cwd": "annotation",
+      "command": "node node_modules/@playwright/test/cli.js test --reporter=json"
+    },
+    {
+      "cwd": ".",
+      "command": "node --check <each listed module>"
+    }
+  ],
+  "results": {
+    "node": {
+      "tests": 36,
+      "passed": 36,
+      "failed": 0,
+      "skipped": 0,
+      "exit_code": 0
+    },
+    "browser": {
+      "passed": 8,
+      "failed": 0,
+      "skipped": 0,
+      "flaky": 0,
+      "exit_code": 0
+    },
+    "syntax": [
+      {
+        "file": "annotation/src/server.mjs",
+        "exit_code": 0
+      },
+      {
+        "file": "annotation/src/validation.mjs",
+        "exit_code": 0
+      },
+      {
+        "file": "annotation/src/workspace.mjs",
+        "exit_code": 0
+      },
+      {
+        "file": "annotation/public/app.mjs",
+        "exit_code": 0
+      },
+      {
+        "file": "annotation/scripts/verify.mjs",
+        "exit_code": 0
+      },
+      {
+        "file": "annotation/test/http.test.mjs",
+        "exit_code": 0
+      },
+      {
+        "file": "annotation/test/publication.test.mjs",
+        "exit_code": 0
+      },
+      {
+        "file": "annotation/test/schema.test.mjs",
+        "exit_code": 0
+      },
+      {
+        "file": "annotation/test/ui/annotation.page.mjs",
+        "exit_code": 0
+      },
+      {
+        "file": "annotation/test/ui/annotation.spec.mjs",
+        "exit_code": 0
+      },
+      {
+        "file": "annotation/test/workspace.test.mjs",
+        "exit_code": 0
+      },
+      {
+        "file": "annotation/playwright.config.mjs",
+        "exit_code": 0
+      },
+      {
+        "file": "scripts/check-operating-docs.mjs",
+        "exit_code": 0
+      },
+      {
+        "file": "scripts/run-evidence.mjs",
+        "exit_code": 0
+      }
+    ]
+  },
+  "test_sources": {
+    "annotation/test/http.test.mjs": "df4392860152817f73c7ac45939c053fdb9bad9ac494363a80dcbbadfa7406c1",
+    "annotation/test/publication.test.mjs": "3db8b94ec6716d983262557a1e3884dd4082ff463bec82a903286c26ad715524",
+    "annotation/test/schema.test.mjs": "99e939ee631f3926ca07dc2aba201840d7fc6efdf9a36861adcc8d80274edd20",
+    "annotation/test/ui/annotation.page.mjs": "529c1b0991d9c2d046bbca13301e288ae1d1c8c0edbf9311a44f86f4a78a0b2e",
+    "annotation/test/ui/annotation.spec.mjs": "5b28467dd2081874b7e7b9563530e2e25c1568ff2d7e81a5eeb224d3e40e69c0",
+    "annotation/test/workspace.test.mjs": "4509089cff014d21fbe88b90628b5807cd259c33510913f6480e56422599685d",
+    "annotation/playwright.config.mjs": "a6adef0c82b3a1465af847ec61e7df6d8c266333be61263b07ae116890d4bd6c",
+    "annotation/scripts/verify.mjs": "546bc0eacc224bca36bbdb9ff9b73af36636bc774e69c1b5ae1f3c9cb9c7f4ad",
+    "scripts/run-evidence.mjs": "7c8f9a3502c094f8f7efae35ff51b3c389e5a09c2e89b6eb7964e9590754c7ff"
+  },
+  "raw_output_sha256": {
+    "node-tests.stdout.txt": "b5248ad18e160b5e853ccdd01d21b1b7d919b54c16f3e6bfa968c66979ecd481",
+    "node-tests.stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "browser-tests.stdout.txt": "fc85fe0461ca6e078d6be4be768453b6c7fddd641446c6e1fae7f456d49e1e9c",
+    "browser-tests.stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "measurements": {
+    "actual_annotation_time": null,
+    "expert_agreement": null,
+    "context_sufficiency": null,
+    "principle_coverage": null,
+    "coaching_effectiveness": null
+  },
+  "limitations": [
+    "Synthetic software inputs, not VOD or independent experts.",
+    "Controlled-clock durations are test assertions; wall/browser durations are software execution only.",
+    "Raw traces may contain temporary access codes and remain private; only sanitized summaries may be published.",
+    "No ACTUAL TEST, product GO decision, full security/WCAG certification or hosted deployment."
+  ]
+}

@@ -2,7 +2,7 @@
 
 Public operating foundation for **DECODE Coach Copilot MVP v0.1**. The canonical source of truth is [`main`](https://github.com/edward321416-maker/DECODE/tree/main), not a private chat or an unmerged branch.
 
-**③-A-1 ACTUAL TEST: NOT YET TESTED.** This repository publishes operating rules, candidate specifications and handoffs. It does not yet contain an implemented annotation application, validated coaching model, real VOD, or expert results. The pre-existing local deterministic demo is excluded from this publication and is not a validated Coach Copilot.
+**③-A-1 ACTUAL TEST: NOT YET TESTED.** This branch proposes candidate annotation infrastructure, ten SIMULATED fixtures and executed internal validation. See the [tool guide](annotation/README.md) and [design](docs/ANNOTATION_IMPLEMENTATION.md). Product review is required before merging; no validated coaching model, real VOD or expert result is included. The pre-existing local deterministic demo is excluded from this publication and is not a validated Coach Copilot.
 
 ## Start here
 
@@ -24,8 +24,8 @@ node scripts/check-operating-docs.mjs --tracked
 
 The first command checks the allowlisted working files; the second additionally compares the committed HEAD file list to the publication inventory. Before a publication commit, use `--index` instead of `--tracked` to verify the proposed staged tree. Exit 0 means these static publication checks passed; exit 1 lists failed checks to resolve. These commands do not run ③-A-1, certify security, or validate model behavior.
 
-See [publication evidence](docs/MAIN_PUBLICATION.md), [historical Rules Review](docs/RULES_REVIEW.md) and [Risks](docs/RISKS.md) for limits. The [experiment log](experiments/experiment_log.csv) has no executed runs; the separate [pending operations log](experiments/ai_execution_log.pending.csv) is not a Google sync receipt.
+See [publication evidence](docs/MAIN_PUBLICATION.md), [historical Rules Review](docs/RULES_REVIEW.md) and [Risks](docs/RISKS.md) for limits. The [experiment log](experiments/experiment_log.csv) records executed SELF-BENCHMARK checks with SIMULATED inputs, never actual-test success; the separate [pending operations log](experiments/ai_execution_log.pending.csv) is not a Google sync receipt.
 
 ## Contribution boundary
 
-Use a scoped branch when needed, check changes and conflicts, and merge validated policies/results to `main` through a normal PR. Never bypass branch protections or publish secrets, private media, identities, consent records, private chat URLs, local-only audit files or unrelated app code. Public visibility does not approve a license or third-party content reuse; no license was added by this task.
+Use a scoped branch when needed, check changes and conflicts, and submit validated policies/results to `main` through a normal PR. This infrastructure PR MUST NOT merge before Product review. Never bypass branch protections or publish secrets, private media, identities, consent records, private chat URLs, local-only audit files or unrelated app code. Public visibility does not approve a license or third-party content reuse; no license was added by this task.
