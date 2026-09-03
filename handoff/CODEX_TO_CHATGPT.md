@@ -29,7 +29,7 @@ Initial test-first stubs failed as expected. Real-clock timestamp mismatch, sele
 
 ## NOT TESTED
 
-Real annotation time, expert agreement, context sufficiency, principle coverage, coaching effectiveness; real-mode session/adjudication/aggregate reporting; Linux/macOS or other browser engines; hosted deployment, encryption, disk-failure recovery, penetration testing, full WCAG/screen-reader compliance; model/prompt behavior, token savings, Google sync and planning-chat membership refresh. No root legacy scripts were executed.
+Real annotation time, expert agreement, context sufficiency, principle coverage, coaching effectiveness; real-mode session/adjudication/aggregate reporting; Linux/macOS or other browser engines; hosted deployment, encryption, disk-failure recovery, penetration testing, full WCAG/screen-reader compliance; model/prompt behavior, token savings, Google sync and planning-chat membership refresh. No root legacy scripts were executed. CodeRabbit reported SUCCESS but explicitly skipped automatic review; it is not counted as a completed review. Product review remains pending.
 
 ## FILES CHANGED
 
