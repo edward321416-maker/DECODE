@@ -4,6 +4,12 @@ Snapshot: 2026-09-03 | Owner: AI/Engineering Lead
 Phase: 003-A-1 infrastructure implemented on codex/annotation-infrastructure; Product review required, NOT MERGED.
 Canonical baseline: public main e8e835718a9f95f02ce81682da2092db81249816. Issue: [#4](https://github.com/edward321416-maker/DECODE/issues/4). Review: [PR #5](https://github.com/edward321416-maker/DECODE/pull/5), OPEN against main, NOT MERGED.
 
+## v0.2 Current Update — 2026-09-04
+
+Task 1 start gate: BLOCKED / STOP_AND_REPORT. Live PR #5 is OPEN and unmerged at inspected head 9398fd26dd227da014bf8d4cdf931a4279b9418e; main remains the baseline above. Both required canonical v0.2 Spec and Implementation Plan are absent from main and the PR head, and their approved full texts were not supplied. Product must supply them before engineering can materialize or implement them. See the [current blocker checkpoint](../handoff/CODEX_TO_CHATGPT.md#v02-current-update).
+
+No v0.2 implementation or benchmark execution has started. ACTUAL TEST: NOT YET TESTED. The remaining sections retain the historical v0.1 snapshot; its test counts and artifacts are not v0.2 evidence. Existing v0.1 evidence files are preserved. DO NOT MERGE.
+
 ## LOCKED
 
 - DECODE Coach Copilot MVP v0.1.
