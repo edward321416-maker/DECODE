@@ -1,7 +1,10 @@
 # Experiment results
 
-No experiment results exist yet. ACTUAL TEST: NOT YET TESTED.
+Owner: AI/Engineering Lead | Revision: 2026-09-03
+ACTUAL TEST: NOT YET TESTED.
 
-Future runs use distinct ACTUAL_TEST, SELF_BENCHMARK and SIMULATED subdirectories and a unique run ID. Each sanitized report identifies evidence mode and data origin separately, execution status, protocol/schema version, code revision or exact snapshot hash, input references, evaluator, actual sample count, commands, metric definitions, exclusions, failures and limitations. Unknown metrics remain unavailable, not zero.
+The [experiment log](../experiment_log.csv) now records executed infrastructure SELF-BENCHMARK checks with SIMULATED inputs. Sanitized summaries under SELF_BENCHMARK preserve commands, counts, version/source/input/test hashes, environment and null actual metrics. They are not the actual 10-case stress-test result.
 
-Do not put a planned/example run in [experiment_log.csv](../experiment_log.csv). Use [EXPERIMENT_PROTOCOL](../../docs/EXPERIMENT_PROTOCOL.md); never use this directory for raw media or credentials.
+Raw output, stores, screenshots and traces remain local/private; traces can contain temporary access codes. Their hashes are recorded without publishing contents. No real VOD, expert session or actual measurement exists here.
+
+Use distinct ACTUAL_TEST, SELF_BENCHMARK and SIMULATED paths. Never add planned/example runs to the experiment log. Each actual execution needs provenance and limitations under the [protocol](../../docs/EXPERIMENT_PROTOCOL.md). Public evidence review is separate from private artifact generation.

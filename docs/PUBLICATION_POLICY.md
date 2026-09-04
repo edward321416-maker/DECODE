@@ -1,7 +1,9 @@
 # DECODE Public Repository and Main Policy
 
-Version: 1.0 | Updated: 2026-09-02 | Owner: Product/Business Lead and AI/Engineering Lead
+Version: 1.1 | Updated: 2026-09-03 | Owner: Product/Business Lead and AI/Engineering Lead
 Status: ACTIVE OPERATING POLICY | Authority: U-PUBLIC-2026-09-02 / D013
+
+Task-specific amendment U-INFRA-2026-09-02 / D014: annotation implementation, tests and a main-targeted PR are approved, but DO NOT MERGE automatically. Product/Business Lead review is required. Earlier foundation merge steps below do not grant merge authority for this PR. No candidate promotion or real-data publication is implied.
 
 ## Canonical source
 
@@ -27,7 +29,7 @@ The inventory lists the complete initial published file set, including the check
 
 The dependency-free checker uses Node.js built-ins. Run from the repository root with Node.js and Git installed:
 
-- `node scripts/check-operating-docs.mjs`: read allowlisted working files; validate required coverage, relative file links, UTF-8/newlines, handoff/report sections, candidates/slots, historical labels, basic privacy/secret patterns and zero recorded experiment runs at this foundation stage.
+- `node scripts/check-operating-docs.mjs`: read allowlisted working files; validate required coverage, relative file links, UTF-8/newlines, handoff/report sections, candidates/slots, historical labels, basic privacy/secret patterns and approved internal-run evidence contracts. Inventory v2 admits scoped annotation code/tests/dependencies, not root app or private stores. The old header-only gate is replaced with matching row/artifact provenance, null-real-metric and anti-ACTUAL-promotion checks. Failed/incomplete runs stay in private raw evidence until a reviewed failure-publication contract exists.
 - `node scripts/check-operating-docs.mjs --index`: also require the staged tree to match the inventory and staged blobs to match inspected working files.
 - `node scripts/check-operating-docs.mjs --tracked`: also require HEAD to match the inventory and committed blobs to match inspected working files.
 
@@ -37,7 +39,7 @@ Unknown options fail. Exit 0 means these checks passed; exit 1 reports failures 
 
 ACTUAL TEST requires consented real VOD, independent experts, the approved method and actual recorded execution. SELF-BENCHMARK describes internal evaluation; synthetic input origin remains SIMULATED. NOT YET TESTED means unexecuted, not zero and not passed. Documentation checks belong in the operational report, not the experiment log.
 
-This approval covers the operating foundation and verification tooling only. It does not start queued annotation development, publish the excluded local demo, add a license, change access/IAM/branch protections, enable paid services, connect OAuth/Google, or disclose raw/private data. Existing rules must always yield to stricter host safety and task constraints.
+D013 covered the operating foundation only. D014 also approves candidate annotation infrastructure, testing and PR, with a no-merge gate. Neither publishes the excluded app, adds a license, changes access/IAM/branch protections, enables paid services, connects OAuth/Google or discloses raw/private data. Existing rules must always yield to stricter host safety and task constraints.
 
 ## Main handoff
 

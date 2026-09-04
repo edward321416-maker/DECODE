@@ -1,6 +1,6 @@
 # DECODE Risks and Open Decisions
 
-Updated: 2026-09-02
+Updated: 2026-09-03
 
 | Risk / blocker | Current evidence | Required action / owner |
 | --- | --- | --- |
@@ -19,3 +19,5 @@ Updated: 2026-09-02
 | Token optimization overclaim | No measured prompt/model baseline | 80–90% diff-output reduction is a target for sparse edits only, not a guarantee or result |
 
 U-PUBLIC-2026-09-02 authorizes the public operating foundation and normal PR merge to main. It does not authorize unrelated app/private data publication, a new account/OAuth connection, API enablement, paid service, collaborator/IAM grant or destructive command. Branch protections and automated CI are not established by policy prose. Before legal/policy-sensitive data use, recheck current authoritative requirements; this is not a compliance certification.
+
+D014 now authorizes candidate annotation implementation and a main-targeted PR, but explicitly prohibits merge before Product review. Current implementation risks: trusted local operator/OS boundary; no encrypted store or human identity proof; active timing continues until explicit pause while the server runs; snapshot quota and uncertain-write recovery; no embedded VOD/adjudication/aggregate metrics. [Guide](../annotation/README.md) and [implementation review](ANNOTATION_IMPLEMENTATION.md) distinguish tested behavior from these limitations. Do not ingest real data until Product approves the operational consent/storage/withdrawal and measurement gates.

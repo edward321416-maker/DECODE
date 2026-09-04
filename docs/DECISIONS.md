@@ -1,6 +1,6 @@
 # DECODE Decision Register
 
-Updated: 2026-09-02 | Owner: Product/Business Lead
+Updated: 2026-09-03 | Owner: Product/Business Lead
 
 LOCKED means product scope is approved, not scientifically validated. LOCK CANDIDATE means reversible and awaiting evidence/approval. Record amendments as new entries referencing the superseded decision; do not silently rewrite history.
 
@@ -30,6 +30,14 @@ U-REPO-2026-09-02: the user explicitly requested repository creation. Private vi
 | D013 | USER-AUTHORIZED OPERATING POLICY | DECODE is public; main is the single Source of Truth. Verify conflicts and content, then merge the operating foundation; use scoped branches as needed and integrate validated current rules/results into main | U-PUBLIC-2026-09-02; [Publication Policy](PUBLICATION_POLICY.md); supersedes D012 private visibility and earlier local-only/publication-pending restrictions |
 
 U-PUBLIC-2026-09-02: the user explicitly required a public repository and main integration after verification. This authorizes scoped operating-document publication, issue/branch/commit/PR/normal merge, not unrelated legacy app publication, raw/private data, candidate promotion, new account permissions, destructive actions or a claimed ACTUAL TEST. D009-D012 and prior setup reports are historical; their unfulfilled repository/publication gates are superseded. Google bindings remain unresolved.
+
+## Infrastructure amendment
+
+| ID | Status | Decision | Source |
+| --- | --- | --- | --- |
+| D014 | USER-AUTHORIZED IMPLEMENTATION | Implement only 003-A-1 annotation infrastructure, ten SIMULATED fixtures and automated checks on a scoped branch from latest public main; open a main PR, DO NOT MERGE before Product review | U-INFRA-2026-09-02; [approved handoff](../handoff/CHATGPT_TO_CODEX.md); supersedes the implementation-pending gate and D013's earlier merge permission for this new task |
+
+U-INFRA-2026-09-02 is the Product/Business Lead's explicit implementation request. No new repository, destructive command, legacy-app mutation, ACTUAL TEST success, 50/150 expansion, full Coach Copilot, OAuth, paid service or broad permission is authorized. Candidate fields/context/principles and GO/REVISE/STOP thresholds are not promoted. [Implementation choices](ANNOTATION_IMPLEMENTATION.md) remain reversible. This amendment is a branch proposal until reviewed/merged; main remains canonical.
 
 ## Decision promotion
 

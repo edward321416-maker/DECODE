@@ -1,0 +1,225 @@
+{
+  "schema_version": "0.1.0-candidate",
+  "data_origin": "SIMULATED",
+  "actual_test_status": "NOT YET TESTED",
+  "purpose": "Invented software label examples; NOT expert annotations, NOT ACTUAL TEST",
+  "examples": [
+    {
+      "case_id": "case-001",
+      "data_origin": "SIMULATED",
+      "annotation": {
+        "trigger": "Contact or positioning changes at the marked moment",
+        "observed_decision": "Re-peeked the same corridor",
+        "verdict": "ERROR",
+        "preferred_decision": "Hold cover with the team",
+        "decision_principle": {
+          "primary": "NUMBER_ADVANTAGE_PRESERVATION",
+          "related": []
+        },
+        "expert_reason": "Synthetic example reasoning for software validation only; not an expert judgment.",
+        "severity": "HIGH",
+        "confidence": "MEDIUM",
+        "uncertainty_reasons": [],
+        "missing_context_note": null,
+        "alternatives": []
+      }
+    },
+    {
+      "case_id": "case-002",
+      "data_origin": "SIMULATED",
+      "annotation": {
+        "trigger": "Contact or positioning changes at the marked moment",
+        "observed_decision": "Contested the path under time pressure",
+        "verdict": "ACCEPTABLE",
+        "preferred_decision": "Contest with the available cover",
+        "decision_principle": {
+          "primary": "TIME_PRESSURE_RISK",
+          "related": []
+        },
+        "expert_reason": "Synthetic example reasoning for software validation only; not an expert judgment.",
+        "severity": null,
+        "confidence": "MEDIUM",
+        "uncertainty_reasons": [],
+        "missing_context_note": null,
+        "alternatives": []
+      }
+    },
+    {
+      "case_id": "case-003",
+      "data_origin": "SIMULATED",
+      "annotation": {
+        "trigger": "Contact or positioning changes at the marked moment",
+        "observed_decision": "Moved wide into the lane",
+        "verdict": "ERROR",
+        "preferred_decision": "Gather information before committing",
+        "decision_principle": {
+          "primary": "INFORMATION_ADVANTAGE",
+          "related": []
+        },
+        "expert_reason": "Synthetic example reasoning for software validation only; not an expert judgment.",
+        "severity": "MEDIUM",
+        "confidence": "MEDIUM",
+        "uncertainty_reasons": [],
+        "missing_context_note": null,
+        "alternatives": []
+      }
+    },
+    {
+      "case_id": "case-004",
+      "data_origin": "SIMULATED",
+      "annotation": {
+        "trigger": "Contact or positioning changes at the marked moment",
+        "observed_decision": "Repositioned behind cover",
+        "verdict": "OPTIMAL",
+        "preferred_decision": "Keep the new covered position",
+        "decision_principle": {
+          "primary": "POST_KILL_REPOSITION",
+          "related": []
+        },
+        "expert_reason": "Synthetic example reasoning for software validation only; not an expert judgment.",
+        "severity": null,
+        "confidence": "MEDIUM",
+        "uncertainty_reasons": [],
+        "missing_context_note": null,
+        "alternatives": []
+      }
+    },
+    {
+      "case_id": "case-005",
+      "data_origin": "SIMULATED",
+      "annotation": {
+        "trigger": "Contact or positioning changes at the marked moment",
+        "observed_decision": "Pursued beyond support",
+        "verdict": "SUBOPTIMAL",
+        "preferred_decision": "Disengage after initial value",
+        "decision_principle": {
+          "primary": "VALUE_THEN_DISENGAGE",
+          "related": []
+        },
+        "expert_reason": "Synthetic example reasoning for software validation only; not an expert judgment.",
+        "severity": "MEDIUM",
+        "confidence": "MEDIUM",
+        "uncertainty_reasons": [],
+        "missing_context_note": null,
+        "alternatives": []
+      }
+    },
+    {
+      "case_id": "case-006",
+      "data_origin": "SIMULATED",
+      "annotation": {
+        "trigger": "Contact or positioning changes at the marked moment",
+        "observed_decision": "Entered synchronized contact",
+        "verdict": "OPTIMAL",
+        "preferred_decision": "Maintain the shared contact line",
+        "decision_principle": {
+          "primary": "SYNCHRONIZED_CONTACT",
+          "related": []
+        },
+        "expert_reason": "Synthetic example reasoning for software validation only; not an expert judgment.",
+        "severity": null,
+        "confidence": "MEDIUM",
+        "uncertainty_reasons": [],
+        "missing_context_note": null,
+        "alternatives": []
+      }
+    },
+    {
+      "case_id": "case-007",
+      "data_origin": "SIMULATED",
+      "annotation": {
+        "trigger": "Contact or positioning changes at the marked moment",
+        "observed_decision": "Held near the contested angle",
+        "verdict": "UNCERTAIN",
+        "preferred_decision": null,
+        "decision_principle": {
+          "primary": "DUEL_QUALITY",
+          "related": []
+        },
+        "expert_reason": "Synthetic example reasoning for software validation only; not an expert judgment.",
+        "severity": null,
+        "confidence": "LOW",
+        "uncertainty_reasons": [
+          "MULTIPLE_VALID_OPTIONS"
+        ],
+        "missing_context_note": null,
+        "alternatives": [
+          {
+            "action": "Re-engage with available cover",
+            "reason": "One plausible synthetic option"
+          },
+          {
+            "action": "Disengage along the visible path",
+            "reason": "Another plausible synthetic option"
+          }
+        ]
+      }
+    },
+    {
+      "case_id": "case-008",
+      "data_origin": "SIMULATED",
+      "annotation": {
+        "trigger": "Contact or positioning changes at the marked moment",
+        "observed_decision": "Broke contact",
+        "verdict": "INSUFFICIENT_CONTEXT",
+        "preferred_decision": null,
+        "decision_principle": {
+          "primary": "OTHER",
+          "related": []
+        },
+        "expert_reason": "Synthetic example reasoning for software validation only; not an expert judgment.",
+        "severity": null,
+        "confidence": "LOW",
+        "uncertainty_reasons": [
+          "MISSING_INFORMATION"
+        ],
+        "missing_context_note": "The synthetic source omits required enemy or team information.",
+        "alternatives": []
+      }
+    },
+    {
+      "case_id": "case-009",
+      "data_origin": "SIMULATED",
+      "annotation": {
+        "trigger": "Contact or positioning changes at the marked moment",
+        "observed_decision": "Approached contact near a teammate",
+        "verdict": "UNCERTAIN",
+        "preferred_decision": null,
+        "decision_principle": {
+          "primary": "SUPPORT_LINE_OF_SIGHT",
+          "related": []
+        },
+        "expert_reason": "Synthetic example reasoning for software validation only; not an expert judgment.",
+        "severity": null,
+        "confidence": "LOW",
+        "uncertainty_reasons": [
+          "MISSING_INFORMATION"
+        ],
+        "missing_context_note": null,
+        "alternatives": []
+      }
+    },
+    {
+      "case_id": "case-010",
+      "data_origin": "SIMULATED",
+      "annotation": {
+        "trigger": "Contact or positioning changes at the marked moment",
+        "observed_decision": "Paused before shared contact",
+        "verdict": "INSUFFICIENT_CONTEXT",
+        "preferred_decision": null,
+        "decision_principle": {
+          "primary": "OTHER",
+          "related": []
+        },
+        "expert_reason": "Synthetic example reasoning for software validation only; not an expert judgment.",
+        "severity": null,
+        "confidence": "LOW",
+        "uncertainty_reasons": [
+          "MISSING_COMMS"
+        ],
+        "missing_context_note": "The synthetic source omits required enemy or team information.",
+        "alternatives": []
+      }
+    }
+  ]
+}

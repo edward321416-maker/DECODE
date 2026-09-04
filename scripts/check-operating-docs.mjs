@@ -1,5 +1,5 @@
 /**
- * Validate the initial public operating foundation, not application/model behavior.
+ * Validate the public foundation and approved candidate infrastructure publication.
  * Usage: node scripts/check-operating-docs.mjs [--index|--tracked]
  * Read-only; exits 1 on failed assertions, invalid options or missing prerequisites.
  */
@@ -7,6 +7,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { execFileSync } from "node:child_process";
+import { validateInternalRun } from "./run-evidence.mjs";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const checks = [];
@@ -47,7 +48,7 @@ try {
   if (!Array.isArray(files) || files.some((f) => typeof f !== "string")) {
     throw new Error("Publication inventory must list file paths");
   }
-  check("inventory-version", inventory.version === 1);
+  check("inventory-version", inventory.version === 2);
   check("inventory-sorted-unique", same(files, [...new Set(files)].sort()));
   const allowed = new Set(files);
   const required = [
@@ -65,6 +66,11 @@ try {
     "data/samples/README.md", "experiments/results/README.md",
     "experiments/experiment_log.csv", "experiments/ai_execution_log.pending.csv",
     "scripts/check-operating-docs.mjs",
+    "scripts/run-evidence.mjs", "annotation/package.json", "annotation/package-lock.json",
+    "annotation/src/server.mjs", "annotation/src/workspace.mjs", "annotation/src/validation.mjs",
+    "annotation/README.md", "annotation/scripts/verify.mjs", "docs/ANNOTATION_IMPLEMENTATION.md",
+    "data/schemas/annotation-0.1.0-candidate.schema.json", "data/samples/SIMULATED/ten-cases.json",
+    "data/samples/SIMULATED/label-examples.json",
   ];
   for (const f of required) check("required:" + f, allowed.has(f));
   const texts = new Map();
@@ -87,6 +93,7 @@ try {
     check("safe-path:" + f, safePath);
     if (!safePath) continue;
     check("public-scope:" + f, !/^(?:\.env(?:\.|$)|\.agent-docs\/|app\/|components\/|lib\/|node_modules\/|work\/|outputs\/|data\/(?:raw|private)\/|experiments\/private\/|package(?:-lock)?\.json$)/.test(f));
+    check("annotation-private-scope:" + f, !/^annotation\/(?:\.local|node_modules|test-results|playwright-report)(?:\/|$)/.test(f));
     const absolute = path.join(root, f);
     check("regular-file:" + f, fs.existsSync(absolute) && fs.lstatSync(absolute).isFile());
     if (!fs.existsSync(absolute) || !fs.lstatSync(absolute).isFile()) continue;
@@ -162,13 +169,24 @@ try {
   check("experiment-header", same(runs[0], ["run_id", "timestamp", "evaluation_mode", "data_origin", "execution_status",
     "protocol_version", "schema_version", "code_revision", "input_reference", "case_count",
     "evaluator_reference", "artifact_path", "summary", "limitations"]));
-  check("no-executed-experiment-rows", runs.length === 1);
+  const runIds = new Set();
+  for (const [i,row] of runs.slice(1).entries()) {
+    let artifact;
+    try { if(allowed.has(row[11]))artifact=JSON.parse(texts.get(row[11])); } catch { /* Failed contract below. */ }
+    check("executed-internal-run:"+i,validateInternalRun(row,artifact)&&!runIds.has(row[0]));
+    runIds.add(row[0]);
+  }
+  for(const name of ["ten-cases.json","label-examples.json"]) {
+    const data=JSON.parse(texts.get("data/samples/SIMULATED/"+name));
+    check("synthetic-fixture-origin:"+name,data.data_origin==="SIMULATED"&&data.actual_test_status==="NOT YET TESTED");
+  }
+  check("infrastructure-approval",/D014[\s\S]*U-INFRA-2026-09-02/.test(texts.get("docs/DECISIONS.md")));
   const pending = csv(texts.get("experiments/ai_execution_log.pending.csv") || "");
   check("pending-header", same(pending[0], ["Timestamp", "Acquired Skill", "Estimated Tokens Used", "Task Summary"]));
   const events = new Set();
   for (const [i, row] of pending.slice(1).entries()) {
     const event = row[3]?.match(/event_id=([a-z0-9-]+)/)?.[1];
-    check("pending-row:" + i, row.length === 4 && !Number.isNaN(Date.parse(row[0])) && row[1] === "NONE" &&
+    check("pending-row:" + i, row.length === 4 && !Number.isNaN(Date.parse(row[0])) && ["NONE","npm:ajv@8.20.0 + npm:@playwright/test@1.62.1"].includes(row[1]) &&
       row[2] === "UNKNOWN" && row[3].includes("SYNC BLOCKED") && event && !events.has(event));
     if (event) events.add(event);
   }
@@ -187,7 +205,7 @@ try {
 }
 const failures = checks.filter((c) => !c.passed);
 console.log(JSON.stringify({
-  scope: "operating-foundation static publication checks; NOT an ACTUAL TEST",
+  scope: "foundation and candidate infrastructure static publication checks; NOT an ACTUAL TEST or proof of execution",
   checkedAt: new Date().toISOString(), checks: checks.length, passed: checks.length - failures.length,
   failed: failures.length, failures,
 }, null, 2));

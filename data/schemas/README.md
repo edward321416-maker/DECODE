@@ -1,5 +1,8 @@
 # Annotation schemas
 
-Status: NOT IMPLEMENTED. This directory is intentionally reserved, not an empty validated schema.
+Version: 0.1.0-candidate | Owner: AI/Engineering Lead | Status: candidate implementation for Product review
+ACTUAL TEST: NOT YET TESTED.
 
-Implement a versioned candidate schema through [the first handoff](../../handoff/CHATGPT_TO_CODEX.md), grounded in [DECISION_DATASET_SPEC](../../docs/DECISION_DATASET_SPEC.md). Keep migrations, fixtures and validation tied to schema_version. A machine-valid record alone is not an ACTUAL TEST or expert ground truth.
+[Annotation JSON Schema](annotation-0.1.0-candidate.schema.json) defines case, eight-field annotation/draft, ten-case bundle, review/timing/history and transfer structures using Draft 2020-12. It is not product-locked. Use [semantic validation](../../annotation/src/validation.mjs) as well as shape validation; it enforces relationships not expressible by basic field types.
+
+[Tool guide](../../annotation/README.md) explains timing units, null semantics, limits, imports and evidence boundaries. Version mismatch is rejected; no silent migration or ACTUAL TEST promotion. No completed real-test evidence is supplied.

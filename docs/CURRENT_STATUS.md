@@ -1,45 +1,45 @@
 # DECODE Current Status
 
-Snapshot: 2026-09-02 | Phase: operating foundation merged into public main; ③-A-1 implementation remains pending
+Snapshot: 2026-09-03 | Owner: AI/Engineering Lead
+Phase: 003-A-1 infrastructure implemented on codex/annotation-infrastructure; Product review required, NOT MERGED.
+Canonical baseline: public main e8e835718a9f95f02ce81682da2092db81249816. Issue: [#4](https://github.com/edward321416-maker/DECODE/issues/4). Review: [PR #5](https://github.com/edward321416-maker/DECODE/pull/5), OPEN against main, NOT MERGED.
+
+## v0.2 Current Update — 2026-09-04
+
+Task 1 start gate: BLOCKED / STOP_AND_REPORT. Live PR #5 is OPEN and unmerged at inspected head 9398fd26dd227da014bf8d4cdf931a4279b9418e; main remains the baseline above. Both required canonical v0.2 Spec and Implementation Plan are absent from main and the PR head, and their approved full texts were not supplied. Product must supply them before engineering can materialize or implement them. See the [current blocker checkpoint](../handoff/CODEX_TO_CHATGPT.md#v02-current-update).
+
+No v0.2 implementation or benchmark execution has started. ACTUAL TEST: NOT YET TESTED. The remaining sections retain the historical v0.1 snapshot; its test counts and artifacts are not v0.2 evidence. Existing v0.1 evidence files are preserved. DO NOT MERGE.
 
 ## LOCKED
 
 - DECODE Coach Copilot MVP v0.1.
-- Decision Case Dataset philosophy: evidence and context before judgment; `1 Case = 1 Primary Decision`; decision quality is separate from outcome/causality.
-- Exactly three initial decision families: Fight Selection; Post-contact Decision; Tradeability & Spacing.
-- ③-A-1 selection design: six clear and four deliberately ambiguous moments, with 4/3/3 primary-family allocation. Include positive judgments. Expert-first blind labels; do not expose AI suggestions before independent labels are locked.
+- Decision Case Dataset philosophy; 1 Case = 1 Primary Decision; quality is distinct from outcome/causality.
+- Fight Selection, Post-contact Decision, Tradeability & Spacing.
+- Clear 6 + ambiguous 4 and primary-family 4/3/3, including positive judgment.
+- Expert blind labels before AI proposals; uncertainty is a normal label.
 
 ## LOCK CANDIDATE
 
-- Eight expert fields and their enum/conditional-field design.
-- Core/Extended context split.
-- Twelve seed principles and their definitions.
-- GO/STOP thresholds, metric aggregation rules, and escalation rubric.
-
-These are testable proposals, not approved performance claims. Definitions are in [DECISION_DATASET_SPEC](DECISION_DATASET_SPEC.md) and [EXPERIMENT_PROTOCOL](EXPERIMENT_PROTOCOL.md).
+Eight expert fields, Core/Extended context, twelve seed principles and GO/REVISE/STOP thresholds remain candidates. [Dataset](DECISION_DATASET_SPEC.md), [protocol](EXPERIMENT_PROTOCOL.md) and [implementation choices](ANNOTATION_IMPLEMENTATION.md). No Product lock/promotion is inferred from code or software checks.
 
 ## Evidence status
 
 | Category | Current state | Limit |
 | --- | --- | --- |
-| IMPLEMENTED | Public repository and 33-file operating foundation merged through PR #2 | Verified merge receipt and check scope: [Publication evidence](MAIN_PUBLICATION.md); no annotation application |
-| ACTUAL TEST | NOT YET TESTED | No consented VOD/expert session was supplied or run for ③-A-1 |
-| SELF-BENCHMARK | Policy-text review and publication integrity checks only | [Current publication checks](MAIN_PUBLICATION.md); earlier [Rules Review](RULES_REVIEW.md) is historical; not model or coach evaluation |
-| SIMULATED | Document-only checker fixtures executed; decision-data run NOT TESTED | Generated mutations tested the publication checker only; no synthetic decision records, VOD or expert results |
-| FAILED | No claim of a failed stress test | Missing prerequisites are blockers, not test outcomes |
-| NOT TESTED | Annotation infrastructure, expert timing/agreement, context sufficiency, principle coverage, coaching benefit, rule obedience and runtime/accessibility compliance | No new measured values available |
+| IMPLEMENTED | Versioned schema, local operator/reviewer tool, independent review gate, timing, durable save/resume, imports/exports and provenance | Scoped candidate infrastructure, not full Coach Copilot; not yet merged |
+| ACTUAL TEST | NOT YET TESTED | No real consented VALORANT VOD or independent expert session |
+| SELF-BENCHMARK | Executed internal schema/workspace/HTTP/browser validation | Commands and exact counts/hashes in [result log](../experiments/experiment_log.csv); not human annotation measurements |
+| SIMULATED | Ten fixtures, clear 6 / ambiguous 4, family 4 / 3 / 3; separate invented label examples | Not expert ground truth or an actual stress-test run |
+| FAILED | Expected test-first failures and discovered implementation defects were corrected and rerun | See [review](ANNOTATION_IMPLEMENTATION.md); no failed real stress test is claimed |
+| NOT TESTED | Actual annotation time, expert agreement, context sufficiency, principle coverage, coaching effectiveness | Also full security/accessibility conformance, other platforms and Google sync |
 
-## Adopted operating rules
+## Authority and operational bindings
 
-[Development Rules](DEVELOPMENT_RULES.md), [Documentation Rules](DOCUMENTATION_RULES.md) and [Graphics Rules](GRAPHICS_RULES.md), version 0.2, apply to approved work. U-PUBLIC-2026-09-02 authorizes this operating foundation's publication and normal merge to main under [Publication Policy](PUBLICATION_POLICY.md). Earlier rules/setup checks remain historical, not fresh certification. No annotation implementation, graphic production, manifest script or package installation is included.
+D014 / U-INFRA-2026-09-02 approves this implementation and main-targeted PR, not merge. Product/Business Lead must review before merge. D013 keeps public main canonical; branch work is not canonical until merged. Earlier foundation evidence is retained in [MAIN_PUBLICATION](MAIN_PUBLICATION.md).
 
-## Operational bindings
+ChatGPT Project remains planning HQ, planning chat Product/Business Lead and Codex AI/Engineering Lead. Earlier planning-chat membership and saved instruction refresh remain unresolved and were not reverified here; no live transcript synchronization is claimed. Private app/task/source bindings remain outside public Git.
 
-- ChatGPT Project: DECODE planning headquarters. Earlier setup verified project creation and then-current policy persistence; planning-chat membership remains unresolved and was not rechecked during publication. Public prompt-file updates do not update saved project instructions. No transcript/policy synchronization is claimed.
-- Codex: AI/Engineering Lead in the verified existing local DECODE checkout. Private task/project/chat bindings and local paths are excluded from the public repository.
-- GitHub: [public edward321416-maker/DECODE](https://github.com/edward321416-maker/DECODE), repository ID 1354606878, with main as default and canonical branch. Foundation PR #2 merged at 2026-09-02T10:44:59Z; see [Publication evidence](MAIN_PUBLICATION.md) for exact commits and check receipts. Other branch proposals are not canonical until merged.
-- Google `AI_Execution_Log` spreadsheet ID, range binding, and schema-cache Drive folder ID: NOT CONFIGURED. No repository policy or designated execution log was found before setup. No matching credential/binding environment variable names were present in the current process; credential stores were not searched.
-- Prompt files are project policies, not modifications to a provider's system layer or global account settings. Google integration is a written protocol, not a deployed logger.
+Public repository [edward321416-maker/DECODE](https://github.com/edward321416-maker/DECODE) and default main were reverified. Legacy untracked app files are excluded and preserved. Google AI_Execution_Log / Drive bindings and approved authentication are still NOT CONFIGURED / NOT VERIFIED. Sanitized pending rows are SYNC BLOCKED, not Google receipts.
 
 ## Stack metadata — parsed, never executed
 
@@ -59,8 +59,16 @@ Source: root `package.json`, parsed during repository setup and rechecked for pu
 | package-lock.json | Present; not altered |
 | requirements.txt / docker-compose.yml | Not found in inspected project files |
 
-This is metadata for the excluded local legacy demo, not a runnable stack included in the public foundation. Versions are declared ranges, not installed-version or compatibility verification. No package installation, manifest script, Docker service, application build, or Runtime was started. FastAPI/PostgreSQL/FFmpeg discussed in planning are not installed-stack findings.
+This is metadata for the excluded local legacy demo, not a runnable stack included in the public foundation. Versions are declared ranges, not installed-version or compatibility verification. During initial sensing, no package installation, manifest script, Docker service, application build or Runtime was started. Later approved infrastructure execution is documented separately below. FastAPI/PostgreSQL/FFmpeg discussed in planning are not installed-stack findings.
 
-## Next gate
 
-Keep verified operating rules and results on public main; see the publication receipt for the merged state. Next development requires review of the versioned annotation design and unresolved candidate choices under the [first engineering request](../handoff/CHATGPT_TO_CODEX.md); publication does not start that implementation. Acquire consented VOD and independent experts before ACTUAL TEST; obtain Product approval before expanding to 50/150 cases. Google bindings and planning-chat membership remain separate unresolved items.
+
+## Approved infrastructure stack and actual execution
+
+Separate annotation package: Node.js 24.14.0, Ajv 8.20.0, Playwright Test 1.62.1 and installed Chrome 152.0.7977.75 on Windows. Dependency acquisition was confined to annotation with lifecycle scripts disabled, after sensing and under implementation approval. No new account, OAuth, paid service, permissions or external media integration. Loopback server/browser tests were actually run; root legacy scripts remain NOT EXECUTED.
+
+[Operator guide](../annotation/README.md) provides exact install/start/test commands and recovery limits. [Experiment log](../experiments/experiment_log.csv) links the executed sanitized SELF-BENCHMARK artifact. Real metrics remain null.
+
+## Next decision
+
+Review the scoped PR, provisional schema/nullability/timing/limits and representative native form. Approve merge only after Product review. Before actual data ingestion, approve consent/use, storage/access/retention/withdrawal, independent expert arrangement and the measurement/adjudication protocol. Actual execution mode is deliberately not enabled in this candidate. No 50/150 expansion, aggregate success gate or full Coach Copilot is authorized.

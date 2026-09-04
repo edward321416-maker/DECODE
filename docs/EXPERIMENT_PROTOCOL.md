@@ -62,4 +62,4 @@ STOP/REDESIGN candidates: median >8 min; at least 4/10 cases lack context; perva
 
 Ten traceable cases; timing report; schema failure log; taxonomy coverage report; blind expert disagreement report; Product GO/REVISE/STOP record. Every artifact must show evidence label, input provenance, run ID, protocol/schema version, date, evaluator, code commit or exact uncommitted snapshot hash, and limitations.
 
-Log each run in [experiment_log.csv](../experiments/experiment_log.csv). That file is header-only at setup, deliberately containing no invented run. Store sanitized artifacts under [results](../experiments/results/README.md); keep ACTUAL TEST, SELF-BENCHMARK and SIMULATED paths distinct.
+Log each run in [experiment_log.csv](../experiments/experiment_log.csv). It was header-only at setup. The approved infrastructure work now records only actually executed SELF-BENCHMARK software checks with SIMULATED inputs and null real metrics. Store sanitized artifacts under [results](../experiments/results/README.md); keep ACTUAL TEST, SELF-BENCHMARK and SIMULATED paths distinct.
