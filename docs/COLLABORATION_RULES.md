@@ -1,31 +1,99 @@
-# DECODE Collaboration Rules — Codex and Claude Code
+# DECODE Collaboration Rules — Codex and Claude Code (Stage 1 DRAFT)
 
-Version: 0.1 | Updated: 2026-09-06 | Owner: AI/Engineering Lead
-Status: ACTIVE OPERATING POLICY | Scope: multi-tool AI/Engineering work on this repository
-Authority: reconciles existing role/authority decisions (D001, D017) in [Decisions](DECISIONS.md); introduces no new product/architecture decision.
+Version: 0.3-DRAFT | Updated: 2026-09-06 | Owner: AI/Engineering Lead
+Status: DRAFT SCAFFOLD / NOT ACTIVE — this document governs nothing in Stage 1
+Scope: proposed multi-tool AI/Engineering collaboration contract for this repository, if activated in a later stage
+Authority: NONE. This is a Team OS Stage 1 proposal transcribing the Product-specified C1–C11 collaboration contract; it does not itself lock, supersede, or create an operating requirement. Activation would require a Stage 2 decision record in [Decisions](DECISIONS.md).
 
-DECODE's AI/Engineering Lead role has been filled at different times by Codex (via `AGENTS.md`) and Claude Code (via `CLAUDE.md`). Both route to [Project Operating Manual](PROJECT_OPERATING_MANUAL.md) and share the same repository state — `docs/`, `handoff/`, git history. "Codex" and "ChatGPT" in existing handoff documents are role names describing a function (Product/Business Lead, AI/Engineering Lead), not a commitment to a specific vendor tool; either tool may fill either AI role for a given task, subject to the constraints below.
+Until activated, existing active policy continues to govern: ordinary "one writer per branch/worktree at a time" discipline plus the branch+PR+review workflow in `docs/DEVELOPMENT_RULES.md` / `docs/PUBLICATION_POLICY.md` remain in force. Nothing below authorizes direct-main work, self-merge, an optional PR, or any other described behavior until that later activation.
 
-## COL-01 — One writer per branch at a time
+## C1 — Main integration authority
 
-Only one AI tool/session writes to a given branch or worktree at a time. Before starting work, check `git status`, `git worktree list`, and recent commits/PRs for in-progress work by another session. If found, do not rebase, force-push, or overwrite it; branch from the same base under a distinct name or continue in the existing branch/worktree only if the prior session's work is understood and preserved.
+- Peer approval is not required.
+- Review is optional.
+- A PR author may merge their own PR where the applicable task/host permits.
+- Existing stricter task-specific contracts override this default.
 
-## COL-02 — Single handoff record, tool-agnostic
+## C2 — Free parallel development
 
-`handoff/CODEX_TO_CHATGPT.md` and `handoff/CHATGPT_TO_CODEX.md` are the shared report/request record regardless of which tool produced them. A report written by Claude Code uses the same eight required headings and evidence discipline as one written by Codex; it is not a second, competing report. Preserve the prior report's content in Git history rather than silently discarding it.
+- Free parallel development is allowed.
+- Same feature/file may be worked on concurrently.
+- No task/feature ownership requirement.
 
-## COL-03 — Decisions and status are singular
+## C3 — PR size
 
-`docs/DECISIONS.md` and `docs/CURRENT_STATUS.md` have exactly one current state each, edited by whichever tool is doing the reconciling work in a given task, never forked per tool. A decision ID (`D0NN`) is issued once; if two sessions might both need a new ID, the later session checks the current file state immediately before editing to avoid a collision, and amends with a new ID rather than overwriting.
+- PRs may contain the amount of work completed.
+- No fixed small-PR size rule.
+- Unrelated work/material decisions must still not be hidden inside a PR.
 
-## COL-04 — Router files stay thin
+## C4 — Self-merge
 
-`AGENTS.md` and `CLAUDE.md` each hold only: a read-order pointer into `docs/PROJECT_OPERATING_MANUAL.md`, and tool-specific mechanics that genuinely differ (e.g. a harness's own file-editing conventions). Policy content that applies to both tools belongs in the manual or the document it points to, not duplicated or forked across the two router files. A change to shared policy is one edit to the manual, not a parallel edit to both routers.
+- Self-merge is allowed where the applicable task/host permits.
+- Peer approval is not a prerequisite.
 
-## COL-05 — Verification is tool-neutral
+## C5 — Direct main development
 
-A publication check, hash verification, or test result is valid regardless of which tool ran it, provided the method is recorded (exact command, source revision, evidence label). Do not re-claim a check as unverified merely because a different tool re-runs it; do re-run it when the underlying files changed since the last run.
+- Branch is optional.
+- PR is optional.
+- Direct-main workflow is allowed under this collaboration contract when host permissions and the applicable task-specific contract allow it.
+- Force push and destructive reset remain prohibited.
 
-## COL-06 — Escalation on conflict
+## C6 — Minimum verification
 
-If Codex-authored and Claude-Code-authored guidance for the same task genuinely conflict (not just different phrasing), that is a material Product/Architecture question under D017 and goes through the one-decision-at-a-time interview gate — neither tool unilaterally decides which guidance wins.
+For ordinary changes:
+
+- reconcile/check latest main;
+- run affected tests;
+- inspect the actual diff;
+- check for secrets/private VOD/consent/access-bearing data.
+
+Elevate to full verification for:
+
+- shared contract/schema;
+- dependency;
+- build/config;
+- auth/security/rights;
+- migration;
+- cross-system changes;
+- significant conflict resolution.
+
+## C7 — Main recovery
+
+- A main regression/problem may be corrected by whichever developer/approved AI is available.
+- Original authorship does not create exclusive repair ownership.
+- Destructive recovery remains prohibited.
+
+## C8 — Work visibility
+
+- No notification is required for every task.
+- Before significant/large work, send only a short coordination notice.
+- The notice is not an approval request and does not create ownership.
+
+## C9 — AI development authority
+
+- Approved AI development tools and human developers follow the same collaboration rules within actual host permissions.
+- This includes edit/test/commit/branch/PR/self-merge/direct-main capabilities when the applicable host/task permits.
+- This does not grant unavailable OAuth/IAM/elevated/destructive capabilities.
+- Material decisions still remain under D017.
+
+## C10 — Commit style
+
+- Commit count/style is free.
+- Conventional Commits are not mandatory.
+- Squash is not mandatory.
+- Commit messages only need to remain understandable.
+- Force-push history rewriting remains prohibited.
+
+## C11 — Engineering implementation choice
+
+- Routine implementation details are chosen by the implementer within LOCKED contracts.
+- Function/file organization, naming, internal abstractions and test structure do not require a new Product decision.
+- Material Product/Architecture/Data/AI-Eval/Security-Rights/Scope-Cost changes return through D017.
+
+## Precedence (cross-cutting, not a numbered rule)
+
+Approved task-specific Spec / Plan / Handoff may impose stricter workflow or verification requirements and overrides the collaboration defaults for that task. Example: PLAN 1A retains its Whole-PR verification contract.
+
+## Status of this document
+
+DRAFT SCAFFOLD / NOT ACTIVE in Stage 1. If a later stage activates this contract, C1–C11 above and the precedence statement become the collaboration rules for Codex and Claude Code sharing this repository; until then, they describe a proposal only.
