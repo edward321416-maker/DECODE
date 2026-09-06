@@ -17,8 +17,8 @@ NOT YET TESTED — no consented real VOD or independent expert session was run. 
 
 Fresh verification against this Stage 2 branch, results recorded directly here (not only in an external report):
 
-- `node scripts/check-operating-docs.mjs` (default): **PASS, 0 failures**.
-- `node scripts/check-operating-docs.mjs --index` (staged tree): **PASS, 0 failures**, after the corrective rerun described under FAILED below.
+- `node scripts/check-operating-docs.mjs` (default): **660/660 PASS, 0 failures**.
+- `node scripts/check-operating-docs.mjs --index` (staged tree): **710/710 PASS, 0 failures**, after the corrective rerun described under FAILED below.
 - `git diff --cached --check`: exit 0, no whitespace errors.
 - Base verified exact: `origin/main` matched `5c09f6f7108c94fd840797b434f34286da30d8b6` before any edit.
 - Authority document blob/hash re-verification (Git object bytes, `git rev-parse HEAD:<path>` and `git cat-file -p HEAD:<path> | sha256sum`): Integrated Spec `f7571338e93a408a8aeef93d63275d7076e76f80` / `bfad20123a4f4263d111fc50924a04e15d8e76fdccccb666f159eea0978009ae` — MATCH; PLAN 1A `10aa423531f83a044ded273cde603a04e33c03d0` / `ff9b083a355d9228dcb37e4514c493e36d6090a20d2dcb1c96fc8eb83f8a6af7` — MATCH; 10-Case ACTUAL TEST Protocol `4d7788bb39d68c5cd147408a85954cd5a0e7b8f0` / `11b42a0be56cc761a55929d642c9a5ad1d65d5a0f21d46fdf158f46b23dc2ef0` — MATCH.
@@ -31,7 +31,7 @@ No synthetic decision fixtures or simulated stress run generated for this activa
 
 ## FAILED
 
-One intermediate failure occurred and was resolved before this report, evidence the checker is working correctly, not a final Stage 2 defect: while staging files for the first `--index` run, a stray OMC session-cache file (`docs/templates/.omc/state/sessions/.../pre-tool-advisory-throttle.json`) was accidentally included via a broad `git add`. The `index-exact-inventory` check correctly failed (707/708) because that path is not in `docs/PUBLICATION_FILES.json`. The stray file was removed from the working tree and the index, and `--index` was rerun clean. No such file exists in the final proposed tree or this PR's diff. No other check failure occurred. Google sync remains BLOCKED by missing bindings, as before.
+One intermediate failure occurred and was resolved before this report, evidence the checker is working correctly, not a final Stage 2 defect: while staging files for the first `--index` run, a stray OMC session-cache file (`docs/templates/.omc/state/sessions/.../pre-tool-advisory-throttle.json`) was accidentally included via a broad `git add`. The `index-exact-inventory` check correctly failed at **707/708** because that path is not in `docs/PUBLICATION_FILES.json`. The stray file was removed from the working tree and the index, and `--index` was rerun clean at **710/710 PASS, 0 failures**. No such file exists in the final proposed tree or this PR's diff. No other check failure occurred. Google sync remains BLOCKED by missing bindings, as before.
 
 ## NOT TESTED
 
