@@ -154,7 +154,7 @@ Unused reserve cases are not promoted into Decision Dataset evidence. When the r
 
 ## 6. Second Expert subset
 
-Second Expert reviews exactly 4 main slots:
+Second Expert design is 4 planned frozen assignment slots:
 
 - 2 CLEAR
 - 2 AMBIGUOUS
@@ -180,6 +180,8 @@ Record:
 
 Do not redraw after Founder Gold, AI output, Second Expert availability, or expected disagreement.
 
+If a rights/withdrawal/eligibility event leaves a slot ineligible and no same-stratum reserve is available, preserve its final status, including `REPLACEMENT_UNAVAILABLE`. Do not redraw or reselect to repair results. Completed Second Expert reviews may be fewer than the 4 planned slots; report both planned and completed coverage, with eligibility-event reasons.
+
 ## 7. Reviewer structure
 
 ### Founder
@@ -189,7 +191,7 @@ Founder responsibilities:
 - select main 10 cases;
 - select required reserve cases;
 - assign CLEAR/AMBIGUOUS;
-- write Gold for all active main cases.
+- write Gold for eligible active main cases within the 10 frozen main slots; preserve final status for slots lost to rights/withdrawal/eligibility events and report planned and completed coverage.
 
 Founder evidence scope:
 
@@ -202,7 +204,7 @@ Founder Gold is outcome-aware.
 
 Second Expert responsibilities:
 
-- independently review the assigned 4 slots.
+- independently review eligible cases in the 4 planned frozen assignment slots (2 CLEAR + 2 AMBIGUOUS); preserve final status for ineligible slots and report planned and completed coverage.
 
 Second Expert evidence scope:
 
@@ -749,12 +751,12 @@ Guardian withdrawal also stops the applicable processing.
 
 Founder:
 
-- access to all 10 active test cases;
+- access to eligible active cases within the 10 frozen main slots;
 - sanitized full source context required for Gold.
 
 Second Expert:
 
-- assigned 4 slots only;
+- eligible cases within the 4 planned frozen assignment slots only;
 - sufficient bounded context + final outcome;
 - no full source VOD;
 - no unassigned test cases.
@@ -801,9 +803,9 @@ Pre-execution:
 
 Execution:
 
-15. Founder Gold 10 active slots;
+15. Founder Gold for eligible active cases within the 10 frozen main slots; preserve each slot's final status and report planned versus completed coverage after rights/withdrawal/eligibility events;
 16. validate/verify each Gold;
-17. Second Expert blind review of assigned 4;
+17. Second Expert blind review of eligible cases within the 4 planned frozen assignment slots (2 CLEAR + 2 AMBIGUOUS); preserve final statuses and report planned versus completed coverage without result-driven redraw/reselection;
 18. record timing, interruptions, disagreement;
 19. execute required deletion/retention transitions;
 20. freeze measurements.
@@ -852,8 +854,8 @@ A real run must produce at least:
 - 10 frozen main slots with final slot status, including any permitted replacement/withdrawal outcome;
 - reserve/replacement ledger;
 - consent/rights eligibility ledger;
-- Founder Gold records;
-- Second Expert 4-case records;
+- completed eligible Founder Gold records and planned/completed coverage for the 10 frozen main slots;
+- completed eligible Second Expert records and planned/completed coverage for the 4 planned frozen assignment slots (2 CLEAR + 2 AMBIGUOUS);
 - timing report;
 - schema/validation failure log;
 - taxonomy coverage report;
@@ -863,6 +865,8 @@ A real run must produce at least:
 - measurement report;
 - Product GO/REVISE/STOP recommendation;
 - User final decision record.
+
+Rights/withdrawal/eligibility events with no same-stratum reserve may leave completed Gold/review counts below their planned counts. Preserve each affected slot's final status and exclusion reason; do not redraw/reselect to repair the result.
 
 Each sanitized public artifact must include or reference:
 

@@ -8,6 +8,7 @@ Snapshot: 2026-09-06 | Phase: M0 authority materialization prepared; PR-A implem
 - Integrated Spec v1.0, PLAN 1A Canonical Foundation, and 10-Case ACTUAL TEST Protocol v1.0 (Q1-Q56) are the current Product-approved materialization set.
 - Local static cross-document mechanical audit: 67/67 PASS; this is documentation/contract evidence only, not compile/typecheck/software/ACTUAL TEST evidence.
 - GitHub PR #5 remains a separate candidate branch and must not be silently overwritten or merged by M0/PR-A work.
+- After reviewed M0 merge, M0 publication inventory version 2 is canonical. PR #5's branch-local version 2 remains a non-canonical candidate and must not be merged in its current form. Any future reuse requires rebase onto post-M0 main, review of inventory/checker semantics, and adjustment to the next appropriate inventory version. This is not PR #5 merge authorization.
 - ACTUAL TEST: NOT YET TESTED. No 50/150 expansion is authorized.
 - GitHub write through the current integration is SYNC BLOCKED if the materialization branch/commit cannot be created; no chat/local draft is canonical until reviewed merge to main.
 
