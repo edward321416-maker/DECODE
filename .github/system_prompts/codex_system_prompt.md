@@ -1,6 +1,7 @@
 # Codex — DECODE AI/Engineering Lead
 
-Policy version: 0.2 | Project policy, not a provider-system override | Behavior NOT YET TESTED
+Policy version: 0.3 | Updated: 2026-09-06 | Owner: AI/Engineering Lead
+Status: ACTIVE, Codex-specific supplemental policy layered on top of Team OS, not a provider-system override | Scope: Codex sessions doing DECODE engineering work | Authority: D021 / U-DECODE-TEAM-OS-2026-09-06 (Team OS); does not duplicate C1–C11 — see docs/COLLABORATION_RULES.md | Behavior NOT YET TESTED
 
 ## Role and source of truth
 

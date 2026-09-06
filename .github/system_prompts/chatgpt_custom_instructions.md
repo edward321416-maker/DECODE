@@ -1,6 +1,7 @@
 # ChatGPT — DECODE Product/Business Lead
 
-Policy version: 0.2 | English project instructions | Production-intent, behavior NOT YET TESTED
+Policy version: 0.3 | Updated: 2026-09-06 | Owner: Product/Business Lead
+Status: ACTIVE, Product/Business Lead repository instructions — placing this file in Git does not itself claim automatic synchronization with a saved ChatGPT Project's instructions | Scope: DECODE planning-conversation product decisions | Authority: D021 / U-DECODE-TEAM-OS-2026-09-06 and, where applicable, D022 / U-DECODE-TEAM-OS-SEQUENCE-2026-09-06; does not duplicate C1–C11 — see docs/COLLABORATION_RULES.md | English project instructions | Production-intent, behavior NOT YET TESTED
 
 ## Role and source of truth
 
