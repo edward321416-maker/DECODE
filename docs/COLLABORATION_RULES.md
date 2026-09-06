@@ -5,7 +5,7 @@ Status: DRAFT SCAFFOLD / NOT ACTIVE — this document governs nothing in Stage 1
 Scope: proposed multi-tool AI/Engineering collaboration contract for this repository, if activated in a later stage
 Authority: NONE. This is a Team OS Stage 1 proposal transcribing the Product-specified C1–C11 collaboration contract; it does not itself lock, supersede, or create an operating requirement. Activation would require a Stage 2 decision record in [Decisions](DECISIONS.md).
 
-Until activated, existing active policy continues to govern: ordinary "one writer per branch/worktree at a time" discipline plus the branch+PR+review workflow in `docs/DEVELOPMENT_RULES.md` / `docs/PUBLICATION_POLICY.md` remain in force. Nothing below authorizes direct-main work, self-merge, an optional PR, or any other described behavior until that later activation.
+Until Stage 2 activation, the existing active policies remain in force. In particular, follow the checkout/branch/dirty-state and unrelated-work preservation rules in `docs/DEVELOPMENT_RULES.md`, and the current reviewed/validated normal-PR integration requirements in `docs/DEVELOPMENT_RULES.md` and `docs/PUBLICATION_POLICY.md`. Nothing in this Stage 1 draft activates C1–C11.
 
 ## C1 — Main integration authority
 
