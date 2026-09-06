@@ -1,5 +1,5 @@
 {
-  "version": 1,
+  "version": 2,
   "scope": "Initial public operating foundation; changes require reviewed scope and provenance.",
   "files": [
     ".gemini_sync.md",
@@ -26,6 +26,9 @@
     "docs/RISKS.md",
     "docs/RULES_REVIEW.md",
     "docs/SETUP_VERIFICATION.md",
+    "docs/superpowers/plans/2026-09-06-decode-plan-1a-canonical-foundation.md",
+    "docs/superpowers/specs/2026-09-06-decode-10-case-actual-test-protocol-v1.md",
+    "docs/superpowers/specs/2026-09-06-decode-integrated-spec-v1.md",
     "experiments/ai_execution_log.pending.csv",
     "experiments/experiment_log.csv",
     "experiments/results/README.md",
