@@ -1,6 +1,9 @@
 # ③-A-1 — 10-Case Schema Stress Test
 
 Protocol: 0.1 candidate | ACTUAL TEST: NOT YET TESTED | Owner: Product/Business Lead
+Status: **HISTORICAL CANDIDATE SUMMARY / SUPERSEDED FOR EXECUTION** — reconciled under D018 during Team OS Stage 2.
+
+**This document is not an executable protocol.** The sole current 10-Case execution/design authority is [10-Case ACTUAL TEST Protocol v1.0](superpowers/specs/2026-09-06-decode-10-case-actual-test-protocol-v1.md) (Q1–Q56). Where anything below — completion assumptions, measurement rules, reserve/replacement behavior, evidence scope, or the expert execution steps — differs from Q1–Q56, the version here MUST NOT be executed. Git history preserves this document's original 2026-09-02 candidate text unmodified at earlier commits; the tables below are retained only as historical context for the evidence-label vocabulary, sampling-slot design, and GO/STOP hypothesis framing that Q1–Q56 builds on. This is mechanical reconciliation of a superseded document, not a new protocol decision.
 
 ## Evidence labels — mandatory and separate from pass/fail
 
@@ -36,13 +39,15 @@ Six clear + four ambiguous; Fight Selection 4, Post-contact Decision 3, Tradeabi
 | S09 | Ambiguous | Tradeability & Spacing | Teammate close but wall/angle obstructs LOS; tradeability ambiguity |
 | S10 | Ambiguous | Tradeability & Spacing | Missing teammate intent/comms; video-only limits |
 
-## Execution
+## Execution — HISTORICAL, DO NOT EXECUTE (superseded by Q1–Q56)
 
-1. Select moments by observable situation, assign neutral candidate IDs, and record operator-prefilled context with unknowns. Do not force footage into a principle.
-2. Primary expert labels all ten independently without AI output. Automatically record annotation_started_at, annotation_submitted_at and annotation_duration_sec. Capture difficulty and missing-context feedback separately from core expert fields.
-3. Lock the primary labels. Second expert labels two clear and two ambiguous clips without seeing the primary labels or AI output. Preserve both sets and adjudication separately.
-4. Compute metrics only from recorded evidence. Report completion counts, invalid/missing durations, raw denominators, schema version and evaluator roles. Optionally compare AI output only after expert labels are locked; label that comparison SELF-BENCHMARK and disclose real/synthetic origin.
-5. Product reviews the six outputs below and records GO / REVISE / STOP. No automatic expansion to 50/150 cases.
+The five steps below are the original 2026-09-02 candidate execution sequence, preserved for provenance only. Q1–Q56's rights-loss and planned-vs-completed semantics supersede this sequence, including its "second expert labels two clear and two ambiguous" reserve/replacement assumption and its implicit completion criteria. Do not execute these steps as written; use the current 10-Case ACTUAL TEST Protocol v1.0 instead.
+
+1. ~~Select moments by observable situation, assign neutral candidate IDs, and record operator-prefilled context with unknowns. Do not force footage into a principle.~~
+2. ~~Primary expert labels all ten independently without AI output. Automatically record annotation_started_at, annotation_submitted_at and annotation_duration_sec. Capture difficulty and missing-context feedback separately from core expert fields.~~
+3. ~~Lock the primary labels. Second expert labels two clear and two ambiguous clips without seeing the primary labels or AI output. Preserve both sets and adjudication separately.~~
+4. ~~Compute metrics only from recorded evidence. Report completion counts, invalid/missing durations, raw denominators, schema version and evaluator roles. Optionally compare AI output only after expert labels are locked; label that comparison SELF-BENCHMARK and disclose real/synthetic origin.~~
+5. ~~Product reviews the six outputs below and records GO / REVISE / STOP. No automatic expansion to 50/150 cases.~~
 
 ## Measurement specification — LOCK CANDIDATE
 

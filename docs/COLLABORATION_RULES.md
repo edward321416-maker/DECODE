@@ -1,11 +1,10 @@
-# DECODE Collaboration Rules — Codex and Claude Code (Stage 1 DRAFT)
+# DECODE Collaboration Rules — Human Developers and Approved AI Tools
 
-Version: 0.3-DRAFT | Updated: 2026-09-06 | Owner: AI/Engineering Lead
-Status: DRAFT SCAFFOLD / NOT ACTIVE — this document governs nothing in Stage 1
-Scope: proposed multi-tool AI/Engineering collaboration contract for this repository, if activated in a later stage
-Authority: NONE. This is a Team OS Stage 1 proposal transcribing the Product-specified C1–C11 collaboration contract; it does not itself lock, supersede, or create an operating requirement. Activation would require a Stage 2 decision record in [Decisions](DECISIONS.md).
+Version: 1.0 | Updated: 2026-09-06 | Owner: AI/Engineering Lead
+Status: ACTIVE OPERATING POLICY | Scope: multi-tool AI/Engineering and human developer collaboration on this repository
+Authority: D021 / U-DECODE-TEAM-OS-2026-09-06 in [Decisions](DECISIONS.md)
 
-Until Stage 2 activation, the existing active policies remain in force. In particular, follow the checkout/branch/dirty-state and unrelated-work preservation rules in `docs/DEVELOPMENT_RULES.md`, and the current reviewed/validated normal-PR integration requirements in `docs/DEVELOPMENT_RULES.md` and `docs/PUBLICATION_POLICY.md`. Nothing in this Stage 1 draft activates C1–C11.
+These rules govern DECODE collaboration effective this revision. Human developers and approved AI development tools (Codex, Claude Code, and any future approved tool) follow the same rules within actual host permissions. An approved task-specific Spec/Plan/Handoff may impose a stricter workflow and overrides these defaults for that task (see Precedence, below).
 
 ## C1 — Main integration authority
 
@@ -92,8 +91,4 @@ Elevate to full verification for:
 
 ## Precedence (cross-cutting, not a numbered rule)
 
-Approved task-specific Spec / Plan / Handoff may impose stricter workflow or verification requirements and overrides the collaboration defaults for that task. Example: PLAN 1A retains its Whole-PR verification contract.
-
-## Status of this document
-
-DRAFT SCAFFOLD / NOT ACTIVE in Stage 1. If a later stage activates this contract, C1–C11 above and the precedence statement become the collaboration rules for Codex and Claude Code sharing this repository; until then, they describe a proposal only.
+Approved task-specific Spec / Plan / Handoff may impose stricter workflow or verification requirements and overrides the collaboration defaults for that task. Example: PLAN 1A retains its Whole-PR verification contract, which takes priority over C1/C5's PR-optional/direct-main defaults for PR-A Canonical Foundation work.

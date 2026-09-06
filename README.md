@@ -6,12 +6,12 @@ Public operating foundation for **DECODE Coach Copilot MVP v0.1**. The canonical
 
 ## Start here
 
-1. Read [Project Brief](docs/PROJECT_BRIEF.md), [Current Status](docs/CURRENT_STATUS.md) and [Decisions](docs/DECISIONS.md).
-2. Use [Product Spec](docs/PRODUCT_SPEC.md), [Dataset Spec](docs/DECISION_DATASET_SPEC.md) and [Experiment Protocol](docs/EXPERIMENT_PROTOCOL.md). Eight expert fields, Core/Extended context, twelve principles and GO/STOP thresholds remain LOCK CANDIDATE.
-3. Apply [Development Rules](docs/DEVELOPMENT_RULES.md), [Documentation Rules](docs/DOCUMENTATION_RULES.md), [Graphics Rules](docs/GRAPHICS_RULES.md), [AI operations](docs/AI_OPERATING_POLICY.md) and [Publication Policy](docs/PUBLICATION_POLICY.md).
+1. Read [Project Operating Manual](docs/PROJECT_OPERATING_MANUAL.md) — the canonical repository task router — then [Project Brief](docs/PROJECT_BRIEF.md), [Current Status](docs/CURRENT_STATUS.md) and [Decisions](docs/DECISIONS.md).
+2. Use [Product Spec](docs/PRODUCT_SPEC.md), [Dataset Spec](docs/DECISION_DATASET_SPEC.md) and the current 10-Case ACTUAL TEST Protocol (Q1–Q56) as the sole current execution/design authority; [Experiment Protocol](docs/EXPERIMENT_PROTOCOL.md) is retained as a historical candidate summary, superseded for execution. Eight expert fields, Core/Extended context, twelve principles and GO/STOP thresholds remain LOCK CANDIDATE.
+3. Apply [Development Rules](docs/DEVELOPMENT_RULES.md), [Documentation Rules](docs/DOCUMENTATION_RULES.md), [Graphics Rules](docs/GRAPHICS_RULES.md), [AI operations](docs/AI_OPERATING_POLICY.md), [Publication Policy](docs/PUBLICATION_POLICY.md), and [Collaboration Rules](docs/COLLABORATION_RULES.md) for how work integrates.
 4. Product writes [ChatGPT → Codex](handoff/CHATGPT_TO_CODEX.md); Engineering returns [Codex → ChatGPT](handoff/CODEX_TO_CHATGPT.md) against the same revision.
 
-ChatGPT Project is the planning headquarters; the planning conversation is Product/Business Lead; Codex is AI/Engineering Lead. Role assignment does not synchronize chat histories. Private conversation bindings stay outside this public repository.
+ChatGPT Project is the planning headquarters; the planning conversation is Product/Business Lead. Engineering may be a human developer and/or an approved AI development tool such as Codex or Claude Code, per [Collaboration Rules](docs/COLLABORATION_RULES.md) — the legacy handoff filenames `CHATGPT_TO_CODEX` / `CODEX_TO_CHATGPT` are retained as role-endpoint names for compatibility, not a claim of provider exclusivity. Role assignment does not synchronize chat histories. Private conversation bindings stay outside this public repository.
 
 ## Validate the operating documents
 
@@ -28,4 +28,4 @@ See [publication evidence](docs/MAIN_PUBLICATION.md), [historical Rules Review](
 
 ## Contribution boundary
 
-Use a scoped branch when needed, check changes and conflicts, and merge validated policies/results to `main` through a normal PR. Never bypass branch protections or publish secrets, private media, identities, consent records, private chat URLs, local-only audit files or unrelated app code. Public visibility does not approve a license or third-party content reuse; no license was added by this task.
+Follow [Collaboration Rules](docs/COLLABORATION_RULES.md) for how changes reach `main` — branch and PR are available but not mandatory for every change; any stricter approved task-specific contract (e.g. PLAN 1A's Whole-PR verification) still wins. Check changes and conflicts regardless of method. Never bypass branch protections actually configured on the host, force-push, or publish secrets, private media, identities, consent records, private chat URLs, local-only audit files or unrelated app code. Public visibility does not approve a license or third-party content reuse; no license was added by this task.

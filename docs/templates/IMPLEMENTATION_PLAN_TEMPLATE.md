@@ -1,11 +1,11 @@
 # Implementation Plan — [feature name]
 
-Template Version: 0.2-DRAFT | Updated: 2026-09-06 | Owner: AI/Engineering Lead
-Status: DRAFT SCAFFOLD / NOT ACTIVE — Team OS Stage 1 proposal
+Template Version: 1.0 | Updated: 2026-09-06 | Owner: AI/Engineering Lead
+Status: ACTIVE TEMPLATE
 Scope: skeleton for a step-by-step engineering plan for approved scope
-Authority: NONE — Stage 1 proposal; does not create an operating requirement
+Authority: D021 / U-DECODE-TEAM-OS-2026-09-06
 
-Instance fields (fill in when using this template, after activation):
+Instance fields (fill in when using this template):
 
 Owner: AI/Engineering Lead | Date: [ISO-8601] | Status: [DRAFT | APPROVED | IN PROGRESS | DONE]
 

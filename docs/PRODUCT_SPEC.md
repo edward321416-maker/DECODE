@@ -21,7 +21,7 @@ Candidate selection may be manual while automation is immature. AI drafts are ne
 | Report Builder | What happened, why it matters, what to do next; coach-selected priority |
 | Follow-up | Prior priority, next VOD, Improved/Same/Worse, coach note |
 
-These are P-MVP planning requirements, not descriptions of existing screens. First engineering delivery is the annotation/testing foundation in the handoff, not all four surfaces.
+These are P-MVP planning requirements, not descriptions of existing screens. The current execution sequence — what Engineering implements next, and in what order — comes from [Current Status](CURRENT_STATUS.md), [Decisions](DECISIONS.md), and the current approved handoff or task-specific plan, not from this document. This Product Spec states product surface requirements; it does not own a mutable engineering queue, and stating a requirement here is not proof that it has been implemented. Team OS Stage 1/2/3 sequencing precedes PR-A under D022.
 
 ## Scope boundaries
 

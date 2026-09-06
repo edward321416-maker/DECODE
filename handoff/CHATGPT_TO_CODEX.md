@@ -1,23 +1,23 @@
 # ChatGPT → Codex
 
-Handoff ID: DECODE-M0-PR-A | Version: 1.0 | Owner: Product/Business Lead
+Handoff ID: DECODE-TEAM-OS-STAGE2 | Version: 1.0 | Owner: Product/Business Lead
 
-## Current development request — M0 authority materialization → PR-A
+## Current development request — Team OS Stage 2 activation/reconciliation
 
-M0 authority materialization is now MERGED. `M0_AUTHORITY_MERGE_SHA = 94252efe862d01c6441d6b0ed10fde589870b562` (PR #6, `m0/authority-materialization-2026-09-06`, merged into main). The approved authority set is confirmed present at that merge, re-verified in this post-merge receipt by exact Git blob ID and SHA-256 of Git object bytes:
+Start only from exact base `origin/main = 5c09f6f7108c94fd840797b434f34286da30d8b6` (verified merge of Team OS Stage 1 / PR #8). Activate and reconcile Team OS: move `docs/PROJECT_OPERATING_MANUAL.md` and `docs/COLLABORATION_RULES.md` (C1–C11) to ACTIVE OPERATING POLICY; move `docs/templates/` to ACTIVE TEMPLATE; create `CLAUDE.md` and reconcile `AGENTS.md` as thin tool-specific routers into the manual; reconcile `docs/DEVELOPMENT_RULES.md`, `docs/DOCUMENTATION_RULES.md`, `docs/AI_OPERATING_POLICY.md`, `docs/PUBLICATION_POLICY.md`, `README.md`, `docs/PROJECT_BRIEF.md`, `docs/PRODUCT_SPEC.md`, `docs/DECISION_DATASET_SPEC.md`, `data/schemas/README.md`, and both `.github/system_prompts/*` files for tool-neutral Engineering and C1–C11-consistent integration method; retire `docs/EXPERIMENT_PROTOCOL.md` to a historical candidate summary superseded for execution under D018; record D021 (Team OS v1 collaboration/operating policy) and D022 (Team OS precedes PR-A) in `docs/DECISIONS.md`; reconcile `docs/CURRENT_STATUS.md`; bump `docs/PUBLICATION_FILES.json` to version 4 (adds `CLAUDE.md`, 49 files) with only the mechanical `scripts/check-operating-docs.mjs` inventory-version-gate change plus any assertion updates strictly required by the reconciled wording (report each exactly).
 
-- `docs/superpowers/specs/2026-09-06-decode-integrated-spec-v1.md` — blob `f7571338e93a408a8aeef93d63275d7076e76f80`, SHA-256 `bfad20123a4f4263d111fc50924a04e15d8e76fdccccb666f159eea0978009ae`
-- `docs/superpowers/plans/2026-09-06-decode-plan-1a-canonical-foundation.md` — blob `10aa423531f83a044ded273cde603a04e33c03d0`, SHA-256 `ff9b083a355d9228dcb37e4514c493e36d6090a20d2dcb1c96fc8eb83f8a6af7`
-- `docs/superpowers/specs/2026-09-06-decode-10-case-actual-test-protocol-v1.md` — blob `4d7788bb39d68c5cd147408a85954cd5a0e7b8f0`, SHA-256 `11b42a0be56cc761a55929d642c9a5ad1d65d5a0f21d46fdf158f46b23dc2ef0`
+Authority: D021 / U-DECODE-TEAM-OS-2026-09-06, D022 / U-DECODE-TEAM-OS-SEQUENCE-2026-09-06.
 
-All three match expected values exactly. `DECISIONS`, `CURRENT_STATUS`, this handoff and the pending log are reconciled in this post-merge receipt without weakening existing safeguards or touching PR #5, the publication inventory/checker, or any authority document. D014 from open PR #5 remains preserved; D015-D019 remain the 2026-09-06 authority decisions; D020 records this receipt. PR #5 is not overwritten, merged, or re-purposed and remains OPEN / NOT MERGED / non-canonical candidate.
+## Explicit exclusions (HISTORICAL / DO NOT EXECUTE beyond this scope)
 
-`APPROVED_IMPLEMENTATION_BASE_SHA` = the actual `origin/main` HEAD produced by the reviewed merge of this receipt PR (PR #7). Immediately after that merge, `origin/main` is fetched and verified, and the exact SHA is recorded in the merge receipt/report — not written into repository files by a further commit, since that would move main HEAD again and create an infinite receipt loop. Only after that verified HEAD is recorded may Engineering start PLAN 1A PR-A Canonical Foundation using TDD, branching from that exact SHA; immediately before PR-A starts, `git rev-parse origin/main` is re-checked against the approved receipt SHA, and any mismatch is STOP_AND_REPORT. Material unresolved decisions must return through the Mandatory Decision Interview Gate. No automatic merge. ACTUAL TEST remains NOT YET TESTED.
+- **Stage 3** (full Team OS semantic checker hardening) is NOT in scope for this handoff.
+- **PR-A** Canonical Foundation implementation is NOT in scope. PR-A = NOT STARTED.
+- **PR #5** must not be modified, merged, or closed.
+- **ACTUAL TEST** execution, 50/150 case generation, and any change to the three authority documents (Integrated Spec, PLAN 1A, 10-Case ACTUAL TEST Protocol) are NOT in scope.
+- The earlier M0 and 003-A-1 requests remain historical provenance only, per the prior handoff revision preserved in Git history.
 
-## Publication inventory reconciliation
+## Integration
 
-M0 `PUBLICATION_FILES` version 2 is canonical on merged main. PR #5's branch-local publication version 2 remains a non-canonical candidate; PR #5 must not be merged in its current form. Future reuse requires rebase onto post-M0 main, review of inventory/checker semantics, and adjustment to the next appropriate inventory version. This is not PR #5 merge authorization.
+This Stage 2 activation change itself uses a scoped branch (`claude/team-os-stage2-activation`) and a normal main-targeted PR — activation is not effective until that PR is reviewed and merged; no auto-merge. Only after merge does C1–C11 (including direct-main/self-merge defaults) become the active collaboration contract for subsequent work.
 
-## HISTORICAL / DO NOT EXECUTE
-
-The earlier 003-A-1 annotation-infrastructure request is retained only as historical provenance in [open PR #5](https://github.com/edward321416-maker/DECODE/pull/5) and Git history. It is not an active engineering queue. Do not execute it or modify, merge, or close PR #5 under this handoff. The only active sequence is M0 authority materialization → reviewed merge/receipt → PR-A Canonical Foundation. PR-A = NOT STARTED. ACTUAL TEST = NOT YET TESTED.
+`PR-A = NOT STARTED`. `ACTUAL TEST = NOT YET TESTED`.

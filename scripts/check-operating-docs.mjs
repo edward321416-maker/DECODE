@@ -47,13 +47,14 @@ try {
   if (!Array.isArray(files) || files.some((f) => typeof f !== "string")) {
     throw new Error("Publication inventory must list file paths");
   }
-  check("inventory-version", inventory.version === 3);
+  check("inventory-version", inventory.version === 4);
   check("inventory-sorted-unique", same(files, [...new Set(files)].sort()));
   const allowed = new Set(files);
   const required = [
-    "README.md", "AGENTS.md", ".gitignore", ".gemini_sync.md",
+    "README.md", "AGENTS.md", "CLAUDE.md", ".gitignore", ".gemini_sync.md",
     ".github/system_prompts/codex_system_prompt.md",
     ".github/system_prompts/chatgpt_custom_instructions.md",
+    "docs/PROJECT_OPERATING_MANUAL.md", "docs/COLLABORATION_RULES.md",
     "docs/PROJECT_BRIEF.md", "docs/CURRENT_STATUS.md", "docs/DECISIONS.md",
     "docs/PRODUCT_SPEC.md", "docs/DECISION_DATASET_SPEC.md", "docs/EXPERIMENT_PROTOCOL.md",
     "docs/RISKS.md", "docs/AI_OPERATING_POLICY.md", "docs/DEVELOPMENT_RULES.md",

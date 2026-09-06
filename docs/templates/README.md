@@ -1,13 +1,13 @@
-# DECODE Document Templates (Stage 1 DRAFT)
+# DECODE Document Templates
 
-Template Version: 0.2-DRAFT | Updated: 2026-09-06 | Owner: AI/Engineering Lead
-Status: DRAFT SCAFFOLD / NOT ACTIVE — these templates are inert reference structure in Stage 1
-Scope: proposed skeleton templates for document types named in [Documentation Rules](../DOCUMENTATION_RULES.md)
-Authority: NONE. This is a Team OS Stage 1 proposal; it does not mandate use of these templates. [Project Operating Manual](../PROJECT_OPERATING_MANUAL.md) is also DRAFT SCAFFOLD / NOT ACTIVE and is referenced here only for its (also draft) evidence-model description.
+Template Version: 1.0 | Updated: 2026-09-06 | Owner: AI/Engineering Lead
+Status: ACTIVE TEMPLATE SET
+Scope: skeleton templates for document types named in [Documentation Rules](../DOCUMENTATION_RULES.md)
+Authority: D021 / U-DECODE-TEAM-OS-2026-09-06. [Project Operating Manual](../PROJECT_OPERATING_MANUAL.md) is ACTIVE OPERATING POLICY and is referenced here for its evidence-model description.
 
-If activated in a later stage, these become the preferred starting structure for their document type, and every bracketed field would need to be replaced or explicitly marked UNKNOWN/NOT APPLICABLE rather than deleted silently. Until activation, existing active policy continues to govern document structure, and using or not using a given template here carries no compliance consequence.
+These are the preferred starting structure for their document type. Every bracketed field must be replaced or explicitly marked UNKNOWN/NOT APPLICABLE rather than deleted silently.
 
-| Template | Proposed use, if activated |
+| Template | Use for |
 | --- | --- |
 | [TASK_BRIEF_TEMPLATE](TASK_BRIEF_TEMPLATE.md) | A single bounded unit of work handed to an AI/Engineering session |
 | [PLANNING_BRIEF_TEMPLATE](PLANNING_BRIEF_TEMPLATE.md) | Product/Business Lead scoping a feature or milestone before implementation |

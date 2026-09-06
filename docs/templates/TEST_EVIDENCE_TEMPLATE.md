@@ -1,11 +1,11 @@
 # Test Evidence Report — [what was tested]
 
-Template Version: 0.2-DRAFT | Updated: 2026-09-06 | Owner: AI/Engineering Lead
-Status: DRAFT SCAFFOLD / NOT ACTIVE — Team OS Stage 1 proposal
+Template Version: 1.0 | Updated: 2026-09-06 | Owner: AI/Engineering Lead
+Status: ACTIVE TEMPLATE
 Scope: skeleton for any evaluation result report
-Authority: NONE — Stage 1 proposal; does not create an operating requirement
+Authority: D021 / U-DECODE-TEAM-OS-2026-09-06
 
-Instance fields (fill in when using this template, after activation):
+Instance fields (fill in when using this template):
 
 Author: [role] | Date: [ISO-8601] | Run ID: [stable event/run identifier]
 
