@@ -1,6 +1,6 @@
 # DECODE Decision Register
 
-Updated: 2026-09-02 | Owner: Product/Business Lead
+Updated: 2026-09-06 | Owner: Product/Business Lead
 
 LOCKED means product scope is approved, not scientifically validated. LOCK CANDIDATE means reversible and awaiting evidence/approval. Record amendments as new entries referencing the superseded decision; do not silently rewrite history.
 
@@ -50,6 +50,14 @@ D014 is preserved here to prevent decision-ID collision with the still-open PR #
 | D019 | LOCKED | ACTUAL TEST Product gate authority: Product/Business Lead synthesizes evidence and recommends GO/REVISE/STOP; the user is final approval authority. Thresholds never auto-authorize GO/STOP and no 50/150 expansion is automatic. | U-DECODE-ACTUAL-PROTOCOL-2026-09-06 |
 
 U-DECODE-INTEGRATED-2026-09-06 / U-DECODE-PLAN1A-2026-09-06 / U-DECODE-ACTUAL-PROTOCOL-2026-09-06: decisions approved in the DECODE planning conversation and materialized through the M0 review flow. Publication does not establish empirical validity. ACTUAL TEST remains NOT YET TESTED.
+
+## 2026-09-06 M0 post-merge receipt
+
+| ID | Status | Decision | Source |
+| --- | --- | --- | --- |
+| D020 | LOCKED | M0 authority materialization is complete: PR #6 (`m0/authority-materialization-2026-09-06`) merged to main at `M0_AUTHORITY_MERGE_SHA = 94252efe862d01c6441d6b0ed10fde589870b562`; independently re-verified post-merge by exact Git blob ID and SHA-256 of Git object bytes for all three authority documents, matching Product-approved expected values exactly. `APPROVED_IMPLEMENTATION_BASE_SHA` = the actual `origin/main` HEAD produced by the reviewed merge of this receipt PR (PR #7), fetched, verified, and recorded in the merge receipt/report immediately after that merge, without a further repository-file commit that would move main HEAD again; PR-A remains NOT STARTED and must branch from that exact verified HEAD, re-checked against the approved receipt SHA immediately before PR-A starts (mismatch = STOP_AND_REPORT). | U-DECODE-M0-RECEIPT-2026-09-06 |
+
+U-DECODE-M0-RECEIPT-2026-09-06: continuation of the same M0 authority materialization authority (U-DECODE-INTEGRATED-2026-09-06 / U-DECODE-PLAN1A-2026-09-06 / U-DECODE-ACTUAL-PROTOCOL-2026-09-06), confirming the reviewed merge and recording an independent post-merge hash receipt. Does not authorize PR-A start, PR #5 merge, or any ACTUAL TEST execution.
 
 ## Decision promotion
 
