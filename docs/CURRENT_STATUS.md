@@ -14,7 +14,7 @@ Snapshot: 2026-09-06 | Phase: M0 authority merged to main + post-merge receipt v
 - GitHub PR #5 remains a separate, non-canonical candidate branch, currently OPEN / NOT MERGED, and must not be modified, merged, or closed by M0/PR-A work.
 - M0 publication inventory version 2 is canonical on main. PR #5's branch-local version 2 remains a non-canonical candidate and must not be merged in its current form. Any future reuse requires rebase onto post-M0 main, review of inventory/checker semantics, and adjustment to the next appropriate inventory version. This is not PR #5 merge authorization.
 - ACTUAL TEST: NOT YET TESTED. No 50/150 expansion is authorized.
-- `APPROVED_IMPLEMENTATION_BASE_SHA = PENDING_POST_RECEIPT_MERGE` inside this receipt PR. The final PR-A base is fixed only after this receipt PR itself is reviewed and merged, as the then-current main HEAD. PR-A remains NOT STARTED.
+- `APPROVED_IMPLEMENTATION_BASE_SHA` = the actual `origin/main` HEAD produced by the reviewed merge of this receipt PR (PR #7). Immediately after that merge, `origin/main` is fetched and the resulting HEAD SHA is verified and recorded in the merge receipt/report as the exact value — no further repository-file commit writes that literal SHA, since a follow-up commit would move main HEAD again and create an infinite receipt loop. PR-A remains NOT STARTED and must branch from that exact verified HEAD; immediately before PR-A starts, `git rev-parse origin/main` is re-checked against the approved receipt SHA, and any mismatch is STOP_AND_REPORT.
 - Google `AI_Execution_Log` binding remains NOT CONFIGURED; this M0 post-merge receipt event is recorded only in the local pending log (deduplicated by `event_id`), not written to Google.
 
 ## LOCKED
@@ -80,7 +80,7 @@ This is metadata for the excluded local legacy demo, not a runnable stack includ
 
 1. Materialize the three approved 2026-09-06 authority documents on a scoped M0 branch from the verified main revision. — DONE (merged via PR #6 at `M0_AUTHORITY_MERGE_SHA`).
 2. Reconcile publication inventory/checker and decision/handoff documents without weakening existing safeguards or overwriting PR #5. — DONE at merge; re-verified in this post-merge receipt.
-3. Verify exact content hashes and commit receipt; after reviewed M0 merge, record the new main as `APPROVED_IMPLEMENTATION_BASE_SHA`. — Content hashes verified against Git object bytes (this receipt). `APPROVED_IMPLEMENTATION_BASE_SHA` remains `PENDING_POST_RECEIPT_MERGE` until this receipt PR itself is reviewed and merged.
+3. Verify exact content hashes and commit receipt; after reviewed M0 merge, record the new main as `APPROVED_IMPLEMENTATION_BASE_SHA`. — Content hashes verified against Git object bytes (this receipt). `APPROVED_IMPLEMENTATION_BASE_SHA` resolves to the actual `origin/main` HEAD produced by the reviewed merge of this receipt PR (PR #7), fetched and verified immediately after that merge and recorded in the merge receipt/report — not written as a literal SHA into repository files by a further commit.
 4. Only then start PR-A Canonical Foundation TDD from that approved base. PR-A = NOT STARTED.
 5. Product/Research may prepare the 10-Case ACTUAL TEST one gate ahead, but actual-mode execution remains blocked until the protocol/rights/software prerequisites are implemented and verified.
 
