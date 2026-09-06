@@ -47,7 +47,7 @@ try {
   if (!Array.isArray(files) || files.some((f) => typeof f !== "string")) {
     throw new Error("Publication inventory must list file paths");
   }
-  check("inventory-version", inventory.version === 1);
+  check("inventory-version", inventory.version === 2);
   check("inventory-sorted-unique", same(files, [...new Set(files)].sort()));
   const allowed = new Set(files);
   const required = [
@@ -59,7 +59,11 @@ try {
     "docs/RISKS.md", "docs/AI_OPERATING_POLICY.md", "docs/DEVELOPMENT_RULES.md",
     "docs/DOCUMENTATION_RULES.md", "docs/GRAPHICS_RULES.md", "docs/RULES_REVIEW.md",
     "docs/SETUP_VERIFICATION.md", "docs/PUBLICATION_POLICY.md", "docs/MAIN_PUBLICATION.md",
-    "docs/PUBLICATION_FILES.json", "handoff/CHATGPT_TO_CODEX.md", "handoff/CODEX_TO_CHATGPT.md",
+    "docs/PUBLICATION_FILES.json",
+    "docs/superpowers/plans/2026-09-06-decode-plan-1a-canonical-foundation.md",
+    "docs/superpowers/specs/2026-09-06-decode-10-case-actual-test-protocol-v1.md",
+    "docs/superpowers/specs/2026-09-06-decode-integrated-spec-v1.md",
+    "handoff/CHATGPT_TO_CODEX.md", "handoff/CODEX_TO_CHATGPT.md",
     "handoff/DECODE-SETUP-2026-09-02.md", "handoff/DECODE-RULES-2026-09-02.md",
     "handoff/DECODE-REPOSITORY-2026-09-02.md", "data/schemas/README.md",
     "data/samples/README.md", "experiments/results/README.md",
@@ -142,11 +146,21 @@ try {
   check("slot-kinds", slots.filter((s) => s[2] === "Clear").length === 6 && slots.filter((s) => s[2] === "Ambiguous").length === 4);
   check("slot-families", same(["Fight Selection", "Post-contact Decision", "Tradeability & Spacing"].map((f) => slots.filter((s) => s[3].trim() === f).length), [4, 3, 3]));
   check("candidate-thresholds", protocol.includes("GO / STOP hypotheses — NOT validated thresholds"));
+  const actualProtocol = texts.get("docs/superpowers/specs/2026-09-06-decode-10-case-actual-test-protocol-v1.md") || "";
+  check("actual-protocol-version", actualProtocol.includes("10-Case ACTUAL TEST Protocol v1.0"));
+  check("actual-protocol-q1-q56", actualProtocol.includes("Q1–Q56") && !actualProtocol.includes("Q1–Q55"));
+  check("actual-protocol-reserve-2-1", actualProtocol.includes("CLEAR reserve = 2") && actualProtocol.includes("AMBIGUOUS reserve = 1"));
+  check("actual-protocol-reserve-clarity-allocation", actualProtocol.includes("top 2 CLEAR strata") && actualProtocol.includes("top 1 AMBIGUOUS stratum"));
+  check("actual-protocol-no-auto-go", actualProtocol.includes("threshold satisfied ≠ automatic GO") && actualProtocol.includes("threshold missed ≠ automatic STOP"));
   for (const label of ["ACTUAL TEST", "SELF-BENCHMARK", "SIMULATED", "NOT YET TESTED"]) {
     check("evidence-label:" + label, protocol.includes("| " + label + " |"));
   }
   for (const f of ["README.md", "docs/CURRENT_STATUS.md", "docs/DECISION_DATASET_SPEC.md",
-    "docs/EXPERIMENT_PROTOCOL.md", "handoff/CHATGPT_TO_CODEX.md", "handoff/CODEX_TO_CHATGPT.md"]) {
+    "docs/EXPERIMENT_PROTOCOL.md",
+    "docs/superpowers/plans/2026-09-06-decode-plan-1a-canonical-foundation.md",
+    "docs/superpowers/specs/2026-09-06-decode-10-case-actual-test-protocol-v1.md",
+    "docs/superpowers/specs/2026-09-06-decode-integrated-spec-v1.md",
+    "handoff/CHATGPT_TO_CODEX.md", "handoff/CODEX_TO_CHATGPT.md"]) {
     check("actual-unexecuted:" + f, /ACTUAL TEST[\s\S]{0,100}NOT YET TESTED/.test(texts.get(f) || ""));
   }
   for (const f of ["docs/SETUP_VERIFICATION.md", "docs/RULES_REVIEW.md",

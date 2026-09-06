@@ -1,8 +1,22 @@
 # ChatGPT → Codex
 
-Handoff ID: DECODE-003-A-1 | Version: 0.4 | Owner: Product/Business Lead
+Handoff ID: DECODE-M0-PR-A | Version: 1.0 | Owner: Product/Business Lead
 
-## First development request
+## Current development request — M0 authority materialization → PR-A
+
+Start only from verified public main `e8e835718a9f95f02ce81682da2092db81249816`. First materialize the approved authority set exactly:
+
+- `docs/superpowers/specs/2026-09-06-decode-integrated-spec-v1.md` — expected SHA-256 `bfad20123a4f4263d111fc50924a04e15d8e76fdccccb666f159eea0978009ae`
+- `docs/superpowers/plans/2026-09-06-decode-plan-1a-canonical-foundation.md` — expected SHA-256 `ff9b083a355d9228dcb37e4514c493e36d6090a20d2dcb1c96fc8eb83f8a6af7`
+- `docs/superpowers/specs/2026-09-06-decode-10-case-actual-test-protocol-v1.md` — expected SHA-256 `134ac472f28c3a8f400fc16a501013c70614c2870e4b0ef82e7abbbbab0a2484`
+
+Reconcile `DECISIONS`, `CURRENT_STATUS`, publication inventory/checker and this handoff. Preserve D014 from open PR #5 and use D015+ for the 2026-09-06 authority decisions. Do not overwrite, merge, or re-purpose PR #5. Its latest externally verified state remains OPEN / NOT MERGED at head `e3d37e42c129498ddbdf7810ce6dfecf61d9e8f5`.
+
+Run the repository publication checks and inspect the whole M0 diff. Record exact commit SHA and content hashes. Mismatch => `STOP_AND_REPORT`. After reviewed M0 merge, the new main becomes `APPROVED_IMPLEMENTATION_BASE_SHA` for PR-A.
+
+Only after the M0 receipt is exact may Engineering start PLAN 1A PR-A Canonical Foundation using TDD. Material unresolved decisions must return through the Mandatory Decision Interview Gate. No automatic merge. ACTUAL TEST remains NOT YET TESTED.
+
+## Historical 003-A-1 development request
 
 Implement the annotation schema, tools, and test infrastructure required to execute **③-A-1 10-Case Schema Stress Test**. If actual consented VOD or independent expert data is unavailable, label all synthetic/mock-input testing **SIMULATED** and retain **ACTUAL TEST: NOT YET TESTED**. Never report simulated schema-test success as actual stress-test success.
 

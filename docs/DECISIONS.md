@@ -31,6 +31,26 @@ U-REPO-2026-09-02: the user explicitly requested repository creation. Private vi
 
 U-PUBLIC-2026-09-02: the user explicitly required a public repository and main integration after verification. This authorizes scoped operating-document publication, issue/branch/commit/PR/normal merge, not unrelated legacy app publication, raw/private data, candidate promotion, new account permissions, destructive actions or a claimed ACTUAL TEST. D009-D012 and prior setup reports are historical; their unfulfilled repository/publication gates are superseded. Google bindings remain unresolved.
 
+## Infrastructure amendment preserved from open PR #5
+
+| ID | Status | Decision | Source |
+| --- | --- | --- | --- |
+| D014 | USER-AUTHORIZED IMPLEMENTATION | Implement only 003-A-1 annotation infrastructure, ten SIMULATED fixtures and automated checks on a scoped branch from latest public main; open a main PR, DO NOT MERGE before Product review | U-INFRA-2026-09-02; open PR #5 / `codex/annotation-infrastructure` |
+
+D014 is preserved here to prevent decision-ID collision with the still-open PR #5. Recording the decision on the M0 branch does not merge or approve PR #5.
+
+## 2026-09-06 authority amendment
+
+| ID | Status | Decision | Source |
+| --- | --- | --- | --- |
+| D015 | LOCKED | DECODE Integrated Spec v1.0 consolidates the user-approved Product/Architecture decisions. The exact earlier prose was unavailable in GitHub/Library; the reviewed committed M0 content hash becomes repository wording authority only after normal review/merge. | U-DECODE-INTEGRATED-2026-09-06 |
+| D016 | LOCKED | PR-A Canonical Foundation runtime is TypeScript/Node only. Future AI/media/backend runtime remains provider/runtime neutral. Actor authorization uses an `ActorVerifier` port; production identity provider/role taxonomy remain NOT YET LOCKED. | U-DECODE-PLAN1A-2026-09-06 |
+| D017 | LOCKED OPERATING RULE | Material unresolved Product/Architecture/Data/AI-Eval/Security-Rights/Scope-Cost decisions require one-decision-at-a-time user interview before lock/implementation. Product/Research may work at most one verification gate ahead of Engineering. | U-DECODE-OPERATING-2026-09-06 |
+| D018 | LOCKED PROTOCOL DESIGN | 10-Case ACTUAL TEST Protocol v1.0, decisions Q1-Q56, is design-locked for preparation only. ACTUAL TEST remains NOT YET TESTED; fields/context/principles and performance thresholds remain evidence candidates until real execution review. | U-DECODE-ACTUAL-PROTOCOL-2026-09-06 |
+| D019 | LOCKED | ACTUAL TEST Product gate authority: Product/Business Lead synthesizes evidence and recommends GO/REVISE/STOP; the user is final approval authority. Thresholds never auto-authorize GO/STOP and no 50/150 expansion is automatic. | U-DECODE-ACTUAL-PROTOCOL-2026-09-06 |
+
+U-DECODE-INTEGRATED-2026-09-06 / U-DECODE-PLAN1A-2026-09-06 / U-DECODE-ACTUAL-PROTOCOL-2026-09-06: decisions approved in the DECODE planning conversation and materialized through the M0 review flow. Publication does not establish empirical validity. ACTUAL TEST remains NOT YET TESTED.
+
 ## Decision promotion
 
 Engineering may recommend GO/REVISE/STOP, but cannot promote candidates, invent thresholds, declare actual-test success from fixtures, or authorize Alpha 50/150 itself. Product records approver, date, evidence/run IDs, exact rule/version, and approved scope. If evidence is absent, the decision remains pending.

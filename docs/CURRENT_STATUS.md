@@ -1,6 +1,15 @@
 # DECODE Current Status
 
-Snapshot: 2026-09-02 | Phase: operating foundation merged into public main; ③-A-1 implementation remains pending
+Snapshot: 2026-09-06 | Phase: M0 authority materialization prepared; PR-A implementation NOT STARTED; PR #5 remains OPEN / NOT MERGED
+
+## 2026-09-06 M0 authority update
+
+- Source main for M0 preparation: `e8e835718a9f95f02ce81682da2092db81249816`.
+- Integrated Spec v1.0, PLAN 1A Canonical Foundation, and 10-Case ACTUAL TEST Protocol v1.0 (Q1-Q56) are the current Product-approved materialization set.
+- Local static cross-document mechanical audit: 67/67 PASS; this is documentation/contract evidence only, not compile/typecheck/software/ACTUAL TEST evidence.
+- GitHub PR #5 remains a separate candidate branch and must not be silently overwritten or merged by M0/PR-A work.
+- ACTUAL TEST: NOT YET TESTED. No 50/150 expansion is authorized.
+- GitHub write through the current integration is SYNC BLOCKED if the materialization branch/commit cannot be created; no chat/local draft is canonical until reviewed merge to main.
 
 ## LOCKED
 
@@ -63,4 +72,10 @@ This is metadata for the excluded local legacy demo, not a runnable stack includ
 
 ## Next gate
 
-Keep verified operating rules and results on public main; see the publication receipt for the merged state. Next development requires review of the versioned annotation design and unresolved candidate choices under the [first engineering request](../handoff/CHATGPT_TO_CODEX.md); publication does not start that implementation. Acquire consented VOD and independent experts before ACTUAL TEST; obtain Product approval before expanding to 50/150 cases. Google bindings and planning-chat membership remain separate unresolved items.
+1. Materialize the three approved 2026-09-06 authority documents on a scoped M0 branch from the verified main revision.
+2. Reconcile publication inventory/checker and decision/handoff documents without weakening existing safeguards or overwriting PR #5.
+3. Verify exact content hashes and commit receipt; after reviewed M0 merge, record the new main as `APPROVED_IMPLEMENTATION_BASE_SHA`.
+4. Only then start PR-A Canonical Foundation TDD from that approved base.
+5. Product/Research may prepare the 10-Case ACTUAL TEST one gate ahead, but actual-mode execution remains blocked until the protocol/rights/software prerequisites are implemented and verified.
+
+Google bindings remain unresolved. No ACTUAL TEST or 50/150 expansion is authorized by M0 publication.
