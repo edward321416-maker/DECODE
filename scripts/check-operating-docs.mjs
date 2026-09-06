@@ -47,13 +47,14 @@ try {
   if (!Array.isArray(files) || files.some((f) => typeof f !== "string")) {
     throw new Error("Publication inventory must list file paths");
   }
-  check("inventory-version", inventory.version === 3);
+  check("inventory-version", inventory.version === 4);
   check("inventory-sorted-unique", same(files, [...new Set(files)].sort()));
   const allowed = new Set(files);
   const required = [
-    "README.md", "AGENTS.md", ".gitignore", ".gemini_sync.md",
+    "README.md", "AGENTS.md", "CLAUDE.md", ".gitignore", ".gemini_sync.md",
     ".github/system_prompts/codex_system_prompt.md",
     ".github/system_prompts/chatgpt_custom_instructions.md",
+    "docs/PROJECT_OPERATING_MANUAL.md", "docs/COLLABORATION_RULES.md",
     "docs/PROJECT_BRIEF.md", "docs/CURRENT_STATUS.md", "docs/DECISIONS.md",
     "docs/PRODUCT_SPEC.md", "docs/DECISION_DATASET_SPEC.md", "docs/EXPERIMENT_PROTOCOL.md",
     "docs/RISKS.md", "docs/AI_OPERATING_POLICY.md", "docs/DEVELOPMENT_RULES.md",
@@ -140,21 +141,29 @@ try {
   for (const heading of ["eight expert fields", "context", "twelve seed principles"]) {
     check("candidate:" + heading, dataset.includes("## LOCK CANDIDATE — " + heading));
   }
-  const protocol = texts.get("docs/EXPERIMENT_PROTOCOL.md") || "";
-  const slots = [...protocol.matchAll(/^\| (S\d{2}) \| (Clear|Ambiguous) \| ([^|]+) \|/gm)];
-  check("slot-ids", same(slots.map((s) => s[1]), Array.from({ length: 10 }, (_, i) => "S" + String(i + 1).padStart(2, "0"))));
-  check("slot-kinds", slots.filter((s) => s[2] === "Clear").length === 6 && slots.filter((s) => s[2] === "Ambiguous").length === 4);
-  check("slot-families", same(["Fight Selection", "Post-contact Decision", "Tradeability & Spacing"].map((f) => slots.filter((s) => s[3].trim() === f).length), [4, 3, 3]));
-  check("candidate-thresholds", protocol.includes("GO / STOP hypotheses — NOT validated thresholds"));
+  // Canonical 10-Case execution/design authority is Q1-Q56 (below), not docs/EXPERIMENT_PROTOCOL.md,
+  // which Team OS Stage 2 retired to a concise historical summary (D018). Safeguards formerly checked
+  // against the old candidate protocol are now checked against their actual current canonical sources.
+  const decisionsText = texts.get("docs/DECISIONS.md") || "";
+  check("family-433-canonical", decisionsText.includes("clear 6 + ambiguous 4; primary family 4/3/3"));
+  check("no-auto-go-canonical", decisionsText.includes("Thresholds never auto-authorize GO/STOP and no 50/150 expansion is automatic"));
   const actualProtocol = texts.get("docs/superpowers/specs/2026-09-06-decode-10-case-actual-test-protocol-v1.md") || "";
   check("actual-protocol-version", actualProtocol.includes("10-Case ACTUAL TEST Protocol v1.0"));
   check("actual-protocol-q1-q56", actualProtocol.includes("Q1–Q56") && !actualProtocol.includes("Q1–Q55"));
   check("actual-protocol-reserve-2-1", actualProtocol.includes("CLEAR reserve = 2") && actualProtocol.includes("AMBIGUOUS reserve = 1"));
   check("actual-protocol-reserve-clarity-allocation", actualProtocol.includes("top 2 CLEAR strata") && actualProtocol.includes("top 1 AMBIGUOUS stratum"));
   check("actual-protocol-no-auto-go", actualProtocol.includes("threshold satisfied ≠ automatic GO") && actualProtocol.includes("threshold missed ≠ automatic STOP"));
+  check("actual-protocol-clear-ambiguous-canonical", actualProtocol.includes("- CLEAR = 6") && actualProtocol.includes("- AMBIGUOUS = 4"));
   for (const label of ["ACTUAL TEST", "SELF-BENCHMARK", "SIMULATED", "NOT YET TESTED"]) {
-    check("evidence-label:" + label, protocol.includes("| " + label + " |"));
+    check("evidence-label:" + label, actualProtocol.includes("- " + label));
   }
+  const protocol = texts.get("docs/EXPERIMENT_PROTOCOL.md") || "";
+  check("protocol-historical-only", protocol.includes("HISTORICAL CANDIDATE SUMMARY") &&
+    protocol.includes("SUPERSEDED FOR EXECUTION") &&
+    !/^\| S0[1-9] \|/m.test(protocol) && !/^\| S10 \|/m.test(protocol) &&
+    !protocol.includes("## Execution") && !protocol.includes("## Measurement specification") &&
+    !protocol.includes("## GO / STOP hypotheses") && !protocol.includes("## Required real-run outputs") &&
+    protocol.length < 3000);
   for (const f of ["README.md", "docs/CURRENT_STATUS.md", "docs/DECISION_DATASET_SPEC.md",
     "docs/EXPERIMENT_PROTOCOL.md",
     "docs/superpowers/plans/2026-09-06-decode-plan-1a-canonical-foundation.md",

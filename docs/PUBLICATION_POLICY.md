@@ -1,25 +1,27 @@
 # DECODE Public Repository and Main Policy
 
-Version: 1.0 | Updated: 2026-09-02 | Owner: Product/Business Lead and AI/Engineering Lead
-Status: ACTIVE OPERATING POLICY | Authority: U-PUBLIC-2026-09-02 / D013
+Version: 1.1 | Updated: 2026-09-06 | Owner: Product/Business Lead and AI/Engineering Lead
+Status: ACTIVE OPERATING POLICY | Authority: U-PUBLIC-2026-09-02 / D013, reconciled for Team OS under D021 / U-DECODE-TEAM-OS-2026-09-06
 
 ## Canonical source
 
 [edward321416-maker/DECODE](https://github.com/edward321416-maker/DECODE) is a public repository. Its `main` branch is the single Source of Truth for reviewed operating rules, approved specifications, handoffs and validated results. A feature branch, chat proposal or local file is not a substitute for current main. Product candidates remain candidates until explicitly approved; publication never promotes them.
 
-Use scoped branches for development/review when useful. Before delivery, integrate verified current rules/results into main through the applicable PR/review workflow and identify the merged revision. Do not leave the latest accepted rules only on a branch. A user-approved routine merge does not require duplicate approval, but failed checks, conflicts, missing authority and material scope expansion must be resolved first.
+Integration to main may use `DIRECT_MAIN` or `PR_MERGE`, per [Collaboration Rules](COLLABORATION_RULES.md) C1–C5, subject to any stricter approved task-specific contract (e.g. PLAN 1A's Whole-PR verification). Branch/PR/review are not universally required. Do not leave verified current rules/results uncommitted to main once ready to integrate. A user-approved routine integration does not require duplicate approval, but failed checks, conflicts, missing authority and material scope expansion must be resolved first, regardless of integration method.
 
 ## Publication gate
 
-1. Verify the exact owner/repository, public visibility, default branch, current base/head, dirty state, repository rules and requested scope.
-2. Preserve unrelated work. Inspect the entire scoped diff and the exact proposed Git tree. For the initial operating foundation, stage only [PUBLICATION_FILES.json](PUBLICATION_FILES.json); never blanket-stage the legacy app.
-3. Review content conflicts as well as Git conflicts. Resolve superseded decisions explicitly, distinguish historical reports from current status, and check links against the published tree.
-4. Exclude credentials, environment files, private VOD/comms, identities, consent documents, access-bearing links, private chat/task bindings and local-only audit material. Scan staged content; any finding blocks publication until safely resolved. Heuristic scanning is not a security certification.
-5. Run the checks appropriate to the change and report exact scope/limits. For this documentation-only foundation, run `node scripts/check-operating-docs.mjs --index` and `git diff --cached --check`. Neither starts package scripts or an application.
-6. Create a scoped PR, inspect its base/head, mergeability and applicable checks/review requirements, then perform a normal merge pinned to the reviewed head. Never force-push, bypass protections or auto-delete branches under this task's prohibition.
-7. Verify the merged PR and actual main tree from GitHub, recheck the published files, and record the receipt. Keep unexecuted application/model/VOD checks NOT TESTED. Corrections use a new reviewed patch/PR, never destructive history edits.
+For both `DIRECT_MAIN` and `PR_MERGE`:
 
-The content-free initial main bootstrap is an explicit exception needed to create the first comparable PR in the previously empty repository. It contains no operating documents or legacy code; the foundation itself must use the verified PR route.
+1. Verify the exact owner/repository, public visibility, default branch, current base/actual main HEAD, dirty state, repository rules and requested scope.
+2. Preserve unrelated work. Inspect the entire actual diff/tree being integrated. For the initial operating foundation, stage only [PUBLICATION_FILES.json](PUBLICATION_FILES.json); never blanket-stage the legacy app.
+3. Review content conflicts as well as Git conflicts. Resolve superseded decisions explicitly, distinguish historical reports from current status, and check links against the published tree.
+4. Exclude credentials, environment files, private VOD/comms, identities, consent documents, access-bearing links, private chat/task bindings and local-only audit material. Scan staged content; any finding blocks integration until safely resolved. Heuristic scanning is not a security certification.
+5. Run the checks appropriate to the change and report exact scope/limits. For this documentation-only foundation, run `node scripts/check-operating-docs.mjs --index` and `git diff --cached --check`. Neither starts package scripts or an application.
+6. If using `PR_MERGE`: create a scoped PR, inspect its base/head, mergeability and applicable checks/review requirements, then perform a normal merge pinned to the reviewed head. If using `DIRECT_MAIN`: commit directly only where host permissions and the applicable task-specific contract allow it, having completed steps 1–5 against the actual current main HEAD. Never force-push, bypass configured branch protections, or auto-delete branches under this task's prohibition, regardless of method.
+7. Verify the actual resulting main tree from GitHub after integration, recheck the published files, and record the receipt (exact commit/merge SHA, method, checker result). Keep unexecuted application/model/VOD checks NOT TESTED. Corrections use a new reviewed patch/commit/PR, never destructive history edits.
+
+The content-free initial main bootstrap is an explicit exception needed to create the first comparable PR in the previously empty repository. It contains no operating documents or legacy code; the foundation itself used the verified PR route available at that time.
 
 ## Public foundation inventory and checks
 

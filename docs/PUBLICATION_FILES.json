@@ -1,12 +1,13 @@
 {
-  "version": 3,
-  "scope": "Initial public operating foundation; changes require reviewed scope and provenance. Version 3 adds inert Team OS Stage 1 scaffold files (docs/PROJECT_OPERATING_MANUAL.md, docs/COLLABORATION_RULES.md, docs/templates/*) — DRAFT / NOT ACTIVE, registered for generic static checks only; no semantic structure is asserted on them yet (Stage 3 of the Team OS restructuring).",
+  "version": 4,
+  "scope": "Initial public operating foundation; changes require reviewed scope and provenance. Version 3 added inert Team OS Stage 1 scaffold files. Version 4 activates Team OS Stage 2: docs/PROJECT_OPERATING_MANUAL.md and docs/COLLABORATION_RULES.md move to ACTIVE OPERATING POLICY, docs/templates/* move to ACTIVE TEMPLATE, and CLAUDE.md is added as the Claude Code thin router alongside AGENTS.md. Full Team OS semantic structure checks remain Stage 3.",
   "files": [
     ".gemini_sync.md",
     ".github/system_prompts/chatgpt_custom_instructions.md",
     ".github/system_prompts/codex_system_prompt.md",
     ".gitignore",
     "AGENTS.md",
+    "CLAUDE.md",
     "README.md",
     "data/samples/README.md",
     "data/schemas/README.md",

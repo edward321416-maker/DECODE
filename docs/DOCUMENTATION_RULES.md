@@ -1,8 +1,10 @@
 # DECODE Documentation Rules
 
-Version: 0.2 | Updated: 2026-09-02 | Owner: Product/Business Lead and AI/Engineering Lead
+Version: 0.3 | Updated: 2026-09-06 | Owner: Product/Business Lead and AI/Engineering Lead
 Status: ACTIVE OPERATING POLICY | Scope: DECODE specifications, decisions, reports and handoffs
-Authority: user-approved rules plus U-PUBLIC-2026-09-02 in [Decisions](DECISIONS.md). Publication is authorized for the operating foundation; product-candidate promotion, annotation implementation and new visual production are not implied.
+Authority: user-approved rules plus U-PUBLIC-2026-09-02, reconciled for Team OS under D021 / U-DECODE-TEAM-OS-2026-09-06 in [Decisions](DECISIONS.md). Publication is authorized for the operating foundation; product-candidate promotion, annotation implementation and new visual production are not implied.
+
+Use [docs/templates/](templates/README.md) as the canonical starting structure for a new maintained artifact of a type it covers (task brief, planning brief, research note, design spec, implementation plan, decision record, test evidence, change report, handoff) rather than inventing a one-off format.
 
 ## Source and ownership
 
@@ -17,7 +19,7 @@ Authority: user-approved rules plus U-PUBLIC-2026-09-02 in [Decisions](DECISIONS
 | Execution | NOT TESTED, RUNNING, PASSED, FAILED, or BLOCKED; explanatory unexecuted state is NOT YET TESTED |
 | Claim boundary | ACTUAL TEST cannot contain synthetic-origin evidence presented as real; a completed real run still need not have succeeded |
 
-The [Experiment Protocol](EXPERIMENT_PROTOCOL.md) owns the domain definitions. This table explains them; it does not create or lock new machine-schema enums.
+The sole current 10-Case execution/design authority is the [10-Case ACTUAL TEST Protocol v1.0](superpowers/specs/2026-09-06-decode-10-case-actual-test-protocol-v1.md) (Q1–Q56). [Experiment Protocol](EXPERIMENT_PROTOCOL.md) is historical/superseded for execution under D018 and must not be read as current authority. This table explains the evidence contract; it does not create or lock new machine-schema enums.
 
 ## Accuracy and history
 
@@ -28,9 +30,9 @@ The [Experiment Protocol](EXPERIMENT_PROTOCOL.md) owns the domain definitions. T
 
 ## Working records
 
-- DOC-08 — Keep a compact checkpoint: status, artifact, evidence category, token basis and next action. Use measured task telemetry, explicitly scoped estimates, or UNKNOWN; never derive task tokens from account percentages. Retrieve only relevant documents/tool schemas and retain stable source/version/hash references. Do not claim already-sent context was erased.
+- DOC-08 — Keep a compact checkpoint: status, artifact, evaluation purpose/mode, data origin, execution status as applicable, token basis and next action. Use measured task telemetry, explicitly scoped estimates, or UNKNOWN; never derive task tokens from account percentages. Retrieve only relevant documents/tool schemas and retain stable source/version/hash references. Do not claim already-sent context was erased.
 - DOC-09 — Follow the [AI operations](AI_OPERATING_POLICY.md) logging contract. For major completion/acquisition, append Timestamp, Acquired Skill, Estimated Tokens Used, Task Summary to the designated AI_Execution_Log only with verified bindings and authority. Use NONE for no acquisition and a stable event ID. Missing Google configuration means SYNC BLOCKED plus a sanitized local pending row, not a fabricated cloud write. Documentation checks do not create experiment rows.
-- DOC-10 — Before delivery, update [Current Status](CURRENT_STATUS.md) and the [reverse handoff](../handoff/CODEX_TO_CHATGPT.md), retain the eight required headings, and name the next decision without silently authorizing it. Preserve the approved first request in [ChatGPT to Codex](../handoff/CHATGPT_TO_CODEX.md). The .gemini_sync.md report stays English with exactly Executed Actions, GSTACK & Skill Usage, PR Status, and Unresolved Issues / Next Steps sections. Source originals remain unchanged except for scoped, reviewed edits.
+- DOC-10 — Before delivery, update [Current Status](CURRENT_STATUS.md) and the [reverse handoff](../handoff/CODEX_TO_CHATGPT.md), retain the eight required headings, and name the next decision without silently authorizing it. [ChatGPT to Codex](../handoff/CHATGPT_TO_CODEX.md) holds the current approved request; a newer approved handoff replaces an older one there, it is not preserved in place indefinitely — Git history retains every prior version. The .gemini_sync.md report stays English with exactly Executed Actions, GSTACK & Skill Usage, PR Status, and Unresolved Issues / Next Steps sections. Source originals remain unchanged except for scoped, reviewed edits.
 
 ## Definition of done for documentation
 

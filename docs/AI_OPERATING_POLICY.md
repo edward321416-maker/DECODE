@@ -1,10 +1,10 @@
 # AI Operating Policy and Integration Contract
 
-Version: 0.3 | Updated: 2026-09-02 | Scope: DECODE repository
+Version: 0.4 | Updated: 2026-09-06 | Scope: DECODE repository
 
 ## Activation and authority
 
-The operator's preferences apply across tasks, but this change only writes DECODE project policies; it does not alter global account/system configuration. `AGENTS.md` routes future repository work to the [Codex policy](../.github/system_prompts/codex_system_prompt.md). The [ChatGPT policy](../.github/system_prompts/chatgpt_custom_instructions.md) is intended for DECODE project instructions, not automatically executed by placing it on disk. Host safety, permissions and instruction priority always govern. Markdown does not grant unavailable tools or enforce OS permissions.
+The operator's preferences apply across tasks, but this change only writes DECODE project policies; it does not alter global account/system configuration. `AGENTS.md` (Codex) and `CLAUDE.md` (Claude Code) are both thin tool-specific routers into [Project Operating Manual](PROJECT_OPERATING_MANUAL.md), the canonical repository task router; neither duplicates Team OS policy. `AGENTS.md` additionally points to the Codex-specific supplemental [Codex policy](../.github/system_prompts/codex_system_prompt.md). The [ChatGPT policy](../.github/system_prompts/chatgpt_custom_instructions.md) remains Product/Business Lead planning material — it is not Claude Code's or Codex's instruction set, and is intended for DECODE project instructions, not automatically executed by placing it on disk. The Engineering role is tool-neutral: Codex, Claude Code, and a human developer may each fill it under [Collaboration Rules](COLLABORATION_RULES.md), and none of them creates project state that competes with the others — all read and write the same `docs/`, `handoff/`, and Git history. No repository Markdown overrides host/system/developer permissions; host safety, permissions and instruction priority always govern.
 
 Earlier setup verified creation of ChatGPT Project DECODE and persistence of its then-current policy. The planning conversation's move did not persist; membership remains unresolved and is not reverified by repository publication. The public repository's main is canonical under [Publication Policy](PUBLICATION_POLICY.md). Revalidate the local checkout each session. Private task/project/chat IDs and absolute local paths are deliberately excluded from public documents; this does not prove external app bindings changed.
 

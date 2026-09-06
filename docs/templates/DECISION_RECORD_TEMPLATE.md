@@ -1,11 +1,11 @@
 # Decision Record — [short name]
 
-Template Version: 0.2-DRAFT | Updated: 2026-09-06 | Owner: Product/Business Lead
-Status: DRAFT SCAFFOLD / NOT ACTIVE — Team OS Stage 1 proposal
+Template Version: 1.0 | Updated: 2026-09-06 | Owner: Product/Business Lead
+Status: ACTIVE TEMPLATE
 Scope: skeleton for a new or amended entry for docs/DECISIONS.md
-Authority: NONE — Stage 1 proposal; does not create an operating requirement
+Authority: D021 / U-DECODE-TEAM-OS-2026-09-06
 
-Instance instructions (when using this template, after activation): copy the row below into the appropriate dated section of docs/DECISIONS.md; do not create a separate file per decision.
+Instance instructions (when using this template): copy the row below into the appropriate dated section of docs/DECISIONS.md; do not create a separate file per decision.
 
 | ID | Status | Decision | Source |
 | --- | --- | --- | --- |

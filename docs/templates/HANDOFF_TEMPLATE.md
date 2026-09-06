@@ -1,9 +1,9 @@
 # [Role A] → [Role B]
 
-Template Version: 0.2-DRAFT | Updated: 2026-09-06 | Owner: AI/Engineering Lead
-Status: DRAFT SCAFFOLD / NOT ACTIVE — Team OS Stage 1 proposal (the eight section headings below are the existing, already-active `handoff/CODEX_TO_CHATGPT.md` contract; this template does not modify that contract, only reproduces it as a starting skeleton)
+Template Version: 1.0 | Updated: 2026-09-06 | Owner: AI/Engineering Lead
+Status: ACTIVE TEMPLATE (the eight section headings below are the existing `handoff/CODEX_TO_CHATGPT.md` contract; this template reproduces that contract as a starting skeleton, it does not modify it)
 Scope: skeleton for a request or report between Product/Business Lead and AI/Engineering Lead
-Authority: NONE — Stage 1 proposal; does not create an operating requirement beyond the pre-existing eight-heading contract it reproduces
+Authority: D021 / U-DECODE-TEAM-OS-2026-09-06
 
 Instance fields (fill in when using this template):
 

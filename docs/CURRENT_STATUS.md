@@ -1,8 +1,18 @@
 # DECODE Current Status
 
-Snapshot: 2026-09-06 | Phase: M0 authority merged to main + post-merge receipt verified; PR-A implementation NOT STARTED; PR #5 remains OPEN / NOT MERGED
+Snapshot: 2026-09-06 | Phase: Team OS Stage 1 merged; Stage 2 activation in this revision; Stage 3 next; PR-A implementation NOT STARTED; PR #5 remains OPEN / NOT MERGED
 
-## 2026-09-06 M0 authority merge + post-merge receipt
+## 2026-09-06 Team OS Stage 1 + Stage 2
+
+- Team OS Stage 1 (inert DRAFT scaffold: `docs/PROJECT_OPERATING_MANUAL.md`, `docs/COLLABORATION_RULES.md`, `docs/templates/`) merged via PR #8 at `5c09f6f7108c94fd840797b434f34286da30d8b6`.
+- Stage 2 (this revision) activates Team OS: `docs/PROJECT_OPERATING_MANUAL.md` and `docs/COLLABORATION_RULES.md` (C1–C11) move to ACTIVE OPERATING POLICY under D021; `docs/templates/` move to ACTIVE TEMPLATE; `CLAUDE.md` is created and `AGENTS.md` reconciled as thin tool-specific routers into the manual; `docs/DEVELOPMENT_RULES.md`, `docs/DOCUMENTATION_RULES.md`, `docs/AI_OPERATING_POLICY.md`, `docs/PUBLICATION_POLICY.md`, `README.md`, `docs/PROJECT_BRIEF.md`, `docs/PRODUCT_SPEC.md`, `docs/DECISION_DATASET_SPEC.md`, `data/schemas/README.md`, and both `.github/system_prompts/*` files are reconciled for tool-neutral Engineering and C1–C11-consistent integration method; `docs/EXPERIMENT_PROTOCOL.md` is retired to a historical candidate summary superseded for execution under D018, with the Q1–Q56 10-Case ACTUAL TEST Protocol v1.0 as sole current execution authority.
+- If this revision is being read from merged canonical main, Stage 2 is complete and Stage 3 (semantic checker hardening) is next. This revision itself, while in review, is Stage 2 not-yet-merged.
+- This Stage 2 revision carries `docs/PUBLICATION_FILES.json` version 4 (adds `CLAUDE.md`; 49 files). Once this revision is reviewed and merged, version 4 becomes the canonical inventory on main, superseding the version-2-canonical wording below (kept as historical, prior to Team OS).
+- PR #5 remains OPEN / NOT MERGED / non-canonical candidate, untouched by Team OS work.
+- D020's `M0_AUTHORITY_MERGE_SHA`-derived receipt main SHA `44fc42861e6b73d848f2f50b1d8f19991d1d5a12` remains valid historical M0 receipt evidence; D022 supersedes it only as the eventual PR-A start base. No replacement PR-A SHA exists yet — the final PR-A base is selected only after Stage 3 completes, externally verified and explicitly Product-approved before PR-A branch creation.
+- `ACTUAL TEST = NOT YET TESTED`. `PR-A = NOT STARTED`.
+
+## 2026-09-06 M0 authority merge + post-merge receipt (historical, prior to Team OS)
 
 - `M0_AUTHORITY_MERGE_SHA = 94252efe862d01c6441d6b0ed10fde589870b562` (merge of PR #6, `m0/authority-materialization-2026-09-06` into main). This supersedes the earlier `e8e835718a9f95f02ce81682da2092db81249816` preparation-source entry.
 - Integrated Spec v1.0, PLAN 1A Canonical Foundation, and 10-Case ACTUAL TEST Protocol v1.0 (Q1-Q56) are merged to main at `M0_AUTHORITY_MERGE_SHA` and independently re-verified post-merge by exact Git blob ID and SHA-256 of Git object bytes (not working-tree bytes):
@@ -31,7 +41,7 @@ Snapshot: 2026-09-06 | Phase: M0 authority merged to main + post-merge receipt v
 - Twelve seed principles and their definitions.
 - GO/STOP thresholds, metric aggregation rules, and escalation rubric.
 
-These are testable proposals, not approved performance claims. Definitions are in [DECISION_DATASET_SPEC](DECISION_DATASET_SPEC.md) and [EXPERIMENT_PROTOCOL](EXPERIMENT_PROTOCOL.md).
+These are testable proposals, not approved performance claims. Definitions are in [DECISION_DATASET_SPEC](DECISION_DATASET_SPEC.md); GO/STOP threshold and execution authority is the current [10-Case ACTUAL TEST Protocol v1.0](superpowers/specs/2026-09-06-decode-10-case-actual-test-protocol-v1.md) (Q1–Q56) — [EXPERIMENT_PROTOCOL](EXPERIMENT_PROTOCOL.md) is a historical candidate summary, superseded for execution.
 
 ## Evidence status
 
@@ -46,12 +56,12 @@ These are testable proposals, not approved performance claims. Definitions are i
 
 ## Adopted operating rules
 
-[Development Rules](DEVELOPMENT_RULES.md), [Documentation Rules](DOCUMENTATION_RULES.md) and [Graphics Rules](GRAPHICS_RULES.md), version 0.2, apply to approved work. U-PUBLIC-2026-09-02 authorizes this operating foundation's publication and normal merge to main under [Publication Policy](PUBLICATION_POLICY.md). Earlier rules/setup checks remain historical, not fresh certification. No annotation implementation, graphic production, manifest script or package installation is included.
+[Project Operating Manual](PROJECT_OPERATING_MANUAL.md) (v1.0, ACTIVE) is the canonical task router. [Collaboration Rules](COLLABORATION_RULES.md) (C1–C11, v1.0, ACTIVE) governs integration method. [Development Rules](DEVELOPMENT_RULES.md) (v0.3), [Documentation Rules](DOCUMENTATION_RULES.md) (v0.3) and [Graphics Rules](GRAPHICS_RULES.md) (v0.2) apply to approved work, reconciled for Team OS under D021. U-PUBLIC-2026-09-02 authorizes this operating foundation's publication and integration to main under [Publication Policy](PUBLICATION_POLICY.md) (v1.1). Earlier rules/setup checks remain historical, not fresh certification. No annotation implementation, graphic production, manifest script or package installation is included.
 
 ## Operational bindings
 
 - ChatGPT Project: DECODE planning headquarters. Earlier setup verified project creation and then-current policy persistence; planning-chat membership remains unresolved and was not rechecked during publication. Public prompt-file updates do not update saved project instructions. No transcript/policy synchronization is claimed.
-- Codex: AI/Engineering Lead in the verified existing local DECODE checkout. Private task/project/chat bindings and local paths are excluded from the public repository.
+- Engineering: AI/Engineering Lead role, fillable by Codex, Claude Code, or a human developer under [Collaboration Rules](COLLABORATION_RULES.md), in the verified existing local DECODE checkout. Private task/project/chat bindings and local paths are excluded from the public repository.
 - GitHub: [public edward321416-maker/DECODE](https://github.com/edward321416-maker/DECODE), repository ID 1354606878, with main as default and canonical branch. Foundation PR #2 merged at 2026-09-02T10:44:59Z; see [Publication evidence](MAIN_PUBLICATION.md) for exact commits and check receipts. Other branch proposals are not canonical until merged.
 - Google `AI_Execution_Log` spreadsheet ID, range binding, and schema-cache Drive folder ID: NOT CONFIGURED. No repository policy or designated execution log was found before setup. No matching credential/binding environment variable names were present in the current process; credential stores were not searched.
 - Prompt files are project policies, not modifications to a provider's system layer or global account settings. Google integration is a written protocol, not a deployed logger.
@@ -78,10 +88,11 @@ This is metadata for the excluded local legacy demo, not a runnable stack includ
 
 ## Next gate
 
-1. Materialize the three approved 2026-09-06 authority documents on a scoped M0 branch from the verified main revision. — DONE (merged via PR #6 at `M0_AUTHORITY_MERGE_SHA`).
-2. Reconcile publication inventory/checker and decision/handoff documents without weakening existing safeguards or overwriting PR #5. — DONE at merge; re-verified in this post-merge receipt.
-3. Verify exact content hashes and commit receipt; after reviewed M0 merge, record the new main as `APPROVED_IMPLEMENTATION_BASE_SHA`. — Content hashes verified against Git object bytes (this receipt). `APPROVED_IMPLEMENTATION_BASE_SHA` resolves to the actual `origin/main` HEAD produced by the reviewed merge of this receipt PR (PR #7), fetched and verified immediately after that merge and recorded in the merge receipt/report — not written as a literal SHA into repository files by a further commit.
-4. Only then start PR-A Canonical Foundation TDD from that approved base. PR-A = NOT STARTED.
-5. Product/Research may prepare the 10-Case ACTUAL TEST one gate ahead, but actual-mode execution remains blocked until the protocol/rights/software prerequisites are implemented and verified.
+1. M0 authority materialization and post-merge receipt. — DONE (PR #6, PR #7; see historical section above).
+2. Team OS Stage 1 (inert scaffold). — DONE, merged via PR #8 at `5c09f6f7108c94fd840797b434f34286da30d8b6`.
+3. Team OS Stage 2 (policy/router activation and reconciliation). — This revision; not yet merged. Product reviews the Stage 2 PR before merge.
+4. Team OS Stage 3 (semantic checker hardening). — NOT STARTED; begins only after Stage 2 is merged and post-merge main is independently verified.
+5. Only after Stage 1/2/3 all complete does PR-A Canonical Foundation TDD begin, from the exact actual `origin/main` HEAD at that time, externally verified and explicitly Product-approved before PR-A branch creation (D022). PR-A = NOT STARTED.
+6. Product/Research may prepare the 10-Case ACTUAL TEST one gate ahead, but actual-mode execution remains blocked until the protocol/rights/software prerequisites are implemented and verified.
 
-Google bindings remain unresolved. No ACTUAL TEST or 50/150 expansion is authorized by M0 publication.
+Google bindings remain unresolved. No ACTUAL TEST or 50/150 expansion is authorized by Team OS activation.

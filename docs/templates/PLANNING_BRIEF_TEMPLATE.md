@@ -1,11 +1,11 @@
 # Planning Brief — [feature / milestone name]
 
-Template Version: 0.2-DRAFT | Updated: 2026-09-06 | Owner: Product/Business Lead
-Status: DRAFT SCAFFOLD / NOT ACTIVE — Team OS Stage 1 proposal
+Template Version: 1.0 | Updated: 2026-09-06 | Owner: Product/Business Lead
+Status: ACTIVE TEMPLATE
 Scope: skeleton for Product/Business Lead scoping a feature or milestone before implementation
-Authority: NONE — Stage 1 proposal; does not create an operating requirement
+Authority: D021 / U-DECODE-TEAM-OS-2026-09-06
 
-Instance fields (fill in when using this template, after activation):
+Instance fields (fill in when using this template):
 
 Owner: Product/Business Lead | Version: [N] | Date: [ISO-8601] | Status: [DRAFT | UNDER REVIEW | APPROVED]
 Scope: [what this brief covers]

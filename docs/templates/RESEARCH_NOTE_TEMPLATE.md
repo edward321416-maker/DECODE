@@ -1,11 +1,11 @@
 # Research Note — [topic]
 
-Template Version: 0.2-DRAFT | Updated: 2026-09-06 | Owner: Product/Research
-Status: DRAFT SCAFFOLD / NOT ACTIVE — Team OS Stage 1 proposal
+Template Version: 1.0 | Updated: 2026-09-06 | Owner: Product/Research
+Status: ACTIVE TEMPLATE
 Scope: skeleton for investigation findings that inform a decision but are not the decision itself
-Authority: NONE — Stage 1 proposal; does not create an operating requirement
+Authority: D021 / U-DECODE-TEAM-OS-2026-09-06
 
-Instance fields (fill in when using this template, after activation):
+Instance fields (fill in when using this template):
 
 Author: [Product/Research | AI/Engineering Lead] | Date: [ISO-8601]
 Informs: [decision ID or planning brief this feeds, if any]
