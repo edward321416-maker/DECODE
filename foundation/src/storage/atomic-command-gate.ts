@@ -40,20 +40,24 @@ interface IdempotencyReceipt {
 export class AtomicCommandGate {
   private aggregates = new Map<string, AggregateState>();
   private receipts = new Map<string, IdempotencyReceipt>();
-  // Serializes ALL execute() calls per aggregateKey — not merely per idempotencyKey — so a
-  // version check + mutate + commit is atomic relative to any other command (same or different
-  // idempotency key) racing on the same aggregate.
+  // Serializes per aggregateKey so a version check + mutate + commit is atomic relative to any
+  // other command racing on the same aggregate.
   private aggregateLocks = new Map<string, Promise<unknown>>();
+  // Serializes per idempotencyKey FIRST (acquired before any aggregateLock), so two calls
+  // sharing the same idempotencyKey but targeting DIFFERENT aggregates cannot both observe "no
+  // receipt yet" and both execute their mutation callback. Lock acquisition order is always
+  // idempotencyLocks -> aggregateLocks, never the reverse, so this cannot deadlock.
+  private idempotencyLocks = new Map<string, Promise<unknown>>();
 
   getAggregateVersion(aggregateKey: string): number {
     return this.aggregates.get(aggregateKey)?.version ?? 0;
   }
 
-  private async withAggregateLock<T>(aggregateKey: string, fn: () => Promise<T>): Promise<T> {
-    const previous = this.aggregateLocks.get(aggregateKey) ?? Promise.resolve();
+  private async withLock<T>(locks: Map<string, Promise<unknown>>, key: string, fn: () => Promise<T>): Promise<T> {
+    const previous = locks.get(key) ?? Promise.resolve();
     const run = previous.then(fn, fn);
-    this.aggregateLocks.set(
-      aggregateKey,
+    locks.set(
+      key,
       run.then(
         () => undefined,
         () => undefined,
@@ -69,6 +73,7 @@ export class AtomicCommandGate {
   ): Promise<T> {
     const fingerprint = fingerprintCommand(input);
 
+    // Fast path outside any lock: exact replay of an already-committed receipt.
     const existing = this.receipts.get(idempotencyKey);
     if (existing) {
       if (existing.fingerprint !== fingerprint) {
@@ -79,9 +84,9 @@ export class AtomicCommandGate {
       return existing.result as T;
     }
 
-    return this.withAggregateLock(input.aggregateKey, async () => {
+    return this.withLock(this.idempotencyLocks, idempotencyKey, async () => {
       // Re-check inside the critical section: another queued call for the same idempotencyKey
-      // may have committed while this call was waiting for the aggregate lock.
+      // (on any aggregate) may have committed while this call waited for the lock.
       const existingInner = this.receipts.get(idempotencyKey);
       if (existingInner) {
         if (existingInner.fingerprint !== fingerprint) {
@@ -92,17 +97,19 @@ export class AtomicCommandGate {
         return existingInner.result as T;
       }
 
-      const currentVersion = this.getAggregateVersion(input.aggregateKey);
-      if (input.expectedVersion !== currentVersion) {
-        throw new StaleVersionError(
-          `expected version ${input.expectedVersion}, aggregate ${input.aggregateKey} is at ${currentVersion}`,
-        );
-      }
+      return this.withLock(this.aggregateLocks, input.aggregateKey, async () => {
+        const currentVersion = this.getAggregateVersion(input.aggregateKey);
+        if (input.expectedVersion !== currentVersion) {
+          throw new StaleVersionError(
+            `expected version ${input.expectedVersion}, aggregate ${input.aggregateKey} is at ${currentVersion}`,
+          );
+        }
 
-      const result = await mutate();
-      this.aggregates.set(input.aggregateKey, { version: currentVersion + 1 });
-      this.receipts.set(idempotencyKey, { fingerprint, result });
-      return result;
+        const result = await mutate();
+        this.aggregates.set(input.aggregateKey, { version: currentVersion + 1 });
+        this.receipts.set(idempotencyKey, { fingerprint, result });
+        return result;
+      });
     });
   }
 }

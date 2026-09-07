@@ -39,6 +39,14 @@ export interface ReconcileInput {
 
 export class DurableJobError extends Error {}
 
+// Deep-clones arbitrary evidence data (objects, arrays, nested Dates, etc.) so neither ingress
+// (the caller's original input object) nor egress (a previously-returned view) can alias stored
+// historical evidence. `undefined` is passed through since structuredClone(undefined) is not a
+// meaningful clone target.
+function deepCloneEvidence<T>(value: T): T {
+  return value === undefined ? value : (structuredClone(value) as T);
+}
+
 export class DurableJob {
   readonly jobId: string;
   private state: JobState = "CREATED";
@@ -57,7 +65,12 @@ export class DurableJob {
   }
 
   getAttempts(): readonly Attempt[] {
-    return this.attempts.map((attempt) => ({ ...attempt, startedAt: new Date(attempt.startedAt.getTime()) }));
+    return this.attempts.map((attempt) => ({
+      ...attempt,
+      startedAt: new Date(attempt.startedAt.getTime()),
+      resultEvidence: deepCloneEvidence(attempt.resultEvidence),
+      failureEvidence: deepCloneEvidence(attempt.failureEvidence),
+    }));
   }
 
   getReconciliations(): readonly Reconciliation[] {
@@ -100,7 +113,8 @@ export class DurableJob {
     }
     const attempt = this.currentAttempt();
     attempt.state = "SUCCEEDED";
-    attempt.resultEvidence = resultEvidence;
+    // Ingress clone: the caller's original object must not alias stored history.
+    attempt.resultEvidence = deepCloneEvidence(resultEvidence);
     this.state = "SUCCEEDED";
   }
 
@@ -110,7 +124,8 @@ export class DurableJob {
     }
     const attempt = this.currentAttempt();
     attempt.state = "FAILED";
-    attempt.failureEvidence = failureEvidence;
+    // Ingress clone: the caller's original object must not alias stored history.
+    attempt.failureEvidence = deepCloneEvidence(failureEvidence);
     this.state = "FAILED";
   }
 
@@ -146,7 +161,8 @@ export class DurableJob {
       reconciliationRef: input.reconciliationRef,
       reason: input.reason,
       recordedAt: this.clock.now(),
-      externalObservedAt: input.externalObservedAt,
+      // Ingress clone: the caller's original Date must not alias stored provenance.
+      externalObservedAt: input.externalObservedAt ? new Date(input.externalObservedAt.getTime()) : undefined,
     };
     this.reconciliations.push(record);
 

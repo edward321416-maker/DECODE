@@ -12,10 +12,15 @@ export interface EvidenceRecord {
 export class EvidenceRecordError extends Error {}
 
 export function validateEvidenceRecord(record: EvidenceRecord): void {
-  // Runtime boundary enforcement lives here too, not only in a separate helper callers might
-  // forget to invoke: a record whose dataOrigin is not one of the canonical values (e.g. an
-  // untyped "MIXED" arriving from outside the type system) must never pass validation.
+  // Runtime boundary enforcement lives here too, not only in separate helpers callers might
+  // forget to invoke: every canonical dimension (D023-locked) is checked against its exact
+  // membership set — an untyped/unknown value arriving from outside the type system (e.g.
+  // evaluationMode="MODEL_BAKE_OFF" as a top-level mode, or an unknown ExecutionStatus like
+  // "EXECUTED") must never pass validation.
+  assertValidEvaluationMode(record.evaluationMode);
   assertValidDataOrigin(record.dataOrigin);
+  assertValidExecutionStatus(record.executionStatus);
+  assertValidEvaluationSubtype(record.evaluationSubtype);
   if (record.evaluationSubtype === "MODEL_BAKE_OFF" && record.evaluationMode !== "SELF_BENCHMARK") {
     throw new EvidenceRecordError("evaluation_subtype=MODEL_BAKE_OFF is only valid under SELF-BENCHMARK");
   }
@@ -47,5 +52,35 @@ const DATA_ORIGIN_VALUES: readonly DataOrigin[] = ["REAL", "SIMULATED", "UNKNOWN
 export function assertValidDataOrigin(value: string): asserts value is DataOrigin {
   if (!(DATA_ORIGIN_VALUES as readonly string[]).includes(value)) {
     throw new EvidenceRecordError(`invalid DataOrigin: ${value}`);
+  }
+}
+
+const EVALUATION_MODE_VALUES: readonly EvaluationMode[] = ["ACTUAL_TEST", "SELF_BENCHMARK", "N_A"];
+
+export function assertValidEvaluationMode(value: string): asserts value is EvaluationMode {
+  if (!(EVALUATION_MODE_VALUES as readonly string[]).includes(value)) {
+    throw new EvidenceRecordError(`invalid EvaluationMode: ${value}`);
+  }
+}
+
+const EXECUTION_STATUS_VALUES: readonly ExecutionStatus[] = [
+  "NOT_TESTED",
+  "RUNNING",
+  "PASSED",
+  "FAILED",
+  "BLOCKED",
+];
+
+export function assertValidExecutionStatus(value: string): asserts value is ExecutionStatus {
+  if (!(EXECUTION_STATUS_VALUES as readonly string[]).includes(value)) {
+    throw new EvidenceRecordError(`invalid ExecutionStatus: ${value}`);
+  }
+}
+
+export function assertValidEvaluationSubtype(
+  value: string | undefined,
+): asserts value is "MODEL_BAKE_OFF" | undefined {
+  if (value !== undefined && value !== "MODEL_BAKE_OFF") {
+    throw new EvidenceRecordError(`invalid evaluation_subtype: ${value}`);
   }
 }

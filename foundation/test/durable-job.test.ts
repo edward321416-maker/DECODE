@@ -175,3 +175,71 @@ test("finding 9: mutating the returned attempts/reconciliations does not alter s
   assert.equal(job.getReconciliations()[0]?.reason, "retry authorized");
   assert.equal(job.getReconciliations()[0]?.recordedAt.getFullYear(), 2026);
 });
+
+// Round-2 review finding B: durable history must not alias nested evidence/input objects, on
+// EITHER ingress (caller's original input object) OR egress (a previously-returned view).
+
+test("finding B.1: mutating the ORIGINAL result-evidence object after succeed() does not change stored history", () => {
+  const { job } = makeJob();
+  job.start();
+  const original = { score: 1, nested: { detail: "first" } };
+  job.succeed(original);
+  original.score = 999;
+  original.nested.detail = "tampered";
+  assert.deepEqual(job.getAttempts()[0]?.resultEvidence, { score: 1, nested: { detail: "first" } });
+});
+
+test("finding B.2: mutating a nested object inside a RETURNED resultEvidence view does not change stored history", () => {
+  const { job } = makeJob();
+  job.start();
+  job.succeed({ score: 1, nested: { detail: "first" } });
+  const view = job.getAttempts()[0]?.resultEvidence as { score: number; nested: { detail: string } };
+  view.score = 999;
+  view.nested.detail = "tampered";
+  assert.deepEqual(job.getAttempts()[0]?.resultEvidence, { score: 1, nested: { detail: "first" } });
+});
+
+test("finding B.3: same nested-mutation protection applies to failureEvidence (ingress and egress)", () => {
+  const { job } = makeJob();
+  job.start();
+  const original = { code: "E1", nested: { detail: "first" } };
+  job.fail(original);
+  original.code = "TAMPERED";
+  original.nested.detail = "tampered";
+  const view = job.getAttempts()[0]?.failureEvidence as { code: string; nested: { detail: string } };
+  view.code = "TAMPERED-VIEW";
+  view.nested.detail = "tampered-view";
+  assert.deepEqual(job.getAttempts()[0]?.failureEvidence, { code: "E1", nested: { detail: "first" } });
+});
+
+test("finding B.4: mutating the ORIGINAL externalObservedAt Date after reconcile() does not change stored provenance", () => {
+  const { job } = makeJob();
+  job.start();
+  job.markUnknownResult();
+  job.requireReconciliation();
+  const original = new Date("2025-06-01T00:00:00Z");
+  job.reconcile({
+    decision: "CONFIRMED_SUCCEEDED",
+    reconciliationRef: "ref-1",
+    reason: "verified externally",
+    externalObservedAt: original,
+  });
+  original.setFullYear(1999);
+  assert.equal(job.getReconciliations()[0]?.externalObservedAt?.getFullYear(), 2025);
+});
+
+test("finding B.5: mutating a Date obtained from a RETURNED reconciliation view does not change stored provenance", () => {
+  const { job } = makeJob();
+  job.start();
+  job.markUnknownResult();
+  job.requireReconciliation();
+  job.reconcile({
+    decision: "CONFIRMED_SUCCEEDED",
+    reconciliationRef: "ref-1",
+    reason: "verified externally",
+    externalObservedAt: new Date("2025-06-01T00:00:00Z"),
+  });
+  const view = job.getReconciliations()[0];
+  view?.externalObservedAt?.setFullYear(1999);
+  assert.equal(job.getReconciliations()[0]?.externalObservedAt?.getFullYear(), 2025);
+});

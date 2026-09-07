@@ -9,6 +9,10 @@ import {
   type EvidenceRecord,
 } from "../src/shared/provenance.js";
 
+function cast(record: Record<string, unknown>): EvidenceRecord {
+  return record as unknown as EvidenceRecord;
+}
+
 // Invariant 3: SELF-BENCHMARK + SIMULATED is valid.
 test("invariant 3: SELF-BENCHMARK + SIMULATED is valid", () => {
   assert.doesNotThrow(() =>
@@ -128,4 +132,56 @@ test("finding 8: validateEvidenceRecord still preserves D023/D024 and MODEL_BAKE
       evaluationSubtype: "MODEL_BAKE_OFF",
     }),
   );
+});
+
+// Round-2 review finding C: validateEvidenceRecord() must enforce runtime membership for EVERY
+// canonical provenance dimension, not just DataOrigin — D023 already locks the allowed values.
+
+test("finding C.1: MODEL_BAKE_OFF is rejected as a top-level EvaluationMode, not only as a subtype", () => {
+  assert.throws(() =>
+    validateEvidenceRecord(
+      cast({ evaluationMode: "MODEL_BAKE_OFF", dataOrigin: "SIMULATED", executionStatus: "PASSED" }),
+    ),
+  );
+});
+
+test("finding C.2: an unknown EvaluationMode is rejected at the runtime boundary", () => {
+  assert.throws(() =>
+    validateEvidenceRecord(cast({ evaluationMode: "BOGUS_MODE", dataOrigin: "SIMULATED", executionStatus: "PASSED" })),
+  );
+});
+
+test("finding C.3: an unknown/non-canonical ExecutionStatus is rejected at the runtime boundary", () => {
+  assert.throws(() =>
+    validateEvidenceRecord(
+      cast({ evaluationMode: "SELF_BENCHMARK", dataOrigin: "SIMULATED", executionStatus: "EXECUTED" }),
+    ),
+  );
+});
+
+test("finding C.4: an unknown evaluationSubtype is rejected at the runtime boundary", () => {
+  assert.throws(() =>
+    validateEvidenceRecord(
+      cast({
+        evaluationMode: "SELF_BENCHMARK",
+        dataOrigin: "SIMULATED",
+        executionStatus: "PASSED",
+        evaluationSubtype: "BOGUS_SUBTYPE",
+      }),
+    ),
+  );
+});
+
+test("finding C.5: validateEvidenceRecord still accepts every canonical EvaluationMode and ExecutionStatus", () => {
+  for (const evaluationMode of ["ACTUAL_TEST", "SELF_BENCHMARK", "N_A"] as const) {
+    for (const executionStatus of ["NOT_TESTED", "RUNNING", "PASSED", "FAILED", "BLOCKED"] as const) {
+      if (evaluationMode === "ACTUAL_TEST") continue; // ACTUAL_TEST requires DataOrigin=REAL, tested separately
+      assert.doesNotThrow(() => validateEvidenceRecord({ evaluationMode, dataOrigin: "SIMULATED", executionStatus }));
+    }
+  }
+  for (const executionStatus of ["NOT_TESTED", "RUNNING", "PASSED", "FAILED", "BLOCKED"] as const) {
+    assert.doesNotThrow(() =>
+      validateEvidenceRecord({ evaluationMode: "ACTUAL_TEST", dataOrigin: "REAL", executionStatus }),
+    );
+  }
 });

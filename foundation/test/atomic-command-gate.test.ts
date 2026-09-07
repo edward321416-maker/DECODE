@@ -158,3 +158,52 @@ test("finding 6: same-aggregate concurrent commands under different idempotency 
   assert.ok((rejected[0] as PromiseRejectedResult).reason instanceof StaleVersionError);
   assert.equal(gate.getAggregateVersion("aggregate-1"), 1);
 });
+
+// Round-2 review finding A: same idempotency key, DIFFERENT aggregateKey, concurrent execution.
+// Round-1's fix only serialized per aggregateKey, so two different aggregates could each
+// independently see "no receipt yet" and both execute their mutation callback. The locked
+// contract requires: same key + changed aggregate -> conflict, and the idempotency mutation
+// must not execute twice.
+test("finding A: same idempotency key across different aggregates — exactly one commits, the other conflicts", async () => {
+  const gate = new AtomicCommandGate();
+  let mutationCalls = 0;
+  const makeMutate = (label: string) => () => {
+    mutationCalls += 1;
+    return label;
+  };
+
+  const results = await Promise.allSettled([
+    gate.execute("shared-key", baseInput({ aggregateKey: "aggregate-1", expectedVersion: 0 }), makeMutate("agg1")),
+    gate.execute("shared-key", baseInput({ aggregateKey: "aggregate-2", expectedVersion: 0 }), makeMutate("agg2")),
+  ]);
+
+  const fulfilled = results.filter((r) => r.status === "fulfilled");
+  const rejected = results.filter((r) => r.status === "rejected");
+  assert.equal(fulfilled.length, 1, "exactly one of the two racing commands must commit");
+  assert.equal(rejected.length, 1, "the competing changed-aggregate command must be rejected");
+  assert.equal(mutationCalls, 1, "only the winning command's mutation callback may execute");
+  assert.ok((rejected[0] as PromiseRejectedResult).reason instanceof CommandConflictError);
+  // Exactly one of the two aggregates was actually mutated/version-incremented; the other
+  // (whichever lost) must remain untouched.
+  const versions = [gate.getAggregateVersion("aggregate-1"), gate.getAggregateVersion("aggregate-2")];
+  assert.deepEqual(versions.sort(), [0, 1]);
+});
+
+// Preserve: same key + same canonical command concurrently still replays via one mutation call
+// (re-asserted here alongside the new different-aggregate race coverage for regression safety).
+test("finding A regression guard: same key + same aggregate + same command concurrently still executes once", async () => {
+  const gate = new AtomicCommandGate();
+  let mutationCalls = 0;
+  const mutate = () => {
+    mutationCalls += 1;
+    return "result";
+  };
+  const [a, b] = await Promise.all([
+    gate.execute("dup-key", baseInput({ aggregateKey: "aggregate-3", expectedVersion: 0 }), mutate),
+    gate.execute("dup-key", baseInput({ aggregateKey: "aggregate-3", expectedVersion: 0 }), mutate),
+  ]);
+  assert.equal(mutationCalls, 1);
+  assert.equal(a, "result");
+  assert.equal(b, "result");
+  assert.equal(gate.getAggregateVersion("aggregate-3"), 1);
+});
