@@ -1,21 +1,28 @@
 # DECODE Current Status
 
-Snapshot: 2026-09-07 | Phase: PR-A Canonical Foundation implementation complete on branch `claude/pr-a-canonical-foundation` from approved base `4e006c9512e7665cd9195c42c508435092cb672d`; PR opened targeting main; NOT MERGED; PR #5 remains OPEN / NOT MERGED
+Snapshot: 2026-09-07 | Phase: PR-A Canonical Foundation implementation on branch `claude/pr-a-canonical-foundation`, corrected per Product review of PR #15 and resubmitted; PR NOT MERGED; PR #5 remains OPEN / NOT MERGED
 
-## Current PR-A Canonical Foundation status (2026-09-07, implementation ready for Product review)
+## Current PR-A Canonical Foundation status (2026-09-07, corrected per Product review, awaiting re-audit)
 
 - Team OS Stage 1/2/3 + post-merge audit correction, D023, and D024 remain merged and complete (PR #8–#13); the final pre-PR-A gate correction (PR #14) is also merged. None of these are reopened by this revision.
 - Product approved `APPROVED_IMPLEMENTATION_BASE_SHA = 4e006c9512e7665cd9195c42c508435092cb672d` under D022. Branch `claude/pr-a-canonical-foundation` was created from that exact SHA; start-gate verification confirmed branch base, `origin/main`, and the PLAN 1A blob (`bfb5e35b921ccc320f3ffb2631b661368206fa6b`) all matched before any implementation began.
 - PLAN 1A Canonical Foundation is implemented end-to-end under `foundation/` (TypeScript/Node, locked only for this package): Provenance contract (Section 3, D023/D024-amended), canonical/idempotent command identity (Section 4), ActorVerifier Port + Policy & Rights permit issuance/revalidation (Sections 5–7), durable external-job lifecycle with UNKNOWN_RESULT reconciliation and retry semantics (Section 8), and the migration manifest's semver/rollback/non-destructive guards (Section 9). Identity provider, role taxonomy, and every other Section 14 non-scope item remain unimplemented, as required.
-- Genuine TDD: every behavioral module started as a typed stub that compiled but threw `not implemented`; the full suite was run once to capture real RED (46 of 53 tests failing on assertion errors demonstrating missing behavior, not import/syntax errors — 7 trivial pure-function tests passed at RED because those functions had no meaningful behavior to stub); real implementations were then written and the suite reran fully GREEN.
-- `foundation/`: `npm ci` clean install, `npm run typecheck` (`tsc`, strict) 0 errors, `npm test` (Node's built-in test runner via `tsx`, no test framework dependency) **53/53 PASS, 0 failures**.
-- `docs/PUBLICATION_FILES.json` → version 6 (adds 18 tracked `foundation/` files: package manifest, lockfile, tsconfig, test-runner script, 8 source files, 6 test files; 69 files total). `foundation/node_modules` is gitignored and never tracked.
-- `node scripts/check-operating-docs.mjs` (default): PASS, 0 failures. `--tracked`: PASS, 0 failures (measured at commit time; see the reverse handoff for the exact count).
+- Product's independent review of PR #15 (head `23b02f26dbca349157c0d11e8ac513cec1a7c3a7`) returned `REVISE — MERGE NOT AUTHORIZED` with 10 implementation defects against already-LOCKED contracts (no material decision): execution-time binding enforcement, permit tamper-resistance, policy content-drift detection, unambiguous command fingerprinting, fail-closed Rights, a same-aggregate concurrency race, Job/Permit namespace enforcement, runtime provenance enforcement at point of use, durable-history mutation protection, and an inclusive expiry boundary. All 10 were fixed with RED-confirmed-before-fix TDD (66 tests, 55 pass, 11 fail pre-fix, one failure per finding; 66/66 GREEN post-fix) and pushed to the same branch/PR; none required a D017 decision interview.
+- `foundation/`: fresh `npm ci` clean install (0 vulnerabilities), `npm run typecheck` (`tsc`, strict) 0 errors, `npm test` **66/66 PASS, 0 failures**.
+- `docs/PUBLICATION_FILES.json` remains version 6 (18 tracked `foundation/` files; 69 files total, unchanged by the correction round — no new file). `foundation/node_modules` is gitignored and never tracked.
+- `node scripts/check-operating-docs.mjs --tracked` (committed HEAD `6bca24c323cde783fda4478ad707675cc4cb48d8`): 964/964 PASS, 0 failures (unchanged from before the correction round).
 - `ACTUAL TEST = NOT YET TESTED` (current state).
   No consented real VOD or independent expert session was run for PR-A or for DECODE generally. Engineering verification above is SELF-BENCHMARK (`npm test`/typecheck/checker), not ACTUAL TEST, and does not self-promote.
 - `PR-A = IMPLEMENTATION READY FOR PRODUCT REVIEW` (current state).
-  PR-A is NOT merged and MUST NOT be merged by Engineering; Section 13's Gate F (Product Review) remains PENDING and Gate G (Deployment) remains NOT AUTHORIZED.
+  PR-A is NOT merged and MUST NOT be merged by Engineering; Section 13's Gate F (Product Review) remains PENDING (awaiting Product's re-audit of the corrected code) and Gate G (Deployment) remains NOT AUTHORIZED.
 - PR #5 remains OPEN / NOT MERGED / non-canonical candidate, untouched by this work.
+
+## 2026-09-07 PR-A Canonical Foundation implementation, pre-correction (historical, prior to Product review corrections)
+
+- PLAN 1A Canonical Foundation implemented end-to-end under `foundation/` from approved base `4e006c9512e7665cd9195c42c508435092cb672d`; genuine TDD captured real RED (46 of 53 tests failing on assertion errors, not import/syntax errors) before GREEN.
+- `docs/PUBLICATION_FILES.json` → version 6 (adds 18 tracked `foundation/` files).
+- PR #15 opened at head `23b02f26dbca349157c0d11e8ac513cec1a7c3a7`, NOT MERGED. This section is HISTORICAL: Product's review of this exact head found 10 defects, corrected in the current section above.
+- `ACTUAL TEST = NOT YET TESTED`. `PR-A = IMPLEMENTATION READY FOR PRODUCT REVIEW`.
 
 ## Current Team OS status (2026-09-07, final pre-PR-A gate correction) (historical, prior to PR-A implementation)
 
