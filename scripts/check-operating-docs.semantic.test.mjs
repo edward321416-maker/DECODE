@@ -125,6 +125,25 @@ test("positive control: a summary referencing one REAL and one SIMULATED evidenc
     "referencing two separate REAL/SIMULATED records must not trip the no-MIXED guard");
 });
 
+test("positive control: an ACTUAL TEST + REAL + NOT TESTED pre-execution record is accepted (D024)", () => {
+  const results = collectTeamOsSemanticChecks(baseline);
+  assert.equal(findCheck(results, "plan1a-preexecution-record-allowed").passed, true);
+  assert.equal(findCheck(results, "plan1a-preexecution-requires-real").passed, true);
+  assert.equal(findCheck(results, "plan1a-preexecution-excluded-from-denominator").passed, true);
+});
+
+test("positive control: SELF-BENCHMARK + SIMULATED remains accepted independently of D024", () => {
+  const plan1a = baseline.get("docs/superpowers/plans/2026-09-06-decode-plan-1a-canonical-foundation.md");
+  assert.ok(plan1a.includes("SELF-BENCHMARK + SIMULATED is valid."),
+    "D024's ACTUAL TEST pre-execution amendment must not disturb the unrelated SELF-BENCHMARK + SIMULATED invariant");
+});
+
+test("positive control: no ActualTestStatus axis is needed to represent the D024 pre-execution state", () => {
+  const results = collectTeamOsSemanticChecks(baseline);
+  assert.equal(findCheck(results, "plan1a-no-actualteststatus-axis").passed, true,
+    "the pre-execution record is representable with EvaluationMode + ExecutionStatus alone, no fourth axis");
+});
+
 test("positive control: handoff/CODEX_TO_CHATGPT.md's own audit-trail phrasing does not trip stale-codex-exclusive", () => {
   // Completion reports narrate what stale phrasing was found/fixed in past stages; they are
   // not instruction sources, so they are excluded from the group-E scan.
@@ -208,7 +227,12 @@ const MUTATIONS = [
   // --- Post-merge audit correction scenarios (22-29) ---
 
   { name: "22. Current ACTUAL TEST state changed surgically, historical occurrences left intact", file: "docs/CURRENT_STATUS.md",
-    mutate: (c) => c.replace("- `ACTUAL TEST = NOT YET TESTED` (current state).\n", "- `ACTUAL TEST = TESTED` (current state).\n"),
+    // Two distinct phrasings of the current-state fact exist in the current region (the D024
+    // explanatory sentence and the bullet marker); both must be neutralized for a genuine
+    // regression, while the differently-worded historical-section occurrences stay untouched.
+    mutate: (c) => c
+      .replace("- `ACTUAL TEST = NOT YET TESTED` (current state).\n", "- `ACTUAL TEST = TESTED` (current state).\n")
+      .replace("`ACTUAL TEST = NOT YET TESTED` remains explanatory prose for this state.", "`ACTUAL TEST = TESTED` remains explanatory prose for this state."),
     expectId: "status-actual-test-not-yet-tested" },
   { name: "23. Current PR-A state changed surgically, historical occurrences left intact", file: "docs/CURRENT_STATUS.md",
     mutate: (c) => c.replace(
@@ -255,6 +279,27 @@ const MUTATIONS = [
       "create separate evidence records for the REAL portion and the SIMULATED portion",
       "record both origins together"),
     expectId: "plan1a-separate-records-required" },
+
+  // --- D024 ACTUAL TEST pre-execution record semantics scenarios (35-37) ---
+
+  { name: "35. PLAN 1A reverts to 'NOT TESTED means no ACTUAL TEST record may exist'", file: "docs/superpowers/plans/2026-09-06-decode-plan-1a-canonical-foundation.md",
+    // Minimal, isolated mutation: reinsert the banned absence-of-record phrase as a
+    // contradicting addendum, without touching the "is valid as a pre-execution..." sentence
+    // that check #37's own anchor phrase also depends on.
+    mutate: (c) => c.replace(
+      "Such a record is excluded from executed sample size",
+      "ExecutionStatus=NOT TESTED otherwise means no ACTUAL TEST record exists yet. Such a record is excluded from executed sample size"),
+    expectId: "plan1a-preexecution-record-allowed" },
+  { name: "36. Exclusion of pre-execution records from executed denominators is removed", file: "docs/superpowers/plans/2026-09-06-decode-plan-1a-canonical-foundation.md",
+    mutate: (c) => c.replace(
+      "Such a record is excluded from executed sample size, expert agreement, threshold calculations, GO/REVISE/STOP evidence, and does not authorize 50/150 expansion.",
+      "Such a record counts toward executed sample size."),
+    expectId: "plan1a-preexecution-excluded-from-denominator" },
+  { name: "37. ACTUAL TEST pre-execution DataOrigin changed from REAL to SIMULATED", file: "docs/superpowers/plans/2026-09-06-decode-plan-1a-canonical-foundation.md",
+    mutate: (c) => c.replace(
+      "ACTUAL TEST + DataOrigin=REAL + ExecutionStatus=NOT TESTED record is valid",
+      "ACTUAL TEST + DataOrigin=SIMULATED + ExecutionStatus=NOT TESTED record is valid"),
+    expectId: "plan1a-preexecution-requires-real" },
 ];
 
 for (const scenario of MUTATIONS) {

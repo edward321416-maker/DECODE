@@ -1,16 +1,24 @@
 # DECODE Current Status
 
-Snapshot: 2026-09-07 | Phase: Team OS Stage 1/2/3 + post-merge audit correction complete; this revision reconciles the D023 evidence/provenance contract amendment; PR-A implementation NOT STARTED; PR #5 remains OPEN / NOT MERGED
+Snapshot: 2026-09-07 | Phase: Team OS Stage 1/2/3 + post-merge audit correction complete; D023 merged; this revision reconciles the D024 ACTUAL TEST pre-execution record semantics amendment; PR-A implementation NOT STARTED; PR #5 remains OPEN / NOT MERGED
 
-## Current Team OS status (2026-09-07, D023 evidence-contract reconciliation)
+## Current Team OS status (2026-09-07, D024 pre-execution-record reconciliation)
 
 - Team OS Stage 1/2/3 implementation and the Stage 3 post-merge audit correction = DONE, merged via PR #8, PR #9, PR #10, and PR #11 respectively.
-- D023 (LOCKED EVIDENCE CONTRACT) was selected by Product via a decision interview under D017 (Option C) and amends PLAN 1A Canonical Foundation's Section 3 provenance contract: `MODEL_BAKE_OFF` is no longer a top-level Evaluation purpose/mode (it is optional `evaluation_subtype` metadata under SELF-BENCHMARK); `MIXED` is no longer a canonical Data origin (REAL and SIMULATED inputs get separate evidence records); the separate `ActualTestStatus` axis is removed (ACTUAL TEST state = Evaluation purpose/mode=ACTUAL TEST plus canonical Execution status). This revision reconciles the repository to that decision.
+- D023 (LOCKED EVIDENCE CONTRACT) = LOCKED, reconciled and merged via PR #12: DECODE's canonical three-dimension evidence contract (Evaluation purpose/mode, Data origin, Execution status); `MODEL_BAKE_OFF` only as SELF-BENCHMARK subtype metadata; no `MIXED` Data origin; the separate `ActualTestStatus` axis removed.
+- D024 (LOCKED EVIDENCE CONTRACT) was selected by Product via a decision interview under D017 (Option A — ALLOW) and this revision reconciles the repository to it: an evidence record may exist with Evaluation purpose/mode=ACTUAL TEST, Data origin=REAL, Execution status=NOT TESTED, representing a planned/registered ACTUAL TEST evidence unit that has not yet been executed — not that the test occurred, passed, or failed. Such a pre-execution record is excluded from executed sample size, expert agreement, threshold calculations, and GO/REVISE/STOP evidence, and never authorizes 50/150 expansion. `ACTUAL TEST = NOT YET TESTED` remains explanatory prose for this state. `ActualTestStatus` is not reintroduced. D023 remains fully in force.
 - `docs/PUBLICATION_FILES.json` remains version 5 / 51 files; no new file is added by this reconciliation.
-- `docs/EXPERIMENT_PROTOCOL.md` remains a concise historical shim, non-executable, pointing to the Q1–Q56 10-Case ACTUAL TEST Protocol v1.0 as sole current execution/design authority (unaffected by D023).
+- `docs/EXPERIMENT_PROTOCOL.md` remains a concise historical shim, non-executable, pointing to the Q1–Q56 10-Case ACTUAL TEST Protocol v1.0 as sole current execution/design authority (unaffected by D023/D024).
 - PR #5 remains OPEN / NOT MERGED / non-canonical candidate, untouched by Team OS work.
 - `ACTUAL TEST = NOT YET TESTED` (current state).
 - `PR-A = NOT STARTED` (current state). Next Product action after this reconciliation revision is merged: externally fetch actual `origin/main`, independently audit the merged amendment, and only then explicitly approve that exact SHA as the PR-A base under D022. No such future SHA is written into this commit in advance.
+
+## 2026-09-07 D023 evidence-contract reconciliation (historical, prior to D024)
+
+- Team OS Stage 1/2/3 implementation and the Stage 3 post-merge audit correction = DONE, merged via PR #8, PR #9, PR #10, and PR #11 respectively.
+- D023 (LOCKED EVIDENCE CONTRACT) was selected by Product via a decision interview under D017 (Option C) and amended PLAN 1A Canonical Foundation's Section 3 provenance contract: `MODEL_BAKE_OFF` no longer a top-level Evaluation purpose/mode; `MIXED` no longer a canonical Data origin; the separate `ActualTestStatus` axis removed. This section is HISTORICAL; see the current section above, which now also reflects D024. Merged via PR #12 at `5b4676af4859ab505d9a524100676f02647445df`.
+- PR #5 remains OPEN / NOT MERGED / non-canonical candidate, untouched by Team OS work.
+- `ACTUAL TEST = NOT YET TESTED`. `PR-A = NOT STARTED`.
 
 ## 2026-09-07 Team OS Stage 3 post-merge audit correction (historical, prior to D023)
 

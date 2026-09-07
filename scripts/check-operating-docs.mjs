@@ -248,6 +248,14 @@ export function collectTeamOsSemanticChecks(texts) {
   chk("plan1a-actual-requires-real", plan1a.includes("ACTUAL TEST requires DataOrigin=REAL"));
   chk("plan1a-separate-records-required", plan1a.includes("create separate evidence records for the REAL portion and the SIMULATED portion"));
 
+  // J — D024 ACTUAL TEST pre-execution record semantics (PLAN 1A Section 12 invariant #5 amendment)
+  chk("plan1a-preexecution-record-allowed",
+    plan1a.includes("is valid as a pre-execution/planned record") &&
+    !plan1a.includes("no ACTUAL TEST record exists yet"));
+  chk("plan1a-preexecution-requires-real",
+    plan1a.includes("ACTUAL TEST + DataOrigin=REAL + ExecutionStatus=NOT TESTED record is valid"));
+  chk("plan1a-preexecution-excluded-from-denominator", plan1a.includes("excluded from executed sample size"));
+
   return c;
 }
 
