@@ -5,18 +5,202 @@
  */
 import fs from "node:fs";
 import path from "node:path";
-import { fileURLToPath } from "node:url";
+import { fileURLToPath, pathToFileURL } from "node:url";
 import { execFileSync } from "node:child_process";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
-const checks = [];
-const check = (id, passed) => checks.push({ id, passed: Boolean(passed) });
 const read = (name) => fs.readFileSync(path.join(root, name), "utf8").replace(/\r\n/g, "\n");
 const git = (...args) => execFileSync("git", ["-c", "core.quotepath=false", ...args], {
   cwd: root, encoding: "utf8", stdio: ["ignore", "pipe", "pipe"],
 });
 const headings = (text) => [...text.matchAll(/^## (.+)$/gm)].map((match) => match[1]);
 const same = (a, b) => JSON.stringify(a) === JSON.stringify(b);
+
+/**
+ * Read each inventoried file that actually exists as a regular file, decode as UTF-8,
+ * normalize CRLF to LF. Pure: no checks, no side effects. Shared by the CLI's own file
+ * loop and by scripts/check-operating-docs.semantic.test.mjs, so both build identical
+ * input for collectTeamOsSemanticChecks.
+ */
+export function loadCanonicalTexts(rootDir, files) {
+  const texts = new Map();
+  for (const f of files) {
+    const absolute = path.join(rootDir, f);
+    if (!fs.existsSync(absolute) || !fs.lstatSync(absolute).isFile()) continue;
+    const bytes = fs.readFileSync(absolute);
+    const content = new TextDecoder("utf-8", { fatal: true }).decode(bytes).replace(/\r\n/g, "\n");
+    texts.set(f, content);
+  }
+  return texts;
+}
+
+/**
+ * Team OS semantic drift checks (Stage 3). Pure function: no I/O, no process.exit.
+ * Takes the texts Map produced by loadCanonicalTexts (or an in-memory mutation of it)
+ * and returns {id, passed}[] covering the ACTIVE Team OS contract — Project Operating
+ * Manual, Collaboration Rules C1-C11, router parity, active templates, the retired
+ * EXPERIMENT_PROTOCOL shape, D021/D022, and evidence/status boundaries. This validates
+ * repository text/contracts only; it does not prove agent/human obedience or runtime
+ * behavior.
+ */
+export function collectTeamOsSemanticChecks(texts) {
+  const c = [];
+  const chk = (id, passed) => c.push({ id, passed: Boolean(passed) });
+  const get = (f) => texts.get(f) || "";
+
+  // A — Project Operating Manual
+  const pom = get("docs/PROJECT_OPERATING_MANUAL.md");
+  chk("pom-status-active", /^Status: ACTIVE OPERATING POLICY/m.test(pom));
+  chk("pom-authority-d021", /^Authority:.*D021/m.test(pom));
+  chk("pom-router-role", pom.includes("canonical repository task router"));
+  chk("pom-read-flow-complete", [
+    "Current Status](CURRENT_STATUS.md)", "Decisions](DECISIONS.md)", "applicable handoff",
+    "task-specific Spec / Plan", "Collaboration Rules](COLLABORATION_RULES.md)",
+    "Development Rules](DEVELOPMENT_RULES.md)",
+  ].every((s) => pom.includes(s)));
+  {
+    const taskIdx = pom.indexOf("An approved task-specific Spec / Plan / Handoff.");
+    const manualIdx = pom.indexOf("This Project Operating Manual.");
+    chk("pom-precedence-task-contract", taskIdx !== -1 && manualIdx !== -1 && taskIdx < manualIdx);
+  }
+  chk("pom-plan1a-override", pom.includes("PLAN 1A") && pom.includes("Whole-PR verification contract overrides"));
+  chk("pom-evidence-not-collapsed",
+    /\|\s*Evaluation purpose\/mode\s*\|/.test(pom) &&
+    /\|\s*Data origin\s*\|/.test(pom) &&
+    /\|\s*Execution status\s*\|/.test(pom));
+
+  // B — Collaboration Rules
+  const col = get("docs/COLLABORATION_RULES.md");
+  {
+    const cHeads = [...col.matchAll(/^## (C\d+)/gm)].map((m) => m[1]);
+    chk("col-c-headings-order", same(cHeads, Array.from({ length: 11 }, (_, i) => "C" + (i + 1))));
+  }
+  chk("col-branch-optional", col.includes("Branch is optional."));
+  chk("col-pr-optional", col.includes("PR is optional."));
+  chk("col-direct-main-allowed", col.includes("Direct-main workflow is allowed"));
+  chk("col-free-parallel", col.includes("Free parallel development is allowed."));
+  chk("col-no-ownership", col.includes("No task/feature ownership requirement."));
+  chk("col-c6-verification-split", col.includes("Minimum verification") && col.includes("Elevate to full verification for:"));
+  chk("col-c7-recovery", col.includes("may be corrected by whichever developer/approved AI is available"));
+  chk("col-no-force-push",
+    col.includes("Force push and destructive reset remain prohibited") ||
+    col.includes("Force-push history rewriting remains prohibited"));
+  chk("col-d017-boundary", col.includes("remain under D017"));
+  chk("col-precedence-stricter",
+    col.includes("Approved task-specific Spec / Plan / Handoff may impose stricter workflow") &&
+    col.includes("PLAN 1A"));
+
+  // C — Router parity
+  const agents = get("AGENTS.md");
+  const claude = get("CLAUDE.md");
+  chk("router-agents-to-manual", agents.includes("docs/PROJECT_OPERATING_MANUAL.md"));
+  chk("router-claude-to-manual", claude.includes("docs/PROJECT_OPERATING_MANUAL.md"));
+  chk("router-no-duplicate-c-headings", !/^## C\d+/m.test(agents) && !/^## C\d+/m.test(claude));
+  chk("router-claude-chatgpt-separation", claude.includes("not a Claude Code instruction set"));
+
+  // D — Active templates
+  const templateFiles = [
+    "docs/templates/CHANGE_REPORT_TEMPLATE.md", "docs/templates/DECISION_RECORD_TEMPLATE.md",
+    "docs/templates/DESIGN_SPEC_TEMPLATE.md", "docs/templates/HANDOFF_TEMPLATE.md",
+    "docs/templates/IMPLEMENTATION_PLAN_TEMPLATE.md", "docs/templates/PLANNING_BRIEF_TEMPLATE.md",
+    "docs/templates/README.md", "docs/templates/RESEARCH_NOTE_TEMPLATE.md",
+    "docs/templates/TASK_BRIEF_TEMPLATE.md", "docs/templates/TEST_EVIDENCE_TEMPLATE.md",
+  ];
+  for (const f of templateFiles) {
+    const t = get(f);
+    chk("tmpl-all-active:" + f, t.includes("ACTIVE TEMPLATE") && /Authority:.*D021/.test(t));
+  }
+  chk("tmpl-planning-brief-fields", [
+    "## Known facts", "## Assumptions / hypotheses", "## Unknowns", "## Proposed scope",
+    "## Success criteria", "## Material decisions required",
+  ].every((h) => get("docs/templates/PLANNING_BRIEF_TEMPLATE.md").includes(h)));
+  chk("tmpl-research-note-fields", [
+    "## VERIFIED FACTS", "## INFERENCES", "## HYPOTHESES", "## UNKNOWN",
+  ].every((h) => get("docs/templates/RESEARCH_NOTE_TEMPLATE.md").includes(h)));
+  chk("tmpl-design-spec-fields", [
+    "## Interfaces / contracts", "## Data flow", "## State / error states",
+    "## Security / rights / privacy / egress", "## Migration / compatibility",
+    "## Acceptance criteria", "## Test strategy", "## Evidence boundaries",
+  ].every((h) => get("docs/templates/DESIGN_SPEC_TEMPLATE.md").includes(h)));
+  chk("tmpl-impl-plan-fields", [
+    "## Exact approved base", "## Exact files / symbols affected",
+    "## Task-by-task implementation sequence", "## TDD / regression cycle",
+    "## Exact verification commands", "## Explicit exclusions",
+    "## Integration method", "## Completion artifacts",
+  ].every((h) => get("docs/templates/IMPLEMENTATION_PLAN_TEMPLATE.md").includes(h)));
+  chk("tmpl-test-evidence-fields", [
+    "## Evaluation purpose/mode", "## Data origin", "## Execution status",
+  ].every((h) => get("docs/templates/TEST_EVIDENCE_TEMPLATE.md").includes(h)));
+  chk("tmpl-change-report-neutral", get("docs/templates/CHANGE_REPORT_TEMPLATE.md").includes("Integration method: [DIRECT_MAIN"));
+  chk("tmpl-handoff-eight-sections", [
+    "## IMPLEMENTED", "## ACTUAL TEST", "## SELF-BENCHMARK", "## SIMULATED",
+    "## FAILED", "## NOT TESTED", "## FILES CHANGED", "## RECOMMENDED NEXT DECISION",
+  ].every((h) => get("docs/templates/HANDOFF_TEMPLATE.md").includes(h)));
+
+  // E — Stale executable instruction detection (currently-read instruction sources only;
+  // completion reports and DECISIONS.md legitimately narrate/preserve this phrasing as history)
+  const activeFiles = [
+    "docs/PROJECT_OPERATING_MANUAL.md", "docs/COLLABORATION_RULES.md", "docs/DEVELOPMENT_RULES.md",
+    "docs/DOCUMENTATION_RULES.md", "docs/AI_OPERATING_POLICY.md", "docs/PUBLICATION_POLICY.md",
+    "AGENTS.md", "CLAUDE.md", ".github/system_prompts/codex_system_prompt.md",
+    ".github/system_prompts/chatgpt_custom_instructions.md", "handoff/CHATGPT_TO_CODEX.md",
+    "README.md", "docs/PROJECT_BRIEF.md", "docs/PRODUCT_SPEC.md", "docs/DECISION_DATASET_SPEC.md",
+    "data/schemas/README.md",
+    ...templateFiles,
+  ];
+  const stalePatterns = [
+    ["stale-first-engineering-request", /first engineering (?:request|delivery)/i],
+    ["stale-first-handoff", /the first handoff/i],
+    ["stale-codex-exclusive", /Codex is (?:the )?(?:AI\/Engineering Lead|exclusive Engineering)/i],
+    ["stale-primary-expert-all-ten", /Primary expert labels all ten/i],
+    ["stale-second-expert-fixed", /Second expert labels two clear and two ambiguous/i],
+    ["stale-universal-pr", /through a normal PR/i],
+    ["stale-draft-scaffold", /DRAFT SCAFFOLD \/ NOT ACTIVE/],
+  ];
+  for (const [id, pattern] of stalePatterns) {
+    chk(id, !activeFiles.some((f) => pattern.test(get(f))));
+  }
+
+  // F — Protocol authority: EXPERIMENT_PROTOCOL.md must stay a concise historical shim;
+  // Q1-Q56 remains sole current execution/design authority (checked separately elsewhere)
+  const protocol = get("docs/EXPERIMENT_PROTOCOL.md");
+  chk("protocol-status-historical", protocol.includes("HISTORICAL CANDIDATE SUMMARY") && protocol.includes("SUPERSEDED FOR EXECUTION"));
+  chk("protocol-no-slot-table", !/^\|\s*S0[1-9]\s*\|/m.test(protocol) && !/^\|\s*S10\s*\|/m.test(protocol));
+  chk("protocol-no-execution-heading", !protocol.includes("## Execution"));
+  chk("protocol-no-measurement-heading", !protocol.includes("## Measurement specification"));
+  chk("protocol-no-go-stop-heading", !protocol.includes("## GO / STOP hypotheses"));
+  chk("protocol-no-required-outputs-heading", !protocol.includes("## Required real-run outputs"));
+  chk("protocol-concise-size", protocol.length > 0 && protocol.length < 3000);
+
+  // G — D021 / D022 anchored checks (existing D005/D019-anchored checks stay in the CLI's
+  // own logic; these are new, D021/D022-specific)
+  const decisions = get("docs/DECISIONS.md");
+  {
+    const d021 = decisions.match(/\| D021 \|[\s\S]*?\| U-DECODE-TEAM-OS-2026-09-06 \|/)?.[0] || "";
+    chk("d021-contract",
+      d021.includes("LOCKED OPERATING POLICY") &&
+      d021.includes("Project Operating Manual") &&
+      d021.includes("Collaboration Rules") && d021.includes("C1–C11") &&
+      d021.includes("remain under D017") &&
+      d021.includes("wins over the collaboration defaults"));
+  }
+  {
+    const d022 = decisions.match(/\| D022 \|[\s\S]*?\| U-DECODE-TEAM-OS-SEQUENCE-2026-09-06 \|/)?.[0] || "";
+    chk("d022-sequence",
+      d022.includes("Stage 1 → Stage 2 → Stage 3 must complete before PR-A begins") &&
+      d022.includes("valid historical M0 receipt evidence"));
+    chk("d022-product-approved-base", d022.includes("externally verified and explicitly Product-approved before PR-A branch creation"));
+  }
+  chk("d022-no-future-base-assignment", !/PR-A(?:\s+start)? base[^\n]{0,40}\b[0-9a-f]{40}\b/i.test(decisions));
+
+  // H — Evidence and status boundaries
+  chk("evidence-no-promotion-safeguard", pom.includes("never becomes ACTUAL TEST evidence"));
+  chk("evidence-unknown-not-zero", get("docs/DOCUMENTATION_RULES.md").includes("UNKNOWN/null means missing, never zero"));
+  chk("status-actual-test-not-yet-tested", /ACTUAL TEST[\s\S]{0,100}NOT YET TESTED/.test(get("docs/CURRENT_STATUS.md")));
+  chk("status-pr-a-not-started", /PR-A\s*=?\s*NOT STARTED/.test(get("docs/CURRENT_STATUS.md")));
+
+  return c;
+}
 
 /** Parse project CSV rows, including quoted comma/newline values; reject unmatched quotes. */
 function csv(text) {
@@ -37,6 +221,9 @@ function csv(text) {
   return rows;
 }
 
+function main() {
+const checks = [];
+const check = (id, passed) => checks.push({ id, passed: Boolean(passed) });
 try {
   const args = process.argv.slice(2);
   if (args.length > 1 || (args.length && !["--index", "--tracked"].includes(args[0]))) {
@@ -47,7 +234,7 @@ try {
   if (!Array.isArray(files) || files.some((f) => typeof f !== "string")) {
     throw new Error("Publication inventory must list file paths");
   }
-  check("inventory-version", inventory.version === 4);
+  check("inventory-version", inventory.version === 5);
   check("inventory-sorted-unique", same(files, [...new Set(files)].sort()));
   const allowed = new Set(files);
   const required = [
@@ -72,7 +259,7 @@ try {
     "scripts/check-operating-docs.mjs",
   ];
   for (const f of required) check("required:" + f, allowed.has(f));
-  const texts = new Map();
+  const texts = loadCanonicalTexts(root, files);
   const unsafe = [
     /-----BEGIN (?:RSA |EC |OPENSSH )?PRIVATE KEY-----/,
     /\b(?:gh[pousr]_[A-Za-z0-9]{20,}|github_pat_[A-Za-z0-9_]{20,})\b/,
@@ -93,16 +280,16 @@ try {
     if (!safePath) continue;
     check("public-scope:" + f, !/^(?:\.env(?:\.|$)|\.agent-docs\/|app\/|components\/|lib\/|node_modules\/|work\/|outputs\/|data\/(?:raw|private)\/|experiments\/private\/|package(?:-lock)?\.json$)/.test(f));
     const absolute = path.join(root, f);
-    check("regular-file:" + f, fs.existsSync(absolute) && fs.lstatSync(absolute).isFile());
-    if (!fs.existsSync(absolute) || !fs.lstatSync(absolute).isFile()) continue;
-    const bytes = fs.readFileSync(absolute);
-    const content = new TextDecoder("utf-8", { fatal: true }).decode(bytes).replace(/\r\n/g, "\n");
-    texts.set(f, content);
+    const exists = fs.existsSync(absolute) && fs.lstatSync(absolute).isFile();
+    check("regular-file:" + f, exists);
+    if (!exists) continue;
+    const content = texts.get(f);
     check("newline:" + f, content.endsWith("\n"));
     check("whitespace:" + f, !/[ \t]+$/m.test(content));
     check("no-merge-markers:" + f, !/^(?:<<<<<<< |=======\s*$|>>>>>>> )/m.test(content));
     check("public-content:" + f, !unsafe.some((pattern) => pattern.test(content)));
   }
+  checks.push(...collectTeamOsSemanticChecks(texts));
   for (const [f, content] of texts) {
     if (!f.endsWith(".md")) continue;
     check("balanced-fences:" + f, (content.match(/^\x60{3}/gm) || []).length % 2 === 0);
@@ -215,3 +402,8 @@ console.log(JSON.stringify({
   failed: failures.length, failures,
 }, null, 2));
 process.exitCode = failures.length ? 1 : 0;
+}
+
+if (import.meta.url === pathToFileURL(process.argv[1] ?? "").href) {
+  main();
+}
