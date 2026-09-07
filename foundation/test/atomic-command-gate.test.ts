@@ -99,3 +99,62 @@ test("invariant 16: concurrent duplicate calls execute the mutation exactly once
   assert.equal(calls, 1);
   assert.deepEqual(a, b);
 });
+
+// PR-A review finding 4: unambiguous fingerprint serialization. A naive delimiter-joined
+// concatenation lets distinct canonical tuples collide on serialized bytes (e.g. a value that
+// contains the delimiter shifts a field boundary). A length-prefixed/unambiguous encoding must
+// keep these distinct.
+test("finding 4: fingerprint does not collide across a field-boundary-shifting delimiter", () => {
+  const a = fingerprintCommand(
+    baseInput({ aggregateKey: "a b", operation: "c", actorId: "x", payloadHash: "y", expectedVersion: 0 }),
+  );
+  const b = fingerprintCommand(
+    baseInput({ aggregateKey: "a", operation: "b c", actorId: "x", payloadHash: "y", expectedVersion: 0 }),
+  );
+  assert.notEqual(a, b);
+});
+
+test("finding 4: reusing an idempotency key across a boundary-shifting collision conflicts, not replays", async () => {
+  const gate = new AtomicCommandGate();
+  await gate.execute(
+    "key-1",
+    baseInput({ aggregateKey: "a b", operation: "c", actorId: "x", payloadHash: "y", expectedVersion: 0 }),
+    () => "first",
+  );
+  await assert.rejects(
+    () =>
+      gate.execute(
+        "key-1",
+        baseInput({ aggregateKey: "a", operation: "b c", actorId: "x", payloadHash: "y", expectedVersion: 0 }),
+        () => "second",
+      ),
+    CommandConflictError,
+  );
+});
+
+// PR-A review finding 6: same-aggregate race across DIFFERENT idempotency keys. Two distinct
+// commands targeting the same aggregate at the same expectedVersion must not both commit —
+// exactly one may execute its mutation callback; the loser must see a stale-version rejection
+// and must not have executed its mutation callback.
+test("finding 6: same-aggregate concurrent commands under different idempotency keys — exactly one commits", async () => {
+  const gate = new AtomicCommandGate();
+  let mutationCalls = 0;
+  const makeMutate = (label: string) => async () => {
+    mutationCalls += 1;
+    await new Promise((resolve) => setTimeout(resolve, 10));
+    return label;
+  };
+
+  const results = await Promise.allSettled([
+    gate.execute("key-a", baseInput({ expectedVersion: 0 }), makeMutate("a")),
+    gate.execute("key-b", baseInput({ expectedVersion: 0 }), makeMutate("b")),
+  ]);
+
+  const fulfilled = results.filter((r) => r.status === "fulfilled");
+  const rejected = results.filter((r) => r.status === "rejected");
+  assert.equal(fulfilled.length, 1, "exactly one of the two racing commands must commit");
+  assert.equal(rejected.length, 1, "the losing command must be rejected");
+  assert.equal(mutationCalls, 1, "only the winning command's mutation callback may execute");
+  assert.ok((rejected[0] as PromiseRejectedResult).reason instanceof StaleVersionError);
+  assert.equal(gate.getAggregateVersion("aggregate-1"), 1);
+});

@@ -93,3 +93,39 @@ test("invariant 6: DataOrigin=MIXED is rejected at the runtime boundary", () => 
 test("invariant 7: SELF-BENCHMARK results cannot self-promote to ACTUAL TEST", () => {
   assert.throws(() => selfPromoteToActualTest());
 });
+
+// PR-A review finding 8: validateEvidenceRecord() must itself reject non-canonical runtime
+// values (e.g. an untyped/unknown-origin record with dataOrigin="MIXED") — callers must not have
+// to separately remember to call assertValidDataOrigin first.
+test("finding 8: validateEvidenceRecord rejects a runtime record with a non-canonical DataOrigin", () => {
+  const untyped: EvidenceRecord = {
+    evaluationMode: "SELF_BENCHMARK",
+    dataOrigin: "MIXED" as unknown as EvidenceRecord["dataOrigin"],
+    executionStatus: "PASSED",
+  };
+  assert.throws(() => validateEvidenceRecord(untyped));
+});
+
+test("finding 8: validateEvidenceRecord still accepts every canonical DataOrigin value", () => {
+  for (const dataOrigin of ["REAL", "SIMULATED", "UNKNOWN"] as const) {
+    assert.doesNotThrow(() =>
+      validateEvidenceRecord({ evaluationMode: "SELF_BENCHMARK", dataOrigin, executionStatus: "PASSED" }),
+    );
+  }
+});
+
+test("finding 8: validateEvidenceRecord still preserves D023/D024 and MODEL_BAKE_OFF subtype semantics", () => {
+  // D024 pre-execution record remains valid.
+  assert.doesNotThrow(() =>
+    validateEvidenceRecord({ evaluationMode: "ACTUAL_TEST", dataOrigin: "REAL", executionStatus: "NOT_TESTED" }),
+  );
+  // MODEL_BAKE_OFF subtype remains valid only under SELF-BENCHMARK.
+  assert.doesNotThrow(() =>
+    validateEvidenceRecord({
+      evaluationMode: "SELF_BENCHMARK",
+      dataOrigin: "SIMULATED",
+      executionStatus: "PASSED",
+      evaluationSubtype: "MODEL_BAKE_OFF",
+    }),
+  );
+});

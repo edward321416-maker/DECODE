@@ -1,10 +1,11 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { TestClock } from "../src/shared/clock.js";
+import { generateId } from "../src/shared/ids.js";
 import { DurableJob, DurableJobError } from "../src/jobs/durable-job.js";
 
 function makeJob(clock = new TestClock(new Date("2026-01-01T00:00:00Z"))) {
-  return { job: new DurableJob("job-1", clock), clock };
+  return { job: new DurableJob(generateId("job"), clock), clock };
 }
 
 // Invariants 40-41: normal RUNNING job succeeds; successful attempt preserves result evidence.
@@ -138,4 +139,39 @@ test("invariants 53-55: retry creates a fresh attempt, preserves history, carrie
   assert.equal(job.getAttempts()[1]?.failureEvidence, undefined);
   job.succeed({ ok: true });
   assert.equal(job.getState(), "SUCCEEDED");
+});
+
+// PR-A review finding 7: DurableJob must reject a wrong-namespace id (e.g. a Permit id) at
+// construction, not silently accept it as a valid Job id.
+test("finding 7: DurableJob rejects a non-'job'-namespace id", () => {
+  const clock = new TestClock(new Date("2026-01-01T00:00:00Z"));
+  assert.throws(() => new DurableJob(generateId("permit"), clock), DurableJobError);
+  assert.throws(() => new DurableJob("not-namespaced", clock), DurableJobError);
+  assert.doesNotThrow(() => new DurableJob(generateId("job"), clock));
+});
+
+// PR-A review finding 9: getAttempts()/getReconciliations() must not expose the mutable
+// authoritative internal records — external mutation of the returned arrays/objects must not
+// alter stored history/evidence/timestamps.
+test("finding 9: mutating the returned attempts/reconciliations does not alter stored history", () => {
+  const { job } = makeJob();
+  job.start();
+  job.markUnknownResult();
+  job.requireReconciliation();
+  job.reconcile({ decision: "RETRY_ALLOWED", reconciliationRef: "ref-1", reason: "retry authorized" });
+
+  const attempts = job.getAttempts() as unknown as Array<Record<string, unknown>>;
+  attempts[0]!.state = "SUCCEEDED";
+  attempts[0]!.failureEvidence = { tampered: true };
+  attempts.push({ attemptNumber: 99, state: "SUCCEEDED", startedAt: new Date() });
+
+  const reconciliations = job.getReconciliations() as unknown as Array<Record<string, unknown>>;
+  reconciliations[0]!.reason = "tampered";
+  (reconciliations[0]!.recordedAt as Date).setFullYear(1999);
+
+  assert.equal(job.getAttempts()[0]?.state, "UNKNOWN_RESULT");
+  assert.equal(job.getAttempts()[0]?.failureEvidence, undefined);
+  assert.equal(job.getAttemptCount(), 1);
+  assert.equal(job.getReconciliations()[0]?.reason, "retry authorized");
+  assert.equal(job.getReconciliations()[0]?.recordedAt.getFullYear(), 2026);
 });

@@ -12,6 +12,10 @@ export interface EvidenceRecord {
 export class EvidenceRecordError extends Error {}
 
 export function validateEvidenceRecord(record: EvidenceRecord): void {
+  // Runtime boundary enforcement lives here too, not only in a separate helper callers might
+  // forget to invoke: a record whose dataOrigin is not one of the canonical values (e.g. an
+  // untyped "MIXED" arriving from outside the type system) must never pass validation.
+  assertValidDataOrigin(record.dataOrigin);
   if (record.evaluationSubtype === "MODEL_BAKE_OFF" && record.evaluationMode !== "SELF_BENCHMARK") {
     throw new EvidenceRecordError("evaluation_subtype=MODEL_BAKE_OFF is only valid under SELF-BENCHMARK");
   }

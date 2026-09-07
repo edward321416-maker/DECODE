@@ -1,4 +1,5 @@
 import type { Clock } from "../shared/clock.js";
+import { isNamespacedId } from "../shared/ids.js";
 
 export type JobState =
   | "CREATED"
@@ -45,6 +46,9 @@ export class DurableJob {
   private reconciliations: Reconciliation[] = [];
 
   constructor(jobId: string, private readonly clock: Clock) {
+    if (!isNamespacedId(jobId, "job")) {
+      throw new DurableJobError(`invalid job id: ${jobId} is not in the 'job' namespace`);
+    }
     this.jobId = jobId;
   }
 
@@ -53,11 +57,17 @@ export class DurableJob {
   }
 
   getAttempts(): readonly Attempt[] {
-    return this.attempts;
+    return this.attempts.map((attempt) => ({ ...attempt, startedAt: new Date(attempt.startedAt.getTime()) }));
   }
 
   getReconciliations(): readonly Reconciliation[] {
-    return this.reconciliations;
+    return this.reconciliations.map((reconciliation) => ({
+      ...reconciliation,
+      recordedAt: new Date(reconciliation.recordedAt.getTime()),
+      externalObservedAt: reconciliation.externalObservedAt
+        ? new Date(reconciliation.externalObservedAt.getTime())
+        : undefined,
+    }));
   }
 
   getAttemptCount(): number {
