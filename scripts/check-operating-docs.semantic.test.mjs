@@ -81,6 +81,32 @@ test("positive control: docs/DECISIONS.md D001 historical Codex-provenance wordi
   assert.equal(findCheck(results, "stale-codex-exclusive").passed, true);
 });
 
+test("positive control: changing only a HISTORICAL ACTUAL TEST/PR-A occurrence leaves the current-state checks passing", () => {
+  // docs/CURRENT_STATUS.md line 34 ("`ACTUAL TEST = NOT YET TESTED`. `PR-A = NOT STARTED`.")
+  // sits inside a section explicitly marked "(historical, prior to Stage 3)". Mutating only
+  // that historical line must not affect the current-state checks, which read the region
+  // before the first "(historical" marker.
+  const mutated = withMutation("docs/CURRENT_STATUS.md", (c) =>
+    c.replace("- `ACTUAL TEST = NOT YET TESTED`. `PR-A = NOT STARTED`.\n",
+      "- `ACTUAL TEST = TESTED`. `PR-A = STARTED`.\n"));
+  const results = collectTeamOsSemanticChecks(mutated);
+  assert.equal(findCheck(results, "status-actual-test-not-yet-tested").passed, true,
+    "a historical-only edit must not affect the current-state ACTUAL TEST check");
+  assert.equal(findCheck(results, "status-pr-a-not-started").passed, true,
+    "a historical-only edit must not affect the current-state PR-A check");
+});
+
+test("positive control: D022's own future-base scan ignores a later, separate, approved decision row with a literal SHA", () => {
+  // A future separate Product-approved decision may legitimately record a literal PR-A base
+  // after external verification. The scoped check must only inspect D022's own clause, not
+  // the whole DECISIONS.md file. This does not add a real decision to the repository.
+  const mutated = withMutation("docs/DECISIONS.md", (c) =>
+    c + "\n| D023 | LOCKED | PR-A base 1234567890abcdef1234567890abcdef12345678 approved after external verification | U-HYPOTHETICAL-FUTURE |\n");
+  const results = collectTeamOsSemanticChecks(mutated);
+  assert.equal(findCheck(results, "d022-no-future-base-assignment").passed, true,
+    "a later, separate, approved decision row must not trip D022's own scoped future-base guard");
+});
+
 test("positive control: handoff/CODEX_TO_CHATGPT.md's own audit-trail phrasing does not trip stale-codex-exclusive", () => {
   // Completion reports narrate what stale phrasing was found/fixed in past stages; they are
   // not instruction sources, so they are excluded from the group-E scan.
@@ -160,6 +186,37 @@ const MUTATIONS = [
   { name: "21. Stale queue instruction inserted into the current executable request", file: "handoff/CHATGPT_TO_CODEX.md",
     mutate: (c) => c + "\nThe first handoff establishes the engineering queue.\n",
     expectId: "stale-first-handoff" },
+
+  // --- Post-merge audit correction scenarios (22-29) ---
+
+  { name: "22. Current ACTUAL TEST state changed surgically, historical occurrences left intact", file: "docs/CURRENT_STATUS.md",
+    mutate: (c) => c.replace("- `ACTUAL TEST = NOT YET TESTED` (current state).\n", "- `ACTUAL TEST = TESTED` (current state).\n"),
+    expectId: "status-actual-test-not-yet-tested" },
+  { name: "23. Current PR-A state changed surgically, historical occurrences left intact", file: "docs/CURRENT_STATUS.md",
+    mutate: (c) => c.replace(
+      "- `PR-A = NOT STARTED` (current state).",
+      "- `PR-A = STARTED` (current state)."),
+    expectId: "status-pr-a-not-started" },
+  { name: "24. Destructive-reset prohibition removed while C10's force-push sentence stays intact", file: "docs/COLLABORATION_RULES.md",
+    mutate: (c) => c.replace("Force push and destructive reset remain prohibited.", "Force push remains prohibited."),
+    expectId: "col-no-destructive-reset" },
+  { name: "25. Another domain-policy read-flow link removed (Documentation Rules), Development Rules left intact", file: "docs/PROJECT_OPERATING_MANUAL.md",
+    mutate: (c) => c.replace("[Documentation Rules](DOCUMENTATION_RULES.md), ", ""),
+    expectId: "pom-read-flow-complete" },
+  { name: "26. Several C1-C11 rule-body sentences copied into a router without headings", file: "AGENTS.md",
+    mutate: (c) => c + "\n\nPeer approval is not required. Free parallel development is allowed. No fixed small-PR size rule.\n",
+    expectId: "router-no-body-copy" },
+  { name: "27. Alternate-wording universal-mandatory-PR policy inserted into an active source", file: "docs/PUBLICATION_POLICY.md",
+    mutate: (c) => c + "\nAll changes require a PR.\n",
+    expectId: "stale-universal-pr" },
+  { name: "28. D022's own future-base clause gets a premature literal SHA", file: "docs/DECISIONS.md",
+    mutate: (c) => c.replace(
+      "The replacement PR-A base is the exact actual",
+      "The replacement PR-A base is 1234567890abcdef1234567890abcdef12345678, the exact actual"),
+    expectId: "d022-no-future-base-assignment" },
+  { name: "29. Protocol authority/link statement removed, historical status/headings left intact", file: "docs/EXPERIMENT_PROTOCOL.md",
+    mutate: (c) => c.replace("**It is not an executable protocol.** ", ""),
+    expectId: "protocol-authority-link" },
 ];
 
 for (const scenario of MUTATIONS) {

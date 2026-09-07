@@ -18,9 +18,11 @@ const same = (a, b) => JSON.stringify(a) === JSON.stringify(b);
 
 /**
  * Read each inventoried file that actually exists as a regular file, decode as UTF-8,
- * normalize CRLF to LF. Pure: no checks, no side effects. Shared by the CLI's own file
- * loop and by scripts/check-operating-docs.semantic.test.mjs, so both build identical
- * input for collectTeamOsSemanticChecks.
+ * normalize CRLF to LF. Deterministic and side-effect-free with respect to check state (it
+ * pushes no checks), but it does perform filesystem I/O, so it is a shared loader, not a
+ * pure function. Shared by the CLI's own file loop and by
+ * scripts/check-operating-docs.semantic.test.mjs, so both build identical input for the
+ * pure collectTeamOsSemanticChecks below.
  */
 export function loadCanonicalTexts(rootDir, files) {
   const texts = new Map();
@@ -56,7 +58,9 @@ export function collectTeamOsSemanticChecks(texts) {
   chk("pom-read-flow-complete", [
     "Current Status](CURRENT_STATUS.md)", "Decisions](DECISIONS.md)", "applicable handoff",
     "task-specific Spec / Plan", "Collaboration Rules](COLLABORATION_RULES.md)",
-    "Development Rules](DEVELOPMENT_RULES.md)",
+    "AI Operating Policy](AI_OPERATING_POLICY.md)", "Development Rules](DEVELOPMENT_RULES.md)",
+    "Documentation Rules](DOCUMENTATION_RULES.md)", "Graphics Rules](GRAPHICS_RULES.md)",
+    "Publication Policy](PUBLICATION_POLICY.md)", "docs/templates/",
   ].every((s) => pom.includes(s)));
   {
     const taskIdx = pom.indexOf("An approved task-specific Spec / Plan / Handoff.");
@@ -85,6 +89,7 @@ export function collectTeamOsSemanticChecks(texts) {
   chk("col-no-force-push",
     col.includes("Force push and destructive reset remain prohibited") ||
     col.includes("Force-push history rewriting remains prohibited"));
+  chk("col-no-destructive-reset", col.includes("destructive reset remain prohibited"));
   chk("col-d017-boundary", col.includes("remain under D017"));
   chk("col-precedence-stricter",
     col.includes("Approved task-specific Spec / Plan / Handoff may impose stricter workflow") &&
@@ -96,6 +101,21 @@ export function collectTeamOsSemanticChecks(texts) {
   chk("router-agents-to-manual", agents.includes("docs/PROJECT_OPERATING_MANUAL.md"));
   chk("router-claude-to-manual", claude.includes("docs/PROJECT_OPERATING_MANUAL.md"));
   chk("router-no-duplicate-c-headings", !/^## C\d+/m.test(agents) && !/^## C\d+/m.test(claude));
+  {
+    // Thinness guard: a router copying several distinctive C1-C11 rule sentences into its own
+    // body is a policy-copy even without "## Cn" headings. Not a line-count limit — counts
+    // recognizable rule anchors instead.
+    const cRuleAnchors = [
+      "Peer approval is not required.", "Free parallel development is allowed.",
+      "No fixed small-PR size rule.", "Self-merge is allowed where the applicable task/host permits.",
+      "Branch is optional.", "PR is optional.",
+      "may be corrected by whichever developer/approved AI is available",
+      "No notification is required for every task.", "Conventional Commits are not mandatory.",
+      "Routine implementation details are chosen by the implementer within LOCKED contracts.",
+    ];
+    const countAnchors = (text) => cRuleAnchors.filter((a) => text.includes(a)).length;
+    chk("router-no-body-copy", countAnchors(agents) < 3 && countAnchors(claude) < 3);
+  }
   chk("router-claude-chatgpt-separation", claude.includes("not a Claude Code instruction set"));
 
   // D — Active templates
@@ -154,7 +174,7 @@ export function collectTeamOsSemanticChecks(texts) {
     ["stale-codex-exclusive", /Codex is (?:the )?(?:AI\/Engineering Lead|exclusive Engineering)/i],
     ["stale-primary-expert-all-ten", /Primary expert labels all ten/i],
     ["stale-second-expert-fixed", /Second expert labels two clear and two ambiguous/i],
-    ["stale-universal-pr", /through a normal PR/i],
+    ["stale-universal-pr", /through a normal PR|every change must use a PR|all changes require a PR|a PR is mandatory for all changes/i],
     ["stale-draft-scaffold", /DRAFT SCAFFOLD \/ NOT ACTIVE/],
   ];
   for (const [id, pattern] of stalePatterns) {
@@ -165,6 +185,10 @@ export function collectTeamOsSemanticChecks(texts) {
   // Q1-Q56 remains sole current execution/design authority (checked separately elsewhere)
   const protocol = get("docs/EXPERIMENT_PROTOCOL.md");
   chk("protocol-status-historical", protocol.includes("HISTORICAL CANDIDATE SUMMARY") && protocol.includes("SUPERSEDED FOR EXECUTION"));
+  chk("protocol-authority-link",
+    protocol.includes("not an executable protocol") &&
+    protocol.includes("sole current 10-Case execution/design authority") &&
+    protocol.includes("Q1–Q56"));
   chk("protocol-no-slot-table", !/^\|\s*S0[1-9]\s*\|/m.test(protocol) && !/^\|\s*S10\s*\|/m.test(protocol));
   chk("protocol-no-execution-heading", !protocol.includes("## Execution"));
   chk("protocol-no-measurement-heading", !protocol.includes("## Measurement specification"));
@@ -190,14 +214,23 @@ export function collectTeamOsSemanticChecks(texts) {
       d022.includes("Stage 1 → Stage 2 → Stage 3 must complete before PR-A begins") &&
       d022.includes("valid historical M0 receipt evidence"));
     chk("d022-product-approved-base", d022.includes("externally verified and explicitly Product-approved before PR-A branch creation"));
+    // Scoped to D022's own replacement/future-base clause only, not the whole DECISIONS.md
+    // file — historical SHA provenance (e.g. D020's M0 receipt SHA) and any later, separate,
+    // Product-approved decision row that legitimately records a literal PR-A base remain
+    // allowed; only D022 itself may never pre-assign the unknown future SHA.
+    chk("d022-no-future-base-assignment", !/PR-A(?:\s+start)? base[^\n]{0,40}\b[0-9a-f]{40}\b/i.test(d022));
   }
-  chk("d022-no-future-base-assignment", !/PR-A(?:\s+start)? base[^\n]{0,40}\b[0-9a-f]{40}\b/i.test(decisions));
 
   // H — Evidence and status boundaries
   chk("evidence-no-promotion-safeguard", pom.includes("never becomes ACTUAL TEST evidence"));
   chk("evidence-unknown-not-zero", get("docs/DOCUMENTATION_RULES.md").includes("UNKNOWN/null means missing, never zero"));
-  chk("status-actual-test-not-yet-tested", /ACTUAL TEST[\s\S]{0,100}NOT YET TESTED/.test(get("docs/CURRENT_STATUS.md")));
-  chk("status-pr-a-not-started", /PR-A\s*=?\s*NOT STARTED/.test(get("docs/CURRENT_STATUS.md")));
+  // Current-state guards must inspect only the current snapshot, not any historical section
+  // that happens to contain matching wording. Everything before the first "(historical"
+  // marker (case-insensitive) is the current region; sections after it are explicitly
+  // marked historical and are not scanned by these two checks.
+  const currentStatusRegion = get("docs/CURRENT_STATUS.md").split(/\(historical/i)[0];
+  chk("status-actual-test-not-yet-tested", /ACTUAL TEST[\s\S]{0,100}NOT YET TESTED/.test(currentStatusRegion));
+  chk("status-pr-a-not-started", /PR-A\s*=?\s*NOT STARTED/.test(currentStatusRegion));
 
   return c;
 }

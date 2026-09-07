@@ -1,17 +1,27 @@
 # DECODE Current Status
 
-Snapshot: 2026-09-07 | Phase: Team OS Stage 1 + Stage 2 merged; Stage 3 (semantic checker hardening) in this revision; PR-A implementation NOT STARTED; PR #5 remains OPEN / NOT MERGED
+Snapshot: 2026-09-07 | Phase: Team OS Stage 1/2/3 implementation complete; this revision is a post-merge audit correction; PR-A implementation NOT STARTED; PR #5 remains OPEN / NOT MERGED
 
-## 2026-09-07 Team OS Stage 3 — semantic checker hardening
+## Current Team OS status (2026-09-07, post-Stage-3 audit correction)
+
+- Team OS Stage 1 (inert scaffold) = DONE, merged via PR #8 at `5c09f6f7108c94fd840797b434f34286da30d8b6`.
+- Team OS Stage 2 (policy/router activation) = DONE, merged via PR #9 at `f22cceedf369d4b0b2419314f824e12f7563526c`.
+- Team OS Stage 3 (semantic checker hardening) implementation = DONE, merged via PR #10 at `0c30bdb3763d493befe778558b267cd672761792`.
+- This revision is a post-merge audit correction of Stage 3's mechanical enforcement (phase-anchored current-state checks, destructive-reset/force-push separation, read-flow completeness, router-copy detection, broader stale-PR-wording detection, scoped D022 future-base protection, strengthened protocol-authority check) — it does not reopen or rerun Stage 3, and does not change D021/D022 or C1–C11 semantics. `docs/PUBLICATION_FILES.json` remains version 5 / 51 files; no new file is added by this correction.
+- `docs/EXPERIMENT_PROTOCOL.md` remains a concise historical shim, non-executable, pointing to the Q1–Q56 10-Case ACTUAL TEST Protocol v1.0 as sole current execution/design authority.
+- PR #5 remains OPEN / NOT MERGED / non-canonical candidate, untouched by Team OS work.
+- `ACTUAL TEST = NOT YET TESTED` (current state).
+- `PR-A = NOT STARTED` (current state). Next Product action after this corrective revision is merged: externally fetch actual `origin/main` and explicitly approve that exact SHA as the PR-A base under D022. No such future SHA is written into this commit in advance.
+
+## 2026-09-07 Team OS Stage 3 — semantic checker hardening (historical, prior to post-merge audit correction)
 
 - Team OS Stage 2 (policy/router activation) merged via PR #9 at `f22cceedf369d4b0b2419314f824e12f7563526c`.
 - This revision (Stage 3) makes `scripts/check-operating-docs.mjs` mechanically detect semantic drift in the ACTIVE Team OS contract: Project Operating Manual status/authority/precedence/evidence-model; Collaboration Rules C1–C11 presence/order and key clauses; `AGENTS.md`/`CLAUDE.md` router parity and ChatGPT-prompt separation; all 10 active templates' status and required field sets; a scoped stale-executable-instruction scan across currently-read instruction sources (including `handoff/CHATGPT_TO_CODEX.md` itself); the retired `docs/EXPERIMENT_PROTOCOL.md`'s concise historical shape; D021/D022 anchored semantic checks; and evidence/status boundaries (`UNKNOWN/null ≠ zero`, `ACTUAL TEST = NOT YET TESTED`, `PR-A = NOT STARTED`).
-- Implemented as a pure, exported `collectTeamOsSemanticChecks(texts)` function shared by the CLI and by `scripts/check-operating-docs.semantic.test.mjs` (21 RED mutation scenarios + 4 positive/control cases, all passing). Stage 3 validates repository text/contracts only — it does not prove Codex/Claude Code/human obedience, runtime/application/model behavior, or ACTUAL TEST success.
-- If this revision is being read from merged canonical main, Stage 3 is complete and all of Team OS Stage 1/2/3 has finished. This revision itself, while in review, is Stage 3 not-yet-merged.
+- Implemented as a pure, exported `collectTeamOsSemanticChecks(texts)` function (`loadCanonicalTexts` is the deterministic, shared file-loader it consumes — that loader itself performs filesystem I/O and is not pure) shared by the CLI and by `scripts/check-operating-docs.semantic.test.mjs` (21 RED mutation scenarios + 4 positive/control cases, all passing at merge). Stage 3 validates repository text/contracts only — it does not prove Codex/Claude Code/human obedience, runtime/application/model behavior, or ACTUAL TEST success.
+- This section is HISTORICAL: it described the not-yet-merged state at authoring time. Team OS Stage 3 has since merged via PR #10; see the current section above for the present state. Historical `ACTUAL TEST: NOT YET TESTED` and `PR-A: NOT STARTED` occurrences below and elsewhere in this document describe that point in time, not necessarily the current snapshot.
 - `docs/PUBLICATION_FILES.json` → version 5 (adds the Stage 3 plan and the semantic test script; 51 files).
 - PR #5 remains OPEN / NOT MERGED / non-canonical candidate, untouched by Team OS work.
 - D022's PR-A base gate is unchanged by Stage 3: the replacement PR-A base is the exact actual `origin/main` HEAD after this Stage 3 revision merges, externally verified and explicitly Product-approved before PR-A branch creation. No such SHA is written into repository content in advance.
-- `ACTUAL TEST = NOT YET TESTED`. `PR-A = NOT STARTED`.
 
 ## 2026-09-06 Team OS Stage 1 + Stage 2 (historical, prior to Stage 3)
 
