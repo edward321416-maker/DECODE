@@ -232,6 +232,22 @@ export function collectTeamOsSemanticChecks(texts) {
   chk("status-actual-test-not-yet-tested", /ACTUAL TEST[\s\S]{0,100}NOT YET TESTED/.test(currentStatusRegion));
   chk("status-pr-a-not-started", /PR-A\s*=?\s*NOT STARTED/.test(currentStatusRegion));
 
+  // I — D023 evidence/provenance contract (PLAN 1A Section 3 amendment)
+  const plan1a = get("docs/superpowers/plans/2026-09-06-decode-plan-1a-canonical-foundation.md");
+  {
+    const modeBlock = plan1a.match(/EvaluationMode:\n\n((?:- .+\n)+)/)?.[1] || "";
+    chk("plan1a-mode-no-bakeoff",
+      !modeBlock.includes("MODEL_BAKE_OFF") &&
+      modeBlock.includes("ACTUAL TEST") && modeBlock.includes("SELF-BENCHMARK") && modeBlock.includes("N/A"));
+    const originBlock = plan1a.match(/DataOrigin:\n\n((?:- .+\n)+)/)?.[1] || "";
+    chk("plan1a-origin-no-mixed",
+      !originBlock.includes("MIXED") &&
+      originBlock.includes("REAL") && originBlock.includes("SIMULATED") && originBlock.includes("UNKNOWN"));
+  }
+  chk("plan1a-no-actualteststatus-axis", !/ActualTestStatus:\s*\n+\s*-\s/.test(plan1a));
+  chk("plan1a-actual-requires-real", plan1a.includes("ACTUAL TEST requires DataOrigin=REAL"));
+  chk("plan1a-separate-records-required", plan1a.includes("create separate evidence records for the REAL portion and the SIMULATED portion"));
+
   return c;
 }
 

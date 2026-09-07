@@ -1,17 +1,25 @@
 # DECODE Current Status
 
-Snapshot: 2026-09-07 | Phase: Team OS Stage 1/2/3 implementation complete; this revision is a post-merge audit correction; PR-A implementation NOT STARTED; PR #5 remains OPEN / NOT MERGED
+Snapshot: 2026-09-07 | Phase: Team OS Stage 1/2/3 + post-merge audit correction complete; this revision reconciles the D023 evidence/provenance contract amendment; PR-A implementation NOT STARTED; PR #5 remains OPEN / NOT MERGED
 
-## Current Team OS status (2026-09-07, post-Stage-3 audit correction)
+## Current Team OS status (2026-09-07, D023 evidence-contract reconciliation)
+
+- Team OS Stage 1/2/3 implementation and the Stage 3 post-merge audit correction = DONE, merged via PR #8, PR #9, PR #10, and PR #11 respectively.
+- D023 (LOCKED EVIDENCE CONTRACT) was selected by Product via a decision interview under D017 (Option C) and amends PLAN 1A Canonical Foundation's Section 3 provenance contract: `MODEL_BAKE_OFF` is no longer a top-level Evaluation purpose/mode (it is optional `evaluation_subtype` metadata under SELF-BENCHMARK); `MIXED` is no longer a canonical Data origin (REAL and SIMULATED inputs get separate evidence records); the separate `ActualTestStatus` axis is removed (ACTUAL TEST state = Evaluation purpose/mode=ACTUAL TEST plus canonical Execution status). This revision reconciles the repository to that decision.
+- `docs/PUBLICATION_FILES.json` remains version 5 / 51 files; no new file is added by this reconciliation.
+- `docs/EXPERIMENT_PROTOCOL.md` remains a concise historical shim, non-executable, pointing to the Q1–Q56 10-Case ACTUAL TEST Protocol v1.0 as sole current execution/design authority (unaffected by D023).
+- PR #5 remains OPEN / NOT MERGED / non-canonical candidate, untouched by Team OS work.
+- `ACTUAL TEST = NOT YET TESTED` (current state).
+- `PR-A = NOT STARTED` (current state). Next Product action after this reconciliation revision is merged: externally fetch actual `origin/main`, independently audit the merged amendment, and only then explicitly approve that exact SHA as the PR-A base under D022. No such future SHA is written into this commit in advance.
+
+## 2026-09-07 Team OS Stage 3 post-merge audit correction (historical, prior to D023)
 
 - Team OS Stage 1 (inert scaffold) = DONE, merged via PR #8 at `5c09f6f7108c94fd840797b434f34286da30d8b6`.
 - Team OS Stage 2 (policy/router activation) = DONE, merged via PR #9 at `f22cceedf369d4b0b2419314f824e12f7563526c`.
 - Team OS Stage 3 (semantic checker hardening) implementation = DONE, merged via PR #10 at `0c30bdb3763d493befe778558b267cd672761792`.
-- This revision is a post-merge audit correction of Stage 3's mechanical enforcement (phase-anchored current-state checks, destructive-reset/force-push separation, read-flow completeness, router-copy detection, broader stale-PR-wording detection, scoped D022 future-base protection, strengthened protocol-authority check) — it does not reopen or rerun Stage 3, and does not change D021/D022 or C1–C11 semantics. `docs/PUBLICATION_FILES.json` remains version 5 / 51 files; no new file is added by this correction.
-- `docs/EXPERIMENT_PROTOCOL.md` remains a concise historical shim, non-executable, pointing to the Q1–Q56 10-Case ACTUAL TEST Protocol v1.0 as sole current execution/design authority.
+- This section described a post-merge audit correction of Stage 3's mechanical enforcement (phase-anchored current-state checks, destructive-reset/force-push separation, read-flow completeness, router-copy detection, broader stale-PR-wording detection, scoped D022 future-base protection, strengthened protocol-authority check), merged via PR #11 at `6ae646a2e961125d957768f7828e11f13b771a32`. This section is HISTORICAL; see the current section above for the present state, which now also reflects D023.
 - PR #5 remains OPEN / NOT MERGED / non-canonical candidate, untouched by Team OS work.
-- `ACTUAL TEST = NOT YET TESTED` (current state).
-- `PR-A = NOT STARTED` (current state). Next Product action after this corrective revision is merged: externally fetch actual `origin/main` and explicitly approve that exact SHA as the PR-A base under D022. No such future SHA is written into this commit in advance.
+- `ACTUAL TEST = NOT YET TESTED`. `PR-A = NOT STARTED`.
 
 ## 2026-09-07 Team OS Stage 3 — semantic checker hardening (historical, prior to post-merge audit correction)
 

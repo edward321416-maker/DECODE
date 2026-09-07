@@ -8,6 +8,8 @@
 **ACTUAL TEST:** NOT YET TESTED
 **Automatic merge:** PROHIBITED
 
+**Amendment:** Section 3 (Provenance contract) is amended by D023 / U-DECODE-EVIDENCE-CONTRACT-2026-09-07 (see [Decisions](../../DECISIONS.md)) to conform to DECODE's canonical three-dimension evidence contract; `MODEL_BAKE_OFF`, `MIXED`, and `ActualTestStatus` are no longer part of the canonical contract. Git history preserves the pre-amendment text and content hash; this is a locked amendment, not a reversion.
+
 ## 0. Mandatory Decision Interview Gate
 
 If implementation/audit discovers a new material unresolved decision, do not implement it by default.
@@ -95,25 +97,23 @@ TDD remains mandatory.
 
 ## 3. Provenance contract
 
-Canonical dimensions remain separate.
+Canonical dimensions remain separate. Amended by D023 / U-DECODE-EVIDENCE-CONTRACT-2026-09-07.
 
 EvaluationMode:
 
-- SELF-BENCHMARK
-- MODEL_BAKE_OFF
 - ACTUAL TEST
+- SELF-BENCHMARK
+- N/A
+
+`MODEL_BAKE_OFF` is not a fourth EvaluationMode value. To identify an internal model comparison, use EvaluationMode=SELF-BENCHMARK and record optional orthogonal metadata `evaluation_subtype=MODEL_BAKE_OFF`. `evaluation_subtype` is not a canonical evidence axis and must not change ACTUAL TEST eligibility. No additional `evaluation_subtype` values are defined by this amendment.
 
 DataOrigin:
 
-- SIMULATED
 - REAL
-- MIXED
+- SIMULATED
 - UNKNOWN
 
-ActualTestStatus:
-
-- NOT YET TESTED
-- EXECUTED
+`MIXED` is not a canonical DataOrigin value. If a workflow uses both REAL and SIMULATED inputs, create separate evidence records for the REAL portion and the SIMULATED portion; an aggregate/report may reference both records together, but no single evidence record may set DataOrigin=MIXED. SIMULATED material must never be folded into an ACTUAL TEST denominator, run, or claim.
 
 ExecutionStatus:
 
@@ -123,14 +123,16 @@ ExecutionStatus:
 - FAILED
 - BLOCKED
 
+There is no separate `ActualTestStatus` dimension. ACTUAL TEST state is represented by EvaluationMode=ACTUAL TEST plus the applicable ExecutionStatus value above. `ACTUAL TEST = NOT YET TESTED` is explanatory prose for the combination EvaluationMode=ACTUAL TEST and ExecutionStatus=NOT TESTED — it is not a separate enum value.
+
 Required invariants:
 
 - SELF-BENCHMARK + SIMULATED is valid.
+- SELF-BENCHMARK + REAL is valid where appropriate.
+- ACTUAL TEST requires DataOrigin=REAL.
 - ACTUAL TEST + SIMULATED is rejected.
-- ACTUAL TEST requires REAL data.
-- ACTUAL TEST requires actualTestStatus=EXECUTED.
-- ACTUAL TEST cannot have executionStatus=NOT TESTED.
-- actualTestStatus=EXECUTED outside ACTUAL TEST is rejected.
+- ACTUAL TEST cannot use DataOrigin=MIXED, because MIXED does not exist as a canonical value.
+- ACTUAL TEST with ExecutionStatus=NOT TESTED corresponds to the explanatory state "NOT YET TESTED."
 
 Engineering test results cannot promote themselves to ACTUAL TEST.
 
@@ -359,7 +361,7 @@ Reverse handoff must preserve exactly these headings:
 Truth boundaries:
 
 - ACTUAL TEST = NOT YET TESTED
-- MODEL_BAKE_OFF = NOT RUN
+- SELF-BENCHMARK (evaluation_subtype=MODEL_BAKE_OFF) = NOT RUN
 - Expert usability = NOT TESTED
 - Coaching effectiveness = NOT TESTED
 
@@ -389,10 +391,10 @@ Unexpected file or authority mismatch → `STOP_AND_REPORT`.
 1. Supported runtime.
 2. Permit and Job IDs use separate namespaces.
 3. SELF-BENCHMARK + SIMULATED is valid.
-4. ACTUAL TEST + SIMULATED rejected.
-5. Unexecuted ACTUAL TEST rejected.
-6. ACTUAL TEST with execution NOT TESTED rejected.
-7. Executed actual-test status cannot attach to non-ACTUAL mode.
+4. ACTUAL TEST requires DataOrigin=REAL; ACTUAL TEST + SIMULATED rejected.
+5. A persisted ACTUAL TEST evidence record requires ExecutionStatus to reflect an actual outcome (RUNNING/PASSED/FAILED/BLOCKED); ExecutionStatus=NOT TESTED means no ACTUAL TEST record exists yet — "NOT YET TESTED" by absence of a record, not a stored NOT-TESTED record.
+6. No evidence record may set DataOrigin=MIXED; REAL and SIMULATED inputs are recorded as separate evidence records.
+7. No SELF-BENCHMARK result (including evaluation_subtype=MODEL_BAKE_OFF) or other engineering/static result can self-promote to EvaluationMode=ACTUAL TEST.
 
 ### Atomic Command
 

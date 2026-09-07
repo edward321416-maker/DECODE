@@ -32,6 +32,7 @@ const SEMANTIC_FILES = [
   "README.md", "docs/PROJECT_BRIEF.md", "docs/PRODUCT_SPEC.md", "docs/DECISION_DATASET_SPEC.md",
   "data/schemas/README.md", "docs/EXPERIMENT_PROTOCOL.md",
   "docs/DECISIONS.md", "docs/CURRENT_STATUS.md",
+  "docs/superpowers/plans/2026-09-06-decode-plan-1a-canonical-foundation.md",
 ];
 
 const baseline = loadCanonicalTexts(root, SEMANTIC_FILES);
@@ -101,10 +102,27 @@ test("positive control: D022's own future-base scan ignores a later, separate, a
   // after external verification. The scoped check must only inspect D022's own clause, not
   // the whole DECISIONS.md file. This does not add a real decision to the repository.
   const mutated = withMutation("docs/DECISIONS.md", (c) =>
-    c + "\n| D023 | LOCKED | PR-A base 1234567890abcdef1234567890abcdef12345678 approved after external verification | U-HYPOTHETICAL-FUTURE |\n");
+    c + "\n| D999 | LOCKED | PR-A base 1234567890abcdef1234567890abcdef12345678 approved after external verification | U-HYPOTHETICAL-FUTURE |\n");
   const results = collectTeamOsSemanticChecks(mutated);
   assert.equal(findCheck(results, "d022-no-future-base-assignment").passed, true,
     "a later, separate, approved decision row must not trip D022's own scoped future-base guard");
+});
+
+test("positive control: evaluation_subtype=MODEL_BAKE_OFF is allowed as metadata when the canonical mode remains SELF-BENCHMARK", () => {
+  const results = collectTeamOsSemanticChecks(baseline);
+  const plan1a = baseline.get("docs/superpowers/plans/2026-09-06-decode-plan-1a-canonical-foundation.md");
+  assert.ok(plan1a.includes("evaluation_subtype=MODEL_BAKE_OFF"),
+    "baseline PLAN 1A must still mention evaluation_subtype=MODEL_BAKE_OFF as allowed metadata");
+  assert.equal(findCheck(results, "plan1a-mode-no-bakeoff").passed, true,
+    "the subtype mention must not trip the top-level-mode guard");
+});
+
+test("positive control: a summary referencing one REAL and one SIMULATED evidence record does not constitute DataOrigin=MIXED", () => {
+  const mutated = withMutation("docs/superpowers/plans/2026-09-06-decode-plan-1a-canonical-foundation.md", (c) =>
+    c + "\n\nExample: a bake-off summary references one REAL evidence record and one SIMULATED evidence record for the same workflow.\n");
+  const results = collectTeamOsSemanticChecks(mutated);
+  assert.equal(findCheck(results, "plan1a-origin-no-mixed").passed, true,
+    "referencing two separate REAL/SIMULATED records must not trip the no-MIXED guard");
 });
 
 test("positive control: handoff/CODEX_TO_CHATGPT.md's own audit-trail phrasing does not trip stale-codex-exclusive", () => {
@@ -217,6 +235,26 @@ const MUTATIONS = [
   { name: "29. Protocol authority/link statement removed, historical status/headings left intact", file: "docs/EXPERIMENT_PROTOCOL.md",
     mutate: (c) => c.replace("**It is not an executable protocol.** ", ""),
     expectId: "protocol-authority-link" },
+
+  // --- D023 evidence/provenance contract scenarios (30-34) ---
+
+  { name: "30. PLAN 1A reintroduces MODEL_BAKE_OFF as a top-level Evaluation purpose/mode", file: "docs/superpowers/plans/2026-09-06-decode-plan-1a-canonical-foundation.md",
+    mutate: (c) => c.replace("- ACTUAL TEST\n- SELF-BENCHMARK\n- N/A\n", "- ACTUAL TEST\n- SELF-BENCHMARK\n- MODEL_BAKE_OFF\n- N/A\n"),
+    expectId: "plan1a-mode-no-bakeoff" },
+  { name: "31. PLAN 1A reintroduces MIXED as a canonical Data origin", file: "docs/superpowers/plans/2026-09-06-decode-plan-1a-canonical-foundation.md",
+    mutate: (c) => c.replace("- REAL\n- SIMULATED\n- UNKNOWN\n", "- REAL\n- SIMULATED\n- MIXED\n- UNKNOWN\n"),
+    expectId: "plan1a-origin-no-mixed" },
+  { name: "32. PLAN 1A reintroduces ActualTestStatus as a fourth evidence/status dimension", file: "docs/superpowers/plans/2026-09-06-decode-plan-1a-canonical-foundation.md",
+    mutate: (c) => c + "\n\nActualTestStatus:\n\n- NOT YET TESTED\n- EXECUTED\n",
+    expectId: "plan1a-no-actualteststatus-axis" },
+  { name: "33. PLAN 1A loses the ACTUAL TEST + REAL requirement", file: "docs/superpowers/plans/2026-09-06-decode-plan-1a-canonical-foundation.md",
+    mutate: (c) => c.replaceAll("ACTUAL TEST requires DataOrigin=REAL", "ACTUAL TEST does not require DataOrigin=REAL"),
+    expectId: "plan1a-actual-requires-real" },
+  { name: "34. PLAN 1A loses the separate REAL/SIMULATED-record requirement", file: "docs/superpowers/plans/2026-09-06-decode-plan-1a-canonical-foundation.md",
+    mutate: (c) => c.replace(
+      "create separate evidence records for the REAL portion and the SIMULATED portion",
+      "record both origins together"),
+    expectId: "plan1a-separate-records-required" },
 ];
 
 for (const scenario of MUTATIONS) {
