@@ -68,6 +68,14 @@ U-DECODE-M0-RECEIPT-2026-09-06: continuation of the same M0 authority materializ
 
 U-DECODE-TEAM-OS-2026-09-06 / U-DECODE-TEAM-OS-SEQUENCE-2026-09-06: Product-approved Team OS activation and sequencing, recorded during Stage 2 reconciliation. Neither authorizes PR-A start, PR #5 merge/modification/closure, ACTUAL TEST execution, or any change to the three authority documents. ACTUAL TEST remains NOT YET TESTED.
 
+## 2026-09-07 Evidence / provenance contract amendment
+
+| ID | Status | Decision | Source |
+| --- | --- | --- | --- |
+| D023 | LOCKED EVIDENCE CONTRACT | DECODE retains exactly three canonical evidence dimensions — Evaluation purpose/mode (ACTUAL TEST, SELF-BENCHMARK, N/A), Data origin (REAL, SIMULATED, UNKNOWN), Execution status (NOT TESTED, RUNNING, PASSED, FAILED, BLOCKED). `MODEL_BAKE_OFF` is not a fourth Evaluation purpose/mode; an internal model comparison uses Evaluation purpose/mode=SELF-BENCHMARK with optional orthogonal metadata `evaluation_subtype=MODEL_BAKE_OFF`, which never changes ACTUAL TEST eligibility; no other subtype value is defined by this decision. `MIXED` is not a canonical Data origin; a workflow using both REAL and SIMULATED inputs records separate evidence records for each, never a single record with Data origin=MIXED, and SIMULATED material is never folded into an ACTUAL TEST denominator/run/claim. The separate `ActualTestStatus` axis is removed: ACTUAL TEST state is Evaluation purpose/mode=ACTUAL TEST plus the canonical Execution status; `ACTUAL TEST = NOT YET TESTED` remains explanatory prose for mode=ACTUAL TEST, execution status=NOT TESTED, not a separate enum value. This amends only the provenance-contract section (Section 3, plus its restatement in Section 12's acceptance invariants) of PLAN 1A Canonical Foundation; the TypeScript/Node runtime lock, ActorVerifier Port, Policy & Rights, durable job lifecycle, migration compatibility, Q1–Q56 ACTUAL TEST protocol, and product families/fields/threshold status are unchanged. | U-DECODE-EVIDENCE-CONTRACT-2026-09-07 |
+
+U-DECODE-EVIDENCE-CONTRACT-2026-09-07: user-selected Option C following a Product decision interview under D017. Locks the evidence/provenance contract amendment above; does not authorize PR-A start, PR #5 merge/modification/closure, or ACTUAL TEST execution. The pre-amendment PLAN 1A Section 3 text and its prior content hash remain in Git history as historical provenance, not current canonical wording.
+
 ## Decision promotion
 
 Engineering may recommend GO/REVISE/STOP, but cannot promote candidates, invent thresholds, declare actual-test success from fixtures, or authorize Alpha 50/150 itself. Product records approver, date, evidence/run IDs, exact rule/version, and approved scope. If evidence is absent, the decision remains pending.
