@@ -231,6 +231,23 @@ export function collectTeamOsSemanticChecks(texts) {
   const currentStatusRegion = get("docs/CURRENT_STATUS.md").split(/\(historical/i)[0];
   chk("status-actual-test-not-yet-tested", /ACTUAL TEST[\s\S]{0,100}NOT YET TESTED/.test(currentStatusRegion));
   chk("status-pr-a-not-started", /PR-A\s*=?\s*NOT STARTED/.test(currentStatusRegion));
+  // Phase guard, not a permanent rule: while the current CURRENT_STATUS region says PR-A is
+  // NOT STARTED and awaiting Product's exact-SHA base approval, the current Product->Engineering
+  // handoff must represent a gate/no-open-engineering-task state, not an executable
+  // completed-amendment implementation request. Always pushed (never conditionally omitted) so
+  // the check set stays stable across mutations; vacuously true when the pre-PR-A phase
+  // precondition itself doesn't hold. Expected to be revised when Product actually authorizes
+  // PR-A and the handoff legitimately becomes an implementation request again — that future
+  // change is not a regression of this guard.
+  {
+    const preprAPhase = /PR-A\s*=?\s*NOT STARTED/.test(currentStatusRegion) &&
+      /Product.{0,40}exact-SHA PR-A base approval|explicitly approve(?:s)? that exact SHA as the PR-A base/i.test(currentStatusRegion);
+    const chatgptToCodex = get("handoff/CHATGPT_TO_CODEX.md");
+    chk("handoff-pr-a-base-gate",
+      !preprAPhase ||
+      (chatgptToCodex.includes("No engineering implementation is currently authorized") &&
+        chatgptToCodex.includes("PR-A = NOT STARTED")));
+  }
 
   // I — D023 evidence/provenance contract (PLAN 1A Section 3 amendment)
   const plan1a = get("docs/superpowers/plans/2026-09-06-decode-plan-1a-canonical-foundation.md");
@@ -254,7 +271,12 @@ export function collectTeamOsSemanticChecks(texts) {
     !plan1a.includes("no ACTUAL TEST record exists yet"));
   chk("plan1a-preexecution-requires-real",
     plan1a.includes("ACTUAL TEST + DataOrigin=REAL + ExecutionStatus=NOT TESTED record is valid"));
-  chk("plan1a-preexecution-excluded-from-denominator", plan1a.includes("excluded from executed sample size"));
+  chk("plan1a-preexecution-excluded-from-denominator",
+    plan1a.includes("excluded from executed sample size") &&
+    plan1a.includes("expert agreement") &&
+    plan1a.includes("threshold calculations") &&
+    plan1a.includes("GO/REVISE/STOP evidence") &&
+    plan1a.includes("does not authorize 50/150 expansion"));
 
   return c;
 }

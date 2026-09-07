@@ -300,6 +300,24 @@ const MUTATIONS = [
       "ACTUAL TEST + DataOrigin=REAL + ExecutionStatus=NOT TESTED record is valid",
       "ACTUAL TEST + DataOrigin=SIMULATED + ExecutionStatus=NOT TESTED record is valid"),
     expectId: "plan1a-preexecution-requires-real" },
+
+  // --- Final pre-PR-A gate correction scenarios (38-40) ---
+
+  { name: "38. D024 exclusion set loses only the expert-agreement exclusion, sample-size exclusion left intact", file: "docs/superpowers/plans/2026-09-06-decode-plan-1a-canonical-foundation.md",
+    mutate: (c) => c.replace(
+      "excluded from executed sample size, expert agreement, threshold calculations, GO/REVISE/STOP evidence, and does not authorize 50/150 expansion",
+      "excluded from executed sample size, threshold calculations, GO/REVISE/STOP evidence, and does not authorize 50/150 expansion"),
+    expectId: "plan1a-preexecution-excluded-from-denominator" },
+  { name: "39. D024 exclusion set loses only the GO/REVISE/STOP + 50/150 exclusions, sample-size exclusion left intact", file: "docs/superpowers/plans/2026-09-06-decode-plan-1a-canonical-foundation.md",
+    mutate: (c) => c.replace(
+      ", GO/REVISE/STOP evidence, and does not authorize 50/150 expansion.",
+      "."),
+    expectId: "plan1a-preexecution-excluded-from-denominator" },
+  { name: "40. Current handoff reverts from the pre-PR-A gate to a completed-implementation-request shape", file: "handoff/CHATGPT_TO_CODEX.md",
+    mutate: (c) => c.replace(
+      "No engineering implementation is currently authorized.",
+      "Implement, verify, and normally merge D024. Start from base 5b4676af4859ab505d9a524100676f02647445df."),
+    expectId: "handoff-pr-a-base-gate" },
 ];
 
 for (const scenario of MUTATIONS) {

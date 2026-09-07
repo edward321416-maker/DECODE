@@ -1,17 +1,26 @@
 # DECODE Current Status
 
-Snapshot: 2026-09-07 | Phase: Team OS Stage 1/2/3 + post-merge audit correction complete; D023 merged; this revision reconciles the D024 ACTUAL TEST pre-execution record semantics amendment; PR-A implementation NOT STARTED; PR #5 remains OPEN / NOT MERGED
+Snapshot: 2026-09-07 | Phase: Team OS Stage 1/2/3 + post-merge audit correction, D023, and D024 all merged and complete; this revision is the final pre-PR-A gate correction; PR-A implementation NOT STARTED; PR #5 remains OPEN / NOT MERGED
 
-## Current Team OS status (2026-09-07, D024 pre-execution-record reconciliation)
+## Current Team OS status (2026-09-07, final pre-PR-A gate correction)
 
 - Team OS Stage 1/2/3 implementation and the Stage 3 post-merge audit correction = DONE, merged via PR #8, PR #9, PR #10, and PR #11 respectively.
-- D023 (LOCKED EVIDENCE CONTRACT) = LOCKED, reconciled and merged via PR #12: DECODE's canonical three-dimension evidence contract (Evaluation purpose/mode, Data origin, Execution status); `MODEL_BAKE_OFF` only as SELF-BENCHMARK subtype metadata; no `MIXED` Data origin; the separate `ActualTestStatus` axis removed.
-- D024 (LOCKED EVIDENCE CONTRACT) was selected by Product via a decision interview under D017 (Option A — ALLOW) and this revision reconciles the repository to it: an evidence record may exist with Evaluation purpose/mode=ACTUAL TEST, Data origin=REAL, Execution status=NOT TESTED, representing a planned/registered ACTUAL TEST evidence unit that has not yet been executed — not that the test occurred, passed, or failed. Such a pre-execution record is excluded from executed sample size, expert agreement, threshold calculations, and GO/REVISE/STOP evidence, and never authorizes 50/150 expansion. `ACTUAL TEST = NOT YET TESTED` remains explanatory prose for this state. `ActualTestStatus` is not reintroduced. D023 remains fully in force.
-- `docs/PUBLICATION_FILES.json` remains version 5 / 51 files; no new file is added by this reconciliation.
+- D023 (LOCKED EVIDENCE CONTRACT) = LOCKED, merged via PR #12: DECODE's canonical three-dimension evidence contract (Evaluation purpose/mode, Data origin, Execution status); `MODEL_BAKE_OFF` only as SELF-BENCHMARK subtype metadata; no `MIXED` Data origin; the separate `ActualTestStatus` axis removed.
+- D024 (LOCKED EVIDENCE CONTRACT) = LOCKED, merged via PR #13 at `4bd7149ed2a93ba31de9a17d83ae9844b0af7bc3`: an evidence record may exist with Evaluation purpose/mode=ACTUAL TEST, Data origin=REAL, Execution status=NOT TESTED, representing a planned/registered pre-execution unit — not that the test occurred, passed, or failed — excluded from executed sample size, expert agreement, threshold calculations, and GO/REVISE/STOP evidence, and never authorizing 50/150 expansion. `ActualTestStatus` is not reintroduced. D023 remains fully in force.
+- This revision is only the final pre-PR-A gate correction: closes a stale executable handoff (`handoff/CHATGPT_TO_CODEX.md` reconciled to a gate/no-open-engineering-task state), strengthens the D024 exclusion-set semantic check, and adds a deterministic guard preventing the current handoff from silently drifting back to a completed-task-shaped executable request while PR-A remains ungated. It does not reopen D023, D024, or any prior Team OS stage.
+- `docs/PUBLICATION_FILES.json` remains version 5 / 51 files; no new file is added by this correction.
 - `docs/EXPERIMENT_PROTOCOL.md` remains a concise historical shim, non-executable, pointing to the Q1–Q56 10-Case ACTUAL TEST Protocol v1.0 as sole current execution/design authority (unaffected by D023/D024).
 - PR #5 remains OPEN / NOT MERGED / non-canonical candidate, untouched by Team OS work.
 - `ACTUAL TEST = NOT YET TESTED` (current state).
-- `PR-A = NOT STARTED` (current state). Next Product action after this reconciliation revision is merged: externally fetch actual `origin/main`, independently audit the merged amendment, and only then explicitly approve that exact SHA as the PR-A base under D022. No such future SHA is written into this commit in advance.
+- `PR-A = NOT STARTED` (current state). Next action after this correction revision is merged: Product externally verifies the actual new `origin/main` and, if clean, explicitly approves that exact SHA as the PR-A base under D022. No such future SHA is written into this commit in advance.
+
+## 2026-09-07 D024 ACTUAL TEST pre-execution record reconciliation (historical, prior to final gate correction)
+
+- Team OS Stage 1/2/3 implementation and the Stage 3 post-merge audit correction = DONE, merged via PR #8, PR #9, PR #10, and PR #11 respectively.
+- D023 (LOCKED EVIDENCE CONTRACT) = LOCKED, reconciled and merged via PR #12.
+- D024 (LOCKED EVIDENCE CONTRACT) was selected by Product via a decision interview under D017 (Option A — ALLOW) and this section described its reconciliation. This section is HISTORICAL; see the current section above, which now also reflects the final pre-PR-A gate correction. Merged via PR #13 at `4bd7149ed2a93ba31de9a17d83ae9844b0af7bc3`.
+- PR #5 remains OPEN / NOT MERGED / non-canonical candidate, untouched by Team OS work.
+- `ACTUAL TEST = NOT YET TESTED`. `PR-A = NOT STARTED`.
 
 ## 2026-09-07 D023 evidence-contract reconciliation (historical, prior to D024)
 
