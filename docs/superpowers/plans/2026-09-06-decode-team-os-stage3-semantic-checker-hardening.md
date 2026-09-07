@@ -5,7 +5,7 @@ Status: ACTIVE TEMPLATE
 Scope: skeleton for a step-by-step engineering plan for approved scope
 Authority: D021 / U-DECODE-TEAM-OS-2026-09-06
 
-Owner: AI/Engineering Lead | Date: 2026-09-07 | Status: **DRAFT — for Product review before implementation** (revision 2, per Product's plan-review corrections)
+Owner: AI/Engineering Lead | Date: 2026-09-07 | Status: DONE — implemented and merged via PR #10 at `0c30bdb3763d493befe778558b267cd672761792`; this revision's post-merge audit correction (mechanical enforcement fixes only, no architecture change) is tracked separately, not as a reopening of this plan.
 
 ## Exact approved base
 
