@@ -8,7 +8,7 @@
 **ACTUAL TEST:** NOT YET TESTED
 **Automatic merge:** PROHIBITED
 
-**Amendment:** Section 3 (Provenance contract) is amended by D023 / U-DECODE-EVIDENCE-CONTRACT-2026-09-07 (see [Decisions](../../DECISIONS.md)) to conform to DECODE's canonical three-dimension evidence contract; `MODEL_BAKE_OFF`, `MIXED`, and `ActualTestStatus` are no longer part of the canonical contract. Git history preserves the pre-amendment text and content hash; this is a locked amendment, not a reversion.
+**Amendment:** Section 3 (Provenance contract) is amended by D023 / U-DECODE-EVIDENCE-CONTRACT-2026-09-07 (see [Decisions](../../DECISIONS.md)) to conform to DECODE's canonical three-dimension evidence contract; `MODEL_BAKE_OFF`, `MIXED`, and `ActualTestStatus` are no longer part of the canonical contract. Section 12's Provenance acceptance invariant #5 is further amended by D024 / U-DECODE-ACTUAL-PREEXECUTION-2026-09-07: a persisted ACTUAL TEST + REAL + NOT TESTED record is a valid pre-execution/planned record, excluded from executed denominators and outcome claims, not evidence that "no record exists yet." Git history preserves the pre-amendment text and content hashes; these are locked amendments, not reversions.
 
 ## 0. Mandatory Decision Interview Gate
 
@@ -97,7 +97,7 @@ TDD remains mandatory.
 
 ## 3. Provenance contract
 
-Canonical dimensions remain separate. Amended by D023 / U-DECODE-EVIDENCE-CONTRACT-2026-09-07.
+Canonical dimensions remain separate. Amended by D023 / U-DECODE-EVIDENCE-CONTRACT-2026-09-07; the pre-execution record semantics for ACTUAL TEST + ExecutionStatus=NOT TESTED (restated in Section 12) are further clarified by D024 / U-DECODE-ACTUAL-PREEXECUTION-2026-09-07.
 
 EvaluationMode:
 
@@ -392,7 +392,7 @@ Unexpected file or authority mismatch → `STOP_AND_REPORT`.
 2. Permit and Job IDs use separate namespaces.
 3. SELF-BENCHMARK + SIMULATED is valid.
 4. ACTUAL TEST requires DataOrigin=REAL; ACTUAL TEST + SIMULATED rejected.
-5. A persisted ACTUAL TEST evidence record requires ExecutionStatus to reflect an actual outcome (RUNNING/PASSED/FAILED/BLOCKED); ExecutionStatus=NOT TESTED means no ACTUAL TEST record exists yet — "NOT YET TESTED" by absence of a record, not a stored NOT-TESTED record.
+5. A persisted ACTUAL TEST + DataOrigin=REAL + ExecutionStatus=NOT TESTED record is valid as a pre-execution/planned record (D024) — it represents a planned/registered ACTUAL TEST evidence unit that has not yet been executed, not that ACTUAL TEST occurred, real evidence was observed, an expert completed review, or the test passed or failed. Such a record is excluded from executed sample size, expert agreement, threshold calculations, GO/REVISE/STOP evidence, and does not authorize 50/150 expansion. RUNNING/PASSED/FAILED/BLOCKED may only reflect what actually occurred. "NOT YET TESTED" remains explanatory prose for ACTUAL TEST + ExecutionStatus=NOT TESTED, whether or not a record for it has been persisted.
 6. No evidence record may set DataOrigin=MIXED; REAL and SIMULATED inputs are recorded as separate evidence records.
 7. No SELF-BENCHMARK result (including evaluation_subtype=MODEL_BAKE_OFF) or other engineering/static result can self-promote to EvaluationMode=ACTUAL TEST.
 

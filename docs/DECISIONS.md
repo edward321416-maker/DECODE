@@ -76,6 +76,14 @@ U-DECODE-TEAM-OS-2026-09-06 / U-DECODE-TEAM-OS-SEQUENCE-2026-09-06: Product-appr
 
 U-DECODE-EVIDENCE-CONTRACT-2026-09-07: user-selected Option C following a Product decision interview under D017. Locks the evidence/provenance contract amendment above; does not authorize PR-A start, PR #5 merge/modification/closure, or ACTUAL TEST execution. The pre-amendment PLAN 1A Section 3 text and its prior content hash remain in Git history as historical provenance, not current canonical wording.
 
+## 2026-09-07 ACTUAL TEST pre-execution record semantics
+
+| ID | Status | Decision | Source |
+| --- | --- | --- | --- |
+| D024 | LOCKED EVIDENCE CONTRACT | An evidence record may exist with Evaluation purpose/mode=ACTUAL TEST, Data origin=REAL, Execution status=NOT TESTED, representing a planned/registered ACTUAL TEST evidence unit that has not yet been executed. It does not mean the ACTUAL TEST occurred, real evidence was observed, an expert completed review, or the test passed or failed; the record becomes an executed ACTUAL TEST record only when Execution status transitions according to actual execution evidence. `ACTUAL TEST = NOT YET TESTED` is explanatory prose for this pre-execution state, whether or not such a record is persisted. Canonical Execution statuses remain exactly NOT TESTED/RUNNING/PASSED/FAILED/BLOCKED; `ActualTestStatus` is not reintroduced. Such a pre-execution record must never count toward executed sample size, expert agreement, threshold calculations, or GO/REVISE/STOP evidence, and never authorizes 50/150 expansion or is represented as PASSED/FAILED. D023 remains fully in force (three canonical dimensions; MODEL_BAKE_OFF only as SELF-BENCHMARK subtype metadata; no Data origin=MIXED; separate REAL/SIMULATED records). This amends only PLAN 1A Section 12's Provenance acceptance invariant #5, which previously conflicted with Section 3 by treating ExecutionStatus=NOT TESTED as meaning no ACTUAL TEST record exists; Section 3 already had the correct semantics and remains authoritative, unchanged except for a clarifying cross-reference to this decision. | U-DECODE-ACTUAL-PREEXECUTION-2026-09-07 |
+
+U-DECODE-ACTUAL-PREEXECUTION-2026-09-07: user-selected Option A (ALLOW) following a Product decision interview under D017. Locks the pre-execution record semantics above; does not authorize PR-A start, PR #5 merge/modification/closure, or ACTUAL TEST execution. Unknown measured fields remain UNKNOWN/null, never zero.
+
 ## Decision promotion
 
 Engineering may recommend GO/REVISE/STOP, but cannot promote candidates, invent thresholds, declare actual-test success from fixtures, or authorize Alpha 50/150 itself. Product records approver, date, evidence/run IDs, exact rule/version, and approved scope. If evidence is absent, the decision remains pending.
