@@ -230,15 +230,22 @@ export function collectTeamOsSemanticChecks(texts) {
   // marked historical and are not scanned by these two checks.
   const currentStatusRegion = get("docs/CURRENT_STATUS.md").split(/\(historical/i)[0];
   chk("status-actual-test-not-yet-tested", /ACTUAL TEST[\s\S]{0,100}NOT YET TESTED/.test(currentStatusRegion));
-  chk("status-pr-a-not-started", /PR-A\s*=?\s*NOT STARTED/.test(currentStatusRegion));
+  // The current PR-A phase is one of a fixed set of non-overclaiming states: NOT STARTED (prior
+  // stages), or the exact PLAN 1A Section 13 ceiling claim "IMPLEMENTATION READY FOR PRODUCT
+  // REVIEW" once implementation exists but Product has not merged it. "PR-A = MERGED" /
+  // "PR-A = DEPLOYED" are never a valid current-state claim from Engineering — only Product
+  // merging/deploying makes that true, and this checker cannot observe that action.
+  chk("status-pr-a-not-overclaimed",
+    /PR-A\s*=?\s*(NOT STARTED|IMPLEMENTATION READY FOR PRODUCT REVIEW)/.test(currentStatusRegion) &&
+    !/PR-A\s*=?\s*(MERGED|DEPLOYED)/.test(currentStatusRegion));
   // Phase guard, not a permanent rule: while the current CURRENT_STATUS region says PR-A is
   // NOT STARTED and awaiting Product's exact-SHA base approval, the current Product->Engineering
   // handoff must represent a gate/no-open-engineering-task state, not an executable
   // completed-amendment implementation request. Always pushed (never conditionally omitted) so
   // the check set stays stable across mutations; vacuously true when the pre-PR-A phase
-  // precondition itself doesn't hold. Expected to be revised when Product actually authorizes
-  // PR-A and the handoff legitimately becomes an implementation request again — that future
-  // change is not a regression of this guard.
+  // precondition itself doesn't hold — including this revision, where PR-A implementation has
+  // been authorized and the current region no longer says NOT STARTED. That is not a regression
+  // of this guard; it is the anticipated phase transition the guard's own design comment predicted.
   {
     const preprAPhase = /PR-A\s*=?\s*NOT STARTED/.test(currentStatusRegion) &&
       /Product.{0,40}exact-SHA PR-A base approval|explicitly approve(?:s)? that exact SHA as the PR-A base/i.test(currentStatusRegion);
@@ -313,7 +320,7 @@ try {
   if (!Array.isArray(files) || files.some((f) => typeof f !== "string")) {
     throw new Error("Publication inventory must list file paths");
   }
-  check("inventory-version", inventory.version === 5);
+  check("inventory-version", inventory.version === 6);
   check("inventory-sorted-unique", same(files, [...new Set(files)].sort()));
   const allowed = new Set(files);
   const required = [

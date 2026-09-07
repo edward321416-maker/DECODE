@@ -1,8 +1,23 @@
 # DECODE Current Status
 
-Snapshot: 2026-09-07 | Phase: Team OS Stage 1/2/3 + post-merge audit correction, D023, and D024 all merged and complete; this revision is the final pre-PR-A gate correction; PR-A implementation NOT STARTED; PR #5 remains OPEN / NOT MERGED
+Snapshot: 2026-09-07 | Phase: PR-A Canonical Foundation implementation complete on branch `claude/pr-a-canonical-foundation` from approved base `4e006c9512e7665cd9195c42c508435092cb672d`; PR opened targeting main; NOT MERGED; PR #5 remains OPEN / NOT MERGED
 
-## Current Team OS status (2026-09-07, final pre-PR-A gate correction)
+## Current PR-A Canonical Foundation status (2026-09-07, implementation ready for Product review)
+
+- Team OS Stage 1/2/3 + post-merge audit correction, D023, and D024 remain merged and complete (PR #8–#13); the final pre-PR-A gate correction (PR #14) is also merged. None of these are reopened by this revision.
+- Product approved `APPROVED_IMPLEMENTATION_BASE_SHA = 4e006c9512e7665cd9195c42c508435092cb672d` under D022. Branch `claude/pr-a-canonical-foundation` was created from that exact SHA; start-gate verification confirmed branch base, `origin/main`, and the PLAN 1A blob (`bfb5e35b921ccc320f3ffb2631b661368206fa6b`) all matched before any implementation began.
+- PLAN 1A Canonical Foundation is implemented end-to-end under `foundation/` (TypeScript/Node, locked only for this package): Provenance contract (Section 3, D023/D024-amended), canonical/idempotent command identity (Section 4), ActorVerifier Port + Policy & Rights permit issuance/revalidation (Sections 5–7), durable external-job lifecycle with UNKNOWN_RESULT reconciliation and retry semantics (Section 8), and the migration manifest's semver/rollback/non-destructive guards (Section 9). Identity provider, role taxonomy, and every other Section 14 non-scope item remain unimplemented, as required.
+- Genuine TDD: every behavioral module started as a typed stub that compiled but threw `not implemented`; the full suite was run once to capture real RED (46 of 53 tests failing on assertion errors demonstrating missing behavior, not import/syntax errors — 7 trivial pure-function tests passed at RED because those functions had no meaningful behavior to stub); real implementations were then written and the suite reran fully GREEN.
+- `foundation/`: `npm ci` clean install, `npm run typecheck` (`tsc`, strict) 0 errors, `npm test` (Node's built-in test runner via `tsx`, no test framework dependency) **53/53 PASS, 0 failures**.
+- `docs/PUBLICATION_FILES.json` → version 6 (adds 18 tracked `foundation/` files: package manifest, lockfile, tsconfig, test-runner script, 8 source files, 6 test files; 69 files total). `foundation/node_modules` is gitignored and never tracked.
+- `node scripts/check-operating-docs.mjs` (default): PASS, 0 failures. `--tracked`: PASS, 0 failures (measured at commit time; see the reverse handoff for the exact count).
+- `ACTUAL TEST = NOT YET TESTED` (current state).
+  No consented real VOD or independent expert session was run for PR-A or for DECODE generally. Engineering verification above is SELF-BENCHMARK (`npm test`/typecheck/checker), not ACTUAL TEST, and does not self-promote.
+- `PR-A = IMPLEMENTATION READY FOR PRODUCT REVIEW` (current state).
+  PR-A is NOT merged and MUST NOT be merged by Engineering; Section 13's Gate F (Product Review) remains PENDING and Gate G (Deployment) remains NOT AUTHORIZED.
+- PR #5 remains OPEN / NOT MERGED / non-canonical candidate, untouched by this work.
+
+## Current Team OS status (2026-09-07, final pre-PR-A gate correction) (historical, prior to PR-A implementation)
 
 - Team OS Stage 1/2/3 implementation and the Stage 3 post-merge audit correction = DONE, merged via PR #8, PR #9, PR #10, and PR #11 respectively.
 - D023 (LOCKED EVIDENCE CONTRACT) = LOCKED, merged via PR #12: DECODE's canonical three-dimension evidence contract (Evaluation purpose/mode, Data origin, Execution status); `MODEL_BAKE_OFF` only as SELF-BENCHMARK subtype metadata; no `MIXED` Data origin; the separate `ActualTestStatus` axis removed.
@@ -138,7 +153,7 @@ This is metadata for the excluded local legacy demo, not a runnable stack includ
 2. Team OS Stage 1 (inert scaffold). — DONE, merged via PR #8 at `5c09f6f7108c94fd840797b434f34286da30d8b6`.
 3. Team OS Stage 2 (policy/router activation and reconciliation). — DONE, merged via PR #9 at `f22cceedf369d4b0b2419314f824e12f7563526c`.
 4. Team OS Stage 3 (semantic checker hardening). — This revision; not yet merged. Product independently audits the merged code/contracts after merge.
-5. Only after Stage 1/2/3 all complete does PR-A Canonical Foundation TDD begin, from the exact actual `origin/main` HEAD at that time, externally verified and explicitly Product-approved before PR-A branch creation (D022). PR-A = NOT STARTED.
+5. Only after Stage 1/2/3 all complete does PR-A Canonical Foundation TDD begin, from the exact actual `origin/main` HEAD at that time, externally verified and explicitly Product-approved before PR-A branch creation (D022). — DONE; see the current section above. PR-A implementation is complete and ready for Product review; PR-A is NOT merged.
 6. Product/Research may prepare the 10-Case ACTUAL TEST one gate ahead, but actual-mode execution remains blocked until the protocol/rights/software prerequisites are implemented and verified.
 
 Google bindings remain unresolved. No ACTUAL TEST or 50/150 expansion is authorized by Team OS activation.
