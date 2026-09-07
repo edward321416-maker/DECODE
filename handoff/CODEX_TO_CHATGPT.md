@@ -1,27 +1,28 @@
 # Codex → ChatGPT
 
-Report ID: DECODE-D024-PREEXECUTION-RECORD-2026-09-07 | Scope: D024 ACTUAL TEST pre-execution record semantics amendment
-Owner: AI/Engineering Lead | Source revision: base `origin/main = 5b4676af4859ab505d9a524100676f02647445df`
+Report ID: DECODE-PRE-PR-A-GATE-FIX-2026-09-07 | Scope: final pre-PR-A gate correction
+Owner: AI/Engineering Lead | Source revision: base `origin/main = 4bd7149ed2a93ba31de9a17d83ae9844b0af7bc3`
 
-Prior report: DECODE-D023-EVIDENCE-CONTRACT-2026-09-07, this file's immediately preceding content (superseded by this report). See Git history for the exact prior text.
+Prior report: DECODE-D024-PREEXECUTION-RECORD-2026-09-07, this file's immediately preceding content (superseded by this report). See Git history for the exact prior text.
 
 ## IMPLEMENTED
 
-D024 (LOCKED EVIDENCE CONTRACT) recorded in `docs/DECISIONS.md`, authority `U-DECODE-ACTUAL-PREEXECUTION-2026-09-07`, following Product's decision interview under D017 (user selected Option A — ALLOW). Reconciles PLAN 1A Canonical Foundation's Section 12 Provenance acceptance invariant #5, which conflicted with Section 3 by treating Execution status=NOT TESTED as meaning "no ACTUAL TEST record exists yet." Replaced with: a persisted ACTUAL TEST + Data origin=REAL + Execution status=NOT TESTED record is valid as a pre-execution/planned record, representing a planned/registered ACTUAL TEST evidence unit not yet executed — not that the test occurred, passed, or failed — and explicitly excluded from executed sample size, expert agreement, threshold calculations, and GO/REVISE/STOP evidence, never authorizing 50/150 expansion. Section 3 already had the correct semantics and remains authoritative and unchanged except for a clarifying cross-reference to D024. Repo-wide search for "no ACTUAL TEST record exists yet," "persisted ACTUAL TEST," "ExecutionStatus=NOT TESTED," "NOT YET TESTED," and "ACTUAL TEST record" confirmed the conflicting language existed only at PLAN 1A Section 12 item 5 — no other active/current source needed reconciliation. Added 3 new semantic checks (`plan1a-preexecution-record-allowed`, `plan1a-preexecution-requires-real`, `plan1a-preexecution-excluded-from-denominator`) to `collectTeamOsSemanticChecks`, with 3 new RED mutations and 3 new positive controls. `docs/CURRENT_STATUS.md` and `handoff/CHATGPT_TO_CODEX.md` reconciled to the post-D024 gate state.
+Two mechanical defects found by independent Product audit of merged PR #13, fixed: (1) `handoff/CHATGPT_TO_CODEX.md` was stale and executable — it still requested D024 implementation from an old base though D024 was already merged via PR #13. Replaced with Handoff ID `DECODE-PR-A-BASE-GATE`, explicitly stating no engineering implementation is currently authorized, D023/D024 must not be rerun, and PR-A awaits Product's exact-SHA base approval under D022. (2) The `plan1a-preexecution-excluded-from-denominator` semantic check only required the "excluded from executed sample size" phrase; strengthened to require the complete D024 exclusion set (sample size, expert agreement, threshold calculations, GO/REVISE/STOP evidence, and the 50/150-expansion non-authorization), with isolated RED mutation coverage proving each element is independently enforced. Also added a new phase-guard check, `handoff-pr-a-base-gate`: while the current `docs/CURRENT_STATUS.md` region says PR-A is NOT STARTED and awaiting Product's exact-SHA base approval, the current `handoff/CHATGPT_TO_CODEX.md` must represent a gate state, not an executable implementation request — this directly prevents the same stale-handoff problem from recurring silently. `docs/CURRENT_STATUS.md` reconciled to record D023 (PR #12) and D024 (PR #13) as both merged and complete, with this revision as only the final pre-PR-A gate correction. No PLAN 1A text change (D024's wording was already correct) and no `docs/DECISIONS.md` change — no new material decision.
 
 ## ACTUAL TEST
 
-NOT YET TESTED — no consented real VOD or independent expert session was run. `ACTUAL TEST = NOT YET TESTED` for both the DECODE product and this amendment itself. This amendment defines the semantics of a pre-execution record; it does not create, run, or claim any such record for the DECODE product.
+NOT YET TESTED — no consented real VOD or independent expert session was run. `ACTUAL TEST = NOT YET TESTED` for both the DECODE product and this correction itself.
 
 ## SELF-BENCHMARK
 
-- `node scripts/check-operating-docs.semantic.test.mjs`: **48/48 PASS, 0 failures** (11 baseline/positive-control + 37 RED mutation scenarios, 6 new this revision: 3 mutations + 3 controls).
-- `node scripts/check-operating-docs.mjs` (default): **753/753 PASS, 0 failures**.
-- `node scripts/check-operating-docs.mjs --index` (staged tree): **805/805 PASS, 0 failures**.
+- `node scripts/check-operating-docs.semantic.test.mjs`: **51/51 PASS, 0 failures** (14 baseline/positive-control + 37 RED mutation scenarios... plus 3 new this revision: 40 mutations total).
+- `node scripts/check-operating-docs.mjs` (default): **755/755 PASS, 0 failures**.
+- `node scripts/check-operating-docs.mjs --index` (staged tree): **807/807 PASS, 0 failures**.
 - `git diff --cached --check`: exit 0, no whitespace errors.
-- Meaningful-RED evidence for a new check: `plan1a-preexecution-requires-real` was temporarily stubbed to always pass; the corresponding mutation test (`RED mutation: 37. ...`) then failed with `AssertionError: expected plan1a-preexecution-requires-real to fail ... true !== false` — assertion-level, not import/module error. Stub reverted, confirmed byte-identical to pre-stub (modulo CRLF), suite reran fully GREEN.
-- D023 checks re-verified intact: all `plan1a-mode-no-bakeoff`, `plan1a-origin-no-mixed`, `plan1a-no-actualteststatus-axis`, `plan1a-actual-requires-real`, `plan1a-separate-records-required` still pass on the amended PLAN 1A.
-- Authority document blob/hash re-verification: Integrated Spec `f7571338e93a408a8aeef93d63275d7076e76f80` and 10-Case ACTUAL TEST Protocol `4d7788bb39d68c5cd147408a85954cd5a0e7b8f0` unchanged. PLAN 1A's blob changes from `283307d15c7dcc2d75f55044d7d22648a866e94d` to `bfb5e35b921ccc320f3ffb2631b661368206fa6b` — expected and required by this locked amendment, prior blob preserved in Git history.
+- Meaningful-RED evidence for the new check: `handoff-pr-a-base-gate` was temporarily stubbed to always pass; the corresponding mutation test (`RED mutation: 40. ...`) then failed with `AssertionError: expected handoff-pr-a-base-gate to fail ... true !== false` — assertion-level, not import/module error. Stub reverted, confirmed byte-identical to pre-stub (modulo CRLF), suite reran fully GREEN.
+- One design fix made mid-implementation: the phase-guard check was initially pushed conditionally (only when the pre-PR-A phase precondition held), which broke the "same check count before/after mutation" invariant when a mutation altered the precondition itself (scenarios #20/#23, which mutate `PR-A = NOT STARTED` text unrelated to this new check). Fixed by always pushing the check with a vacuously-true value when the precondition doesn't hold, so the check ID never disappears.
+- D023 and D024 checks re-verified intact on the unchanged PLAN 1A content: `plan1a-mode-no-bakeoff`, `plan1a-origin-no-mixed`, `plan1a-no-actualteststatus-axis`, `plan1a-actual-requires-real`, `plan1a-separate-records-required`, `plan1a-preexecution-record-allowed`, `plan1a-preexecution-requires-real`, and the strengthened `plan1a-preexecution-excluded-from-denominator` all pass.
+- Authority document blob/hash re-verification: Integrated Spec `f7571338e93a408a8aeef93d63275d7076e76f80` and 10-Case ACTUAL TEST Protocol `4d7788bb39d68c5cd147408a85954cd5a0e7b8f0` unchanged. Current PLAN 1A blob remains `bfb5e35b921ccc320f3ffb2631b661368206fa6b`, unchanged by this correction (no PLAN 1A file was touched).
 - This is documentation/contract evidence only, not compile/typecheck/software/ACTUAL TEST evidence.
 
 ## SIMULATED
@@ -30,7 +31,7 @@ No synthetic decision fixtures or simulated stress run generated. The new mutati
 
 ## FAILED
 
-None outside the intentional, resolved meaningful-RED proof described in SELF-BENCHMARK. No other check failure occurred during this amendment. Google sync remains BLOCKED by missing bindings, as before.
+None outside the intentional, resolved meaningful-RED proof and the mid-implementation check-design fix described in SELF-BENCHMARK, both real evidence the test infrastructure is working correctly. No other check failure occurred. Google sync remains BLOCKED by missing bindings, as before.
 
 ## NOT TESTED
 
@@ -38,8 +39,8 @@ Application/runtime, model behavior, prompt obedience, accessibility/security co
 
 ## FILES CHANGED
 
-`docs/DECISIONS.md`, `docs/superpowers/plans/2026-09-06-decode-plan-1a-canonical-foundation.md`, `docs/CURRENT_STATUS.md`, `handoff/CHATGPT_TO_CODEX.md`, `handoff/CODEX_TO_CHATGPT.md`, `scripts/check-operating-docs.mjs`, `scripts/check-operating-docs.semantic.test.mjs`, `experiments/ai_execution_log.pending.csv`. Exactly 8 files. No `docs/PUBLICATION_FILES.json` change (inventory remains v5 / 51 — no new file). Integrated Spec and 10-Case ACTUAL TEST Protocol untouched; PLAN 1A's content intentionally changed as the locked amendment target (Section 12 item 5 only; Section 3 unchanged except a clarifying cross-reference). PR #5 untouched.
+`handoff/CHATGPT_TO_CODEX.md`, `docs/CURRENT_STATUS.md`, `scripts/check-operating-docs.mjs`, `scripts/check-operating-docs.semantic.test.mjs`, `handoff/CODEX_TO_CHATGPT.md`, `experiments/ai_execution_log.pending.csv`. Exactly 6 files, matching the request's expected scope exactly — no PLAN 1A change, no `docs/DECISIONS.md` change, no new file, no `docs/PUBLICATION_FILES.json` change (inventory remains v5 / 51). Integrated Spec, 10-Case ACTUAL TEST Protocol, PLAN 1A, and PR #5 untouched.
 
 ## RECOMMENDED NEXT DECISION
 
-Merge this amendment PR (per Product's stated workflow: no pre-merge Product code review gate). After merge, fetch `origin/main`, verify the resulting HEAD, and rerun `node scripts/check-operating-docs.mjs --tracked` on merged main. Product then independently audits the merged amendment and, only if clean, approves that exact SHA as the PR-A base under D022. Do not start PR-A before that explicit approval. PR #5 remains OPEN / non-canonical candidate and must not be merged in its current form. No ACTUAL TEST or 50/150 expansion is authorized by this amendment.
+Merge this corrective PR (per Product's stated workflow: no pre-merge Product code review gate). After merge, fetch `origin/main`, verify the resulting HEAD, and rerun `node scripts/check-operating-docs.mjs --tracked` on merged main. Product then performs one final independent GitHub audit; if clean, that exact resulting main SHA is approved as the PR-A base under D022 and PR-A implementation may begin. PR #5 remains OPEN / non-canonical candidate and must not be merged in its current form. No ACTUAL TEST or 50/150 expansion is authorized by this correction.
