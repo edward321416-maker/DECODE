@@ -3,7 +3,7 @@
 Template Version: 1.0 | Updated: 2026-09-08 | Owner: AI/Engineering Lead
 Status: **DRAFT — USER REVIEW REQUIRED BEFORE IMPLEMENTATION PLAN**
 Scope: architecture/interface design for a synthetic-only "dry rehearsal" readiness harness that exercises the 10-Case ACTUAL TEST Protocol v1.0's pre-execution and structural steps end-to-end with SIMULATED data, before any real Pilot/Founder/Second Expert execution
-Authority: D025–D036 (this document; see [Decisions](../../DECISIONS.md)), amending/extending nothing in the frozen [Integrated Spec](2026-09-06-decode-integrated-spec-v1.md), [PLAN 1A Canonical Foundation](../plans/2026-09-06-decode-plan-1a-canonical-foundation.md), or the [10-Case ACTUAL TEST Protocol v1.0](2026-09-06-decode-10-case-actual-test-protocol-v1.md). Those three documents remain frozen authority artifacts; this spec traces to them, it does not amend them.
+Authority: D025–D037 (this document; see [Decisions](../../DECISIONS.md)), amending/extending nothing in the frozen [Integrated Spec](2026-09-06-decode-integrated-spec-v1.md), [PLAN 1A Canonical Foundation](../plans/2026-09-06-decode-plan-1a-canonical-foundation.md), or the [10-Case ACTUAL TEST Protocol v1.0](2026-09-06-decode-10-case-actual-test-protocol-v1.md). Those three documents remain frozen authority artifacts; this spec traces to them, it does not amend them.
 
 Owner: AI/Engineering Lead | Date: 2026-09-08 | Status: DRAFT
 
@@ -40,14 +40,14 @@ That is the entire and only purpose of this scope: a **dry rehearsal readiness h
 
 All types below are proposed shapes for the later implementation plan to refine (C11 — routine implementation detail); they exist here to make the design's boundaries concrete enough to review, not to lock exact field names.
 
-### 3.1 Readiness domain types (readiness/ package — see Section 4 below for why this is separate from `foundation/`)
+### 3.1 Readiness domain types (readiness/ package — see Section 10, "Alternatives considered," for why this is a separate package from `foundation/`)
 
 ```ts
 // readiness/src/domain/verdict.ts
 type ReadinessVerdict = "DRY_READY" | "BLOCKED";
 
 interface GateResult {
-  gateId: string;                 // stable identifier, see Section 8 gate list
+  gateId: string;                 // stable identifier, see Section 13 gate list
   mandatory: boolean;
   status: "PASS" | "FAIL" | "UNKNOWN" | "NOT_EXECUTED";
   reasonCodes: string[];          // machine-readable, e.g. "REPLACEMENT_UNAVAILABLE"
@@ -60,7 +60,7 @@ interface ReadinessRun {
   completedAt: string;
   gates: GateResult[];
   verdict: ReadinessVerdict;      // DRY_READY iff every mandatory gate is PASS
-  frozenHashes: FrozenHashSet;    // Section 8's "software/schema/protocol/fixture/gate hashing" gate
+  frozenHashes: FrozenHashSet;    // Section 13's "software/schema/protocol/fixture/gate hashing" gate
   staleness: { stale: boolean; reasonCodes: string[] };
 }
 ```
@@ -75,17 +75,21 @@ ExecutionStatus = <whatever the gate actually did: PASSED | FAILED | BLOCKED | N
 
 `readiness_verdict` and `ExecutionStatus` are never the same field, never derived from each other by string equality, and a `DRY_READY` verdict never implies `ExecutionStatus=PASSED` for anything outside this harness's own gates. `DRY_READY != ACTUAL TEST READY != ACTUAL TEST GO` (D029) is enforced structurally: nothing in the `ReadinessRun` type or its JSON serialization contains an `EvaluationMode=ACTUAL_TEST` value anywhere, ever — a static/lint-level invariant, not just documentation.
 
+**D037 (Dry Readiness execution-status mapping)** formalizes the exact `ExecutionStatus`/`readiness_verdict` correspondence: before a run executes, `ExecutionStatus=NOT_TESTED`; while a valid run executes, `ExecutionStatus=RUNNING`; every mandatory gate completed and `PASS` ⇒ `ExecutionStatus=PASSED` and `readiness_verdict=DRY_READY`; a mandatory gate that actually executes and detects a real software/contract/invariant defect ⇒ `ExecutionStatus=FAILED` and `readiness_verdict=BLOCKED`; a valid run that cannot satisfy a mandatory prerequisite or reach a mandatory gate (no defect demonstrated) ⇒ `ExecutionStatus=BLOCKED` and `readiness_verdict=BLOCKED`. This mapping is deterministic; a case implementation cannot map under it stops under D017 rather than inventing a new status.
+
 ### 3.2 Foundation integration (no new protocol behavior added to `foundation/`)
 
-`readiness/` depends on `@decode/foundation` as a published local package (workspace dependency), consuming its existing exports without modification:
+`readiness/` depends on `@decode/foundation` as a repository-local dependency; the exact workspace/`file:` linking mechanism is a C11 implementation detail (Section 11) and is not decided by this spec. `readiness/` consumes `foundation/`'s existing exports without modification:
 
 ```ts
 import {
   InMemoryPolicyRightsGate, InMemoryRightsStore, type ActorVerifier,
   DurableJob, AtomicCommandGate, validateEvidenceRecord,
-  type EvidenceRecord, generateId,
+  type EvidenceRecord,
 } from "@decode/foundation";
 ```
+
+Canonical `foundation/` only defines the `"permit" | "job" | "command"` ID namespaces (`generateId()`); this spec does **not** add a `"readiness"` namespace to `foundation/`. `readiness/` owns its own run-ID generation contract entirely within the `readiness/` package (Section 3.4) — it does not call or extend `foundation/`'s `generateId()`.
 
 Every protected action the Protocol's Section 28 lists (evidence ingestion, expert-voice storage, external transcription egress, evaluation use, player output) is rehearsed by requesting a Permit through `InMemoryPolicyRightsGate.authorize()` and revalidating through `.revalidate(permitId, request)` immediately before the simulated action, exactly as `foundation/`'s existing contract requires. `readiness/` does **not** add a `readiness`-specific action type, a new Eligibility state, or a new protected-action enum value to `foundation/` — it uses the existing `ProtectedAction` union and existing `Eligibility` states, because the Protocol's rights model is already fully expressed by what PR-A implemented. If a later reviewer of this spec identifies a genuine gap where the Protocol needs a rights primitive `foundation/` does not have, that is a material Architecture decision and goes through D017 — it is explicitly out of scope for this document to invent one.
 
@@ -109,11 +113,11 @@ interface TranscriptionResult {
 }
 ```
 
-No concrete adapter (whisper.cpp, a specific local model, etc.) is named or locked by this spec — that is deliberately deferred (D036). The readiness harness's *own* test double/reference adapter (used to prove the port contract itself works) is not a "qualifying local adapter" for the purposes of the `LOCAL_TRANSCRIPTION_UNAVAILABLE` gate; that gate asks whether a real deployment has a real local adapter configured, and in the dry harness's own CI/dev environment it is expected and correct for that gate to report `BLOCKED / LOCAL_TRANSCRIPTION_UNAVAILABLE` unless a genuine local adapter is present (Section 8).
+No concrete adapter (whisper.cpp, a specific local model, etc.) is named or locked by this spec — that is deliberately deferred (D036). The readiness harness's *own* test double/reference adapter (used to prove the port contract itself works) is not a "qualifying local adapter" for the purposes of the `LOCAL_TRANSCRIPTION_UNAVAILABLE` gate; that gate asks whether a real deployment has a real local adapter configured, and in the dry harness's own CI/dev environment it is expected and correct for that gate to report `BLOCKED / LOCAL_TRANSCRIPTION_UNAVAILABLE` unless a genuine local adapter is present (Section 13).
 
 ### 3.4 Run identity
 
-`run_id` is generated the same way `foundation/`'s `generateId()` namespaces IDs (`readiness_<uuid>`), so a `readiness_` run id can never collide with or be confused for a `permit_`/`job_`/`command_` id from `foundation/`.
+`readiness/` owns its own run-ID generation contract, independent of `foundation/`'s `generateId()` (which only defines the `"permit" | "job" | "command"` namespaces and is not extended by this spec — Correction 1). A proposed local implementation: `` `readiness_${crypto.randomUUID()}` `` using Node's built-in `node:crypto.randomUUID()`, or an equivalent C11-level local implementation the implementer chooses. Whichever mechanism is used, a `readiness_`-prefixed run id must remain structurally distinguishable from and never collide with a `permit_`/`job_`/`command_` id minted by `foundation/`.
 
 ## 4. Data flow
 
@@ -122,7 +126,7 @@ CLI invocation (readiness run --scenario <fixture-set>)
   -> load versioned SIMULATED fixture set (Section 6)
   -> compute frozenHashes over: readiness/ source version, foundation/ dependency version,
      Protocol version/hash, schema version, fixture-set version, gate-definition version
-  -> for each mandatory + optional gate (Section 8), in dependency order:
+  -> for each mandatory + optional gate (Section 13), in dependency order:
        -> execute gate logic against fixtures (pure where possible; foundation/ calls where
           rights/permit/job/provenance behavior is exercised)
        -> record GateResult{status, reasonCodes}
@@ -136,7 +140,7 @@ Every gate is independent and order is fixed by dependency (e.g. "main10 composi
 
 ### 5.1 `ReadinessVerdict`
 
-- `DRY_READY` — every mandatory gate (Section 8) reports `PASS` for this run.
+- `DRY_READY` — every mandatory gate (Section 13) reports `PASS` for this run.
 - `BLOCKED` — at least one mandatory gate reports `FAIL`, `UNKNOWN`, or `NOT_EXECUTED` (D029: missing/failing/unknown/unexecuted mandatory gate all collapse to BLOCKED — there is no partial-credit verdict).
 
 ### 5.2 `GateResult.status`
@@ -148,7 +152,7 @@ Every gate is independent and order is fixed by dependency (e.g. "main10 composi
 
 ### 5.3 Staleness (D034)
 
-A run is only trustworthy if its `frozenHashes` still match current canonical state. `staleness.stale = true` when any of: `readiness/` source hash, `foundation/` dependency hash, Protocol document hash, schema version, fixture-set version, or gate-definition hash has changed since the run. A stale run's *recorded* verdict is preserved as historical evidence (D033), but *current* readiness is separately computed as `BLOCKED / STALE_RUN` until a fresh run exists (Section 8, "stale-run detection" gate) — staleness is a property of "is this run still the answer for right now," not a mutation of the historical record.
+A run is only trustworthy if its `frozenHashes` still match current canonical state. `staleness.stale = true` when any of: `readiness/` source hash, `foundation/` dependency hash, Protocol document hash, schema version, fixture-set version, or gate-definition hash has changed since the run. A stale run's *recorded* verdict is preserved as historical evidence (D033), but *current* readiness is separately computed as `BLOCKED / STALE_RUN` until a fresh run exists (Section 13, "stale-run detection" gate) — staleness is a property of "is this run still the answer for right now," not a mutation of the historical record.
 
 ### 5.4 Run validity (D033)
 
@@ -174,15 +178,15 @@ A run is either a **valid completed run** (every gate reached at least `NOT_EXEC
 
 ## 7. Security / rights / privacy / egress
 
-- **No real personal data or VOD may be accepted anywhere in the dry harness** (Correction 7). Every fixture loader validates its input against a SIMULATED-only schema and rejects anything that looks like it could be real (see Section 8, "SIMULATED-only / REAL-input rejection" gate) — this is a mandatory gate, not a best-effort filter.
-- **Consent/assent/guardian/source-rights/Second-Expert-qualification artifacts produced by this harness are templates/rehearsals only** (Correction 6): they exercise the *shape and workflow* of the Protocol's consent (Sections 17, 24–26), source-rights (Section 3–4), and Second Expert qualification (Section 8) processes with synthetic actors and synthetic decisions. None of them constitutes legal certification, and none is evidence that any actual eligibility determination occurred. Every such artifact is labeled, in its own JSON, as `rehearsal: true` and carries `EvaluationMode=SELF_BENCHMARK, DataOrigin=SIMULATED`.
+- **No real personal data or VOD may be accepted anywhere in the dry harness** (Correction 7). The harness fails closed **structurally**, not heuristically: fixture input is restricted to explicitly versioned, repository-bundled/allowlisted synthetic fixture identifiers and their validated records — never an arbitrary filesystem VOD/media path, a URL, user-uploaded media, a free-form real-source reference, or a `DataOrigin=REAL` value. An unknown/unregistered fixture identifier is rejected outright (Section 13, `simulated-only-input` gate). This is a structural allowlist boundary — the harness never attempts to classify whether arbitrary input "looks real" — and, like every gate in this spec, it is a design contract only; it is not implemented in this PR.
+- **Consent/assent/guardian/source-rights/Second-Expert-qualification artifacts produced by this harness are templates/rehearsals only** (Correction 6): they exercise the *shape and workflow* of the Protocol's consent (Protocol §17, §24–26), source-rights (Protocol §3–4), and Second Expert qualification (Protocol §8) processes with synthetic actors and synthetic decisions. None of them constitutes legal certification, and none is evidence that any actual eligibility determination occurred. Every such artifact is labeled, in its own JSON, as `rehearsal: true` and carries `EvaluationMode=SELF_BENCHMARK, DataOrigin=SIMULATED`.
 - **External egress defaults BLOCKED** (matching Protocol Section 12's `LOCAL-FIRST` default and PLAN 1A's Policy & Rights `EXTERNAL_EGRESS` action): the dry harness never attempts a real external STT call. If `LocalTranscriptionPort.isAvailable()` returns false, the gate result is `BLOCKED / LOCAL_TRANSCRIPTION_UNAVAILABLE` — external STT is never an automatic fallback (D036), and a future scope that wants to exercise external egress must separately satisfy the full Protocol Section 12 permit chain (explicit approval, revalidated permit, provider review) under its own authorized scope, not this one.
 - **Foundation Policy/Rights integration is exercised, not reinvented** (Section 3.2): every protected-action rehearsal goes through `authorize()`/`revalidate()` exactly as `foundation/` requires, including execution-time revalidation immediately before the simulated protected action, matching Protocol Section 28's "revalidate immediately before" requirement.
 - **Auth boundary:** the readiness CLI runs locally, as a developer/CI tool; it has no network-facing surface of its own. `ActorVerifier` in this harness is `foundation/`'s existing deterministic in-memory test-infrastructure verifier (per PLAN 1A Section 7) — the dry harness does not implement or lock a production identity provider, matching PLAN 1A's own boundary.
 
 ## 8. External dependencies
 
-- `@decode/foundation` (workspace-local dependency, no version drift possible since both live in the same repository and the same commit).
+- `@decode/foundation` (repository-local dependency; exact workspace/`file:` linking mechanism is a C11 implementation detail, Section 11 — no version drift is possible either way, since both live in the same repository and the same commit).
 - Node.js test runner (`node:test`) and `node:assert/strict`, matching `foundation/`'s existing zero-external-test-framework convention (C11 — implementer may choose otherwise if a genuine need arises, but no new dependency is anticipated by this spec).
 - `node:crypto` for hashing (`frozenHashes`), matching `foundation/`'s existing `createHash("sha256")` usage.
 - No new production dependency is anticipated for the readiness domain logic itself. A concrete `LocalTranscriptionPort` adapter, if one is wired up in a later implementation phase, will bring its own dependency — deliberately not decided here (D036).
@@ -193,7 +197,7 @@ Greenfield — `readiness/` is a new package with no prior stored format to migr
 
 ## 10. Alternatives considered
 
-- **Folding readiness logic into `foundation/` directly** — rejected (D028): `foundation/` is PLAN 1A's Canonical Foundation, already reviewed and merged against a specific locked contract; adding protocol-specific (Q1–Q56) behavior to it would blur that boundary and re-open a merged, reviewed package for unrelated scope. A separate `readiness/` package that *depends on* `foundation/` keeps the boundary clean and matches Section 14/15's non-scope discipline.
+- **Folding readiness logic into `foundation/` directly** — rejected (D028): `foundation/` is PLAN 1A's Canonical Foundation, already reviewed and merged against a specific locked contract; adding protocol-specific (Q1–Q56) behavior to it would blur that boundary and re-open a merged, reviewed package for unrelated scope. A separate `readiness/` package that *depends on* `foundation/` keeps the boundary clean and matches PLAN 1A Section 14/15's non-scope discipline.
 - **Reusing PR #5's annotation-infrastructure code directly (merge/rebase/cherry-pick)** — rejected (D027): PR #5 predates D023/D024's evidence-contract amendments and PR-A's now-merged Foundation contracts, and reuse-by-merge would risk pulling in an evidence model that predates the canonical one. Any genuinely useful pattern from PR #5 is independently reimplemented from canonical `main`, read-only reference, PR #5 itself stays untouched.
 - **A UI-based readiness dashboard instead of CLI+JSON** — rejected (D031): premature; a CLI with machine-readable JSON is sufficient to prove the machinery works and is far cheaper to build and review than a UI, which can be added later against a stable JSON contract if ever needed.
 - **Locking a concrete STT provider now** — rejected (D036): no concrete choice has been evaluated for cost/quality/licensing, and locking one prematurely would create exactly the kind of unreviewed dependency commitment this repository's Decision Interview Gate (D017) exists to prevent.
@@ -219,7 +223,7 @@ Every row maps a Protocol pre-execution step to the dry-harness gate(s) that reh
 | 4 | Verify Founder source rights | source-rights workflow rehearsal | Synthetic source-provenance records are validated against the Protocol §3 allowed-pool rules (Founder-owned/authorized, explicitly consented Pilot) and rejected when they simulate a forbidden source | Real ownership/rights verification of any actual VOD |
 | 5 | Qualify Second Expert | Second Expert qualification workflow rehearsal | The `ELIGIBLE / NOT ELIGIBLE / INSUFFICIENT EVIDENCE` decision path and the minimal relationship-provenance enum (Protocol §8) are exercised against synthetic candidate profiles | Real qualification of any actual person |
 | 6 | Identify allowed source pool | source-rights workflow rehearsal | Synthetic pool enumeration against the allowed/forbidden source rules | Real pool identification |
-| 7 | Select/freeze main 10 | main10 composition/freeze | Synthetic case set is composed to CLEAR 6 / AMBIGUOUS 4, families 4/3/3 (Protocol §2), positive-quality precondition checked, and the set is frozen (post-freeze reclassification attempts are rejected) | Real case content/quality |
+| 7 | Select/freeze main 10 | main10 composition/freeze | Synthetic case set is composed to CLEAR 6 / AMBIGUOUS 4, families 4/3/3 (Protocol §2) and frozen **before** any synthetic Gold rehearsal begins (post-freeze reclassification attempts are rejected). The ≥2 OPTIMAL/ACCEPTABLE positive-quality condition is evaluated **only after** synthetic Gold rehearsal produces verdicts — it is a post-Gold structural check, never a pre-selection eligibility gate — and a shortfall records `COMPOSITION_CONDITION_FAILED` without swapping/reselecting cases to repair the count | Real case content/quality |
 | 8 | Allocate/select/freeze reserve 3 | reserve3 allocation/freeze | Synthetic reserve allocation reproduces Protocol §5's exact stratum-sorting algorithm (CLEAR 2 by `main_count` desc/`stratum_id` asc top-2; AMBIGUOUS 1 by the same rule top-1) and freezes the result | Real reserve case content |
 | 9 | Generate/freeze Second Expert 4-case subset | deterministic Second Expert planned subset (CLEAR 2 + AMBIGUOUS 2) | Synthetic run of Protocol §6's exact algorithm: 256-bit seed, `SHA-256(seed \|\| case_id)`, ascending sort per stratum, first-2-per-stratum selection, frozen before Gold; a re-run with the same seed/fixtures must reproduce the identical selection (determinism check) | Real Second Expert availability/participation |
 | 10 | Freeze measurement contract | measurement preregistration/freeze | The full Protocol §16 metric contract (median/P90 timing, context-insufficiency, taxonomy escape, directional agreement, core-field usefulness, candidate thresholds) is loaded and frozen before any synthetic "Gold" is rehearsed; a post-freeze mutation attempt is rejected | Whether the preregistered thresholds are the *right* thresholds — that remains a Product hypothesis (Protocol §16: "thresholds are hypotheses, not automatic decision rules") |
@@ -228,7 +232,7 @@ Every row maps a Protocol pre-execution step to the dry-harness gate(s) that reh
 | 13 | Verify local transcription | local transcription via LocalTranscriptionPort | `LocalTranscriptionPort.isAvailable()` and `.transcribe()` are exercised against non-personal synthetic audio (D036) | Real transcription quality/accuracy on real speech |
 | 14 | Verify external STT fallback remains blocked unless all permit conditions are satisfied | external egress default BLOCK | A synthetic external-egress request without a satisfied permit chain is rejected `BLOCKED`; a synthetic request WITH every Protocol §12 condition satisfied (as a positive-path rehearsal) is checked against the `EXTERNAL_EGRESS` Policy & Rights action | Whether any real external provider/destination is actually approved — none is approved by this scope |
 
-Steps 15–20 (execution) are not "pre-execution" but their **structural mechanics** are rehearsed by additional gates listed in Section 8 below (freeze immutability, timing/pause/interruption contract, withdrawal/future-use invalidation) using the same synthetic-only discipline — this spec explicitly extends coverage there because a readiness harness that only rehearses steps 1–14 and ignores the freeze-immutability and withdrawal mechanics of steps 15–20 would miss exactly the failure modes (silent redraw, silent threshold repair) the Protocol spends the most words guarding against.
+Steps 15–20 (execution) are not "pre-execution" but their **structural mechanics** are rehearsed by additional gates listed in Section 13 below (freeze immutability, timing/pause/interruption contract, withdrawal/future-use invalidation) using the same synthetic-only discipline — this spec explicitly extends coverage there because a readiness harness that only rehearses steps 1–14 and ignores the freeze-immutability and withdrawal mechanics of steps 15–20 would miss exactly the failure modes (silent redraw, silent threshold repair) the Protocol spends the most words guarding against.
 
 ## 13. Minimum mandatory dry gates
 
@@ -236,12 +240,12 @@ Every gate below is **mandatory** for `readiness_verdict=DRY_READY` (D029) unles
 
 | Gate ID (illustrative) | Rehearses | Negative paths explicitly covered |
 | --- | --- | --- |
-| `simulated-only-input` | Correction 7 / D025 | Rejects any fixture that is not explicitly marked SIMULATED; rejects any attempt to load a "REAL" `DataOrigin` fixture |
+| `simulated-only-input` | Correction 7 / D025 | Structural allowlist: rejects any fixture reference that is not an explicitly versioned, repository-bundled/allowlisted synthetic fixture identifier; refuses arbitrary filesystem/VOD/media paths, URL input, user-uploaded media, free-form real-source references, and any `DataOrigin=REAL` value; an unknown/unregistered fixture identifier is rejected, fail-closed |
 | `evidence-anti-promotion` | PLAN 1A §3/§12 invariant 7, D023 | No SELF-BENCHMARK/synthetic result can self-promote to `EvaluationMode=ACTUAL_TEST`; reuses `foundation/`'s existing `selfPromoteToActualTest()`/`validateEvidenceRecord()` |
 | `consent-guardian-assent-rehearsal` | Protocol §17, §22–26 | Ambiguous-expression pause/reconfirm path; guardian refusal overrides nothing; a clear participant refusal is not overridden by guardian consent |
 | `source-rights-rehearsal` | Protocol §3–4 | Forbidden-source rejection (arbitrary scraping, unconsented Pilot VOD, forced source ratios) |
 | `second-expert-qualification-rehearsal` | Protocol §8 | `INSUFFICIENT EVIDENCE` and `NOT ELIGIBLE` paths; Founder cannot unilaterally approve |
-| `main10-composition-freeze` | Protocol §2 | Post-freeze reclassification attempt rejected; `COMPOSITION_CONDITION_FAILED` path when positive-quality precondition would fail |
+| `main10-composition-freeze` | Protocol §2 | Post-freeze reclassification attempt rejected during selection/freeze (pre-Gold); separately, after synthetic Gold rehearsal, the ≥2 OPTIMAL/ACCEPTABLE positive-quality condition is checked post hoc (never as a pre-selection eligibility gate) and a shortfall records `COMPOSITION_CONDITION_FAILED` without case-swap/reselection |
 | `reserve3-allocation-freeze` | Protocol §5 | Correct stratum-sort tie-breaking; freeze-before-Gold enforcement |
 | `reserve-replacement` | Protocol §5, §21 | **Same-stratum reserve replacement before measurement freeze** (accepted path); **`REPLACEMENT_UNAVAILABLE`** when no same-stratum reserve exists; **no result-driven redraw/reselection after measurement freeze** (rejected path); **unused-reserve deletion receipt at replacement-window close** |
 | `second-expert-planned-subset` | Protocol §6 | Deterministic reproducibility (same seed ⇒ same selection); no redraw after Founder Gold/AI output/availability/expected disagreement |
@@ -268,7 +272,7 @@ This design is correctly implemented (in a later, separately authorized implemen
 3. No code path anywhere in `readiness/` can produce or accept `DataOrigin=REAL` or `EvaluationMode=ACTUAL_TEST`.
 4. `readiness/` never imports from or duplicates PR #5's code; any behavioral similarity is independently reimplemented and reviewable as such.
 5. `readiness/` adds zero new exported symbols to `foundation/`'s public API surface.
-6. The CLI's JSON output is stable/versioned enough that Section 8's gate IDs and reason codes are machine-parseable across runs.
+6. The CLI's JSON output is stable/versioned enough that Section 13's gate IDs and reason codes are machine-parseable across runs.
 7. A stale run is detected and reported as `BLOCKED / STALE_RUN`, not silently treated as still current.
 8. Every retained run artifact (both `DRY_READY` and `BLOCKED`) is git-committed, immutable, and never overwritten to improve appearance.
 
@@ -288,7 +292,7 @@ This design is correctly implemented (in a later, separately authorized implemen
 
 ---
 
-## Appendix A — Decision index (D025–D036)
+## Appendix A — Decision index (D025–D037)
 
 See [Decisions](../../DECISIONS.md) for the authoritative locked text. Summary for navigation only:
 
@@ -306,6 +310,7 @@ See [Decisions](../../DECISIONS.md) for the authoritative locked text. Summary f
 | D034 | J1 Latest valid canonical run determines current readiness; stale ⇒ BLOCKED |
 | D035 | K1 Synthetic metric values are non-evidentiary; only computation correctness is gated |
 | D036 | L1 Readiness core TypeScript/Node + provider-neutral `LocalTranscriptionPort`; no STT engine locked |
+| D037 | Dry Readiness execution-status mapping — canonical `ExecutionStatus`/`readiness_verdict` correspondence, never collapsed into one enum |
 
 ## Appendix B — Corrections addressed (Product pre-spec audit)
 
@@ -316,3 +321,16 @@ See [Decisions](../../DECISIONS.md) for the authoritative locked text. Summary f
 5. Local transcription dry verification — Section 12 step 13, Section 13 `local-transcription-port` gate.
 6. Consent/rights/qualification artifacts are templates/rehearsals only — Section 7.
 7. No real personal data or VOD anywhere in the dry harness — Section 7, Section 13 `simulated-only-input` gate.
+
+## Appendix C — Round-2 corrections addressed (Product's fresh review of PR #17 head `966ad18893cb0a8450ad3f63ed8a04c08a52740e`)
+
+1. Invalid run-ID contract (spec previously implied `foundation/` gains a `"readiness"` ID namespace) — corrected in Section 3.2/3.4: `readiness/` owns its own run-ID contract; `generateId` removed from the illustrative `foundation/` imports.
+2. Positive-quality composition timing (spec previously implied the ≥2 OPTIMAL/ACCEPTABLE condition is checked at selection/freeze time) — corrected in Section 12 row 7 and the Section 13 `main10-composition-freeze` gate: the condition is evaluated only after synthetic Gold rehearsal, never as a pre-selection eligibility gate.
+3. Structural SIMULATED-only input boundary (spec previously used heuristic "looks like it could be real" language) — corrected in Section 7 and the Section 13 `simulated-only-input` gate: a structural allowlist of versioned, repository-bundled fixture identifiers, fail-closed on any unregistered identifier.
+4. Unmerged-PR provenance — corrected in `docs/CURRENT_STATUS.md`: distinguishes canonical `main` (unaffected until PR #17 merges) from PR #17 as a reviewed proposal/spec-review branch, records the REVISE verdict on the prior head, and states the corrected head awaits fresh Product review.
+5. Reverse handoff — `handoff/CODEX_TO_CHATGPT.md` updated for this correction round with the required eight headings, precise about documentation-only scope and no fabricated implementation evidence.
+6. Internal section references — audited and fixed throughout (several places incorrectly said "Section 8" for what is actually Section 13's gate list, or an unqualified "Section 4"/"Section 14/15" that actually meant a different section of this document or of PLAN 1A).
+7. Dependency wording — Section 3.2 and Section 8 (External dependencies) reworded to "repository-local dependency; exact workspace/`file:` linking mechanism is a C11 implementation detail," matching Section 11's already-unresolved status instead of contradicting it.
+8. Pending execution-log timestamp — a new dedicated event row is appended for this correction round with its own accurate timestamp; no historical row is rewritten.
+9. Checker coverage — see `scripts/check-operating-docs.mjs` / `scripts/check-operating-docs.semantic.test.mjs` change notes in this commit for whether a new semantic check was warranted.
+10. D025–D036 preserved in force; D037 added as the next sequential decision (Section 3.1, Appendix A).
