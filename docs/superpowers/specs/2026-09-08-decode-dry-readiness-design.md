@@ -19,7 +19,7 @@ That is the entire and only purpose of this scope: a **dry rehearsal readiness h
 
 ## 1. Scope
 
-- A synthetic-only readiness harness (package name TBD by implementer, C11) that rehearses Protocol Section 29 pre-execution steps 1–14 and the structural mechanics of steps 15–20 (composition, freeze, reserve, Second Expert subset, timing contract, retention/deletion receipts) using exclusively SIMULATED fixtures.
+- A synthetic-only readiness harness, package name `readiness/` (D028), that rehearses Protocol Section 29 pre-execution steps 1–14 and the structural mechanics of steps 15–20 (composition, freeze, reserve, Second Expert subset, timing contract, retention/deletion receipts) using exclusively SIMULATED fixtures.
 - A CLI entry point producing machine-readable JSON output: a `readiness_verdict` (`DRY_READY` or `BLOCKED`), a `run_id`, per-gate results with reason codes, and the frozen hashes that make the run reproducible/comparable.
 - Deterministic properties (hashing, semver-style compatibility rules already in `@decode/foundation`, metric computation formulas, freeze/immutability enforcement) verified by automated unit/integration tests.
 - Operational flows (consent/guardian/assent, source-rights, Second Expert qualification, Pilot Operator checklist) verified by synthetic scenario rehearsal plus a checklist artifact — never by claiming a real legal/ethical determination occurred.
@@ -205,7 +205,8 @@ Greenfield — `readiness/` is a new package with no prior stored format to migr
 
 ## 11. Unresolved decisions
 
-- [ ] Exact package/directory name for `readiness/` (proposed: `readiness/`, matching the instruction's own naming; C11, implementer's call).
+The `readiness/` package/directory name is locked by D028's own wording ("Separate `readiness/` package") — it is not listed as unresolved below.
+
 - [ ] Exact concrete `LocalTranscriptionPort` reference/test adapter used only to prove the port contract in unit tests (not a production STT choice) — C11, implementer's call, must not be confused with or presented as satisfying the "qualifying local adapter" condition for the `LOCAL_TRANSCRIPTION_UNAVAILABLE` gate in a real deployment context.
 - [ ] Whether `readiness/` uses npm workspaces or a simple relative `file:` dependency on `foundation/` — C11, implementer's call, does not change any locked contract.
 
