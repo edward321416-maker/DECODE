@@ -1,8 +1,47 @@
 # DECODE Current Status
 
-Snapshot: 2026-09-07 | Phase: Team OS Stage 1/2/3 + post-merge audit correction, D023, and D024 all merged and complete; this revision is the final pre-PR-A gate correction; PR-A implementation NOT STARTED; PR #5 remains OPEN / NOT MERGED
+Snapshot: 2026-09-07 | Phase: PR-A Canonical Foundation implementation on branch `claude/pr-a-canonical-foundation`, corrected per three rounds of Product review of PR #15 and resubmitted; PR NOT MERGED; PR #5 remains OPEN / NOT MERGED
 
-## Current Team OS status (2026-09-07, final pre-PR-A gate correction)
+## Current PR-A Canonical Foundation status (2026-09-07, corrected per Product review round 3, awaiting final re-audit)
+
+- Team OS Stage 1/2/3 + post-merge audit correction, D023, and D024 remain merged and complete (PR #8–#13); the final pre-PR-A gate correction (PR #14) is also merged. None of these are reopened by this revision.
+- Product approved `APPROVED_IMPLEMENTATION_BASE_SHA = 4e006c9512e7665cd9195c42c508435092cb672d` under D022. Branch `claude/pr-a-canonical-foundation` was created from that exact SHA; start-gate verification confirmed branch base, `origin/main`, and the PLAN 1A blob (`bfb5e35b921ccc320f3ffb2631b661368206fa6b`) all matched before any implementation began.
+- PLAN 1A Canonical Foundation is implemented end-to-end under `foundation/` (TypeScript/Node, locked only for this package): Provenance contract (Section 3, D023/D024-amended), canonical/idempotent command identity (Section 4), ActorVerifier Port + Policy & Rights permit issuance/revalidation (Sections 5–7), durable external-job lifecycle with UNKNOWN_RESULT reconciliation and retry semantics (Section 8), and the migration manifest's semver/rollback/non-destructive guards (Section 9). Identity provider, role taxonomy, and every other Section 14 non-scope item remain unimplemented, as required.
+- Round 1: Product's independent review of PR #15 returned `REVISE — MERGE NOT AUTHORIZED` with 10 implementation defects. All 10 fixed (66/66 GREEN post-fix). See the round-1 historical section below.
+- Round 2: Product's re-review again returned `REVISE — MERGE NOT AUTHORIZED` with 3 further defects (A: same-idempotency-key race across different aggregates; B: durable-history nested-evidence aliasing; C: incomplete runtime provenance validation). All 3 fixed (78/78 GREEN post-fix). See the round-2 historical section below.
+- Round 3 (this revision): Product's final-focused review accepted round-2 findings A–C as corrected and identified 2 remaining narrowly scoped defects against already-LOCKED contracts (no material decision): (1) canonical fingerprint encoding was byte-ambiguous — a length prefix computed from JS string `.length` (UTF-16 code units) but hashed via Node's default UTF-8 string encoding let two commands differing only by which lone (unpaired) surrogate they contained collapse to identical hash bytes; fixed with a byte-length-prefixed UTF-16LE encoding that preserves every code unit, including lone surrogates. (2) `DurableJob.succeed()`/`fail()` mutated Attempt/Job state before the evidence clone (`structuredClone`) ran, so a non-cloneable evidence value would throw after the state transition already happened; fixed by cloning first and only mutating state after the clone succeeds, so a throwing clone leaves the job untouched in RUNNING. Both fixed with RED-confirmed-before-fix TDD (82 tests, 78 pass, 4 fail pre-fix; 82/82 GREEN post-fix, all 78 prior tests preserved unweakened); none required a D017 decision interview.
+- **Verified code snapshot for round 3:** commit `961408a2311e18620234c78723fb344f93ec8a25` on branch `claude/pr-a-canonical-foundation` — this is the exact commit that was subjected to fresh `npm ci`, `npm run typecheck`, `npm test`, and the publication checker; it is **not necessarily the current live PR #15 head**, since subsequent status/handoff-reconciliation commits on the same branch move HEAD forward without changing `foundation/` source. Product must audit the actual live PR #15 head from GitHub, not assume it equals this snapshot SHA.
+- `foundation/` at the verified code snapshot: fresh `npm ci` clean install (0 vulnerabilities), `npm run typecheck` (`tsc`, strict) 0 errors, `npm test` **82/82 PASS, 0 failures**.
+- `docs/PUBLICATION_FILES.json` remains version 6 (18 tracked `foundation/` files; 69 files total, unchanged by any correction round — no new file). `foundation/node_modules` is gitignored and never tracked.
+- `node scripts/check-operating-docs.mjs --tracked` at the verified code snapshot `961408a2311e18620234c78723fb344f93ec8a25`: **966/966 PASS, 0 failures**. This count was measured against that snapshot, before this status-reconciliation commit existed; the actual live PR head's `--tracked` count must be independently re-measured by Product against the real GitHub head, not assumed equal.
+- `ACTUAL TEST = NOT YET TESTED` (current state).
+  No consented real VOD or independent expert session was run for PR-A or for DECODE generally. Engineering verification above is SELF-BENCHMARK (`npm test`/typecheck/checker), not ACTUAL TEST, and does not self-promote.
+- `PR-A = IMPLEMENTATION READY FOR PRODUCT REVIEW` (current state).
+  PR-A is NOT merged and MUST NOT be merged by Engineering; Section 13's Gate F (Product Review) remains PENDING (awaiting Product's final re-audit of the actual live PR #15 head) and Gate G (Deployment) remains NOT AUTHORIZED.
+- PR #5 remains OPEN / NOT MERGED / non-canonical candidate, untouched by this work.
+
+## 2026-09-07 PR-A Canonical Foundation, round-2 corrections (historical, prior to Product review round 3)
+
+- Round 2: Product's re-review of PR #15 (head `dbc2d75ba929327f1287a2c903a1222bb759e1e0`) returned `REVISE — MERGE NOT AUTHORIZED` with 3 further implementation defects against already-LOCKED contracts (no material decision): (A) a same-idempotency-key race across *different* aggregates that round 1's per-aggregate serialization did not close; (B) durable-history nested-evidence aliasing on both ingress and egress (only the outer Attempt object was cloned); (C) incomplete runtime provenance validation (`DataOrigin` was enforced but `EvaluationMode`/`ExecutionStatus`/`evaluationSubtype` still trusted TypeScript). All 3 fixed with RED-confirmed-before-fix TDD (78 tests, 69 pass, 9 fail pre-fix; 78/78 GREEN post-fix).
+- `npm test` **78/78 PASS**; `node scripts/check-operating-docs.mjs --tracked` at committed HEAD `1d081607a7a71a6013b67c939a465f375ef27694`: 965/965 PASS.
+- PR #15 remained NOT MERGED. This section is HISTORICAL: Product's round-3 review of this exact code found 2 further narrowly scoped defects, corrected in the current section above.
+- `ACTUAL TEST = NOT YET TESTED`. `PR-A = IMPLEMENTATION READY FOR PRODUCT REVIEW`.
+
+## 2026-09-07 PR-A Canonical Foundation, round-1 corrections (historical, prior to Product review round 2)
+
+- Product's independent review of PR #15 (head `23b02f26dbca349157c0d11e8ac513cec1a7c3a7`) returned `REVISE — MERGE NOT AUTHORIZED` with 10 implementation defects: execution-time binding enforcement, permit tamper-resistance, policy content-drift detection, unambiguous command fingerprinting, fail-closed Rights, a same-aggregate concurrency race, Job/Permit namespace enforcement, runtime provenance enforcement at point of use, durable-history mutation protection, and an inclusive expiry boundary.
+- All 10 fixed; `npm test` **66/66 PASS**; `node scripts/check-operating-docs.mjs --tracked` at committed HEAD `6bca24c323cde783fda4478ad707675cc4cb48d8`: 964/964 PASS.
+- PR #15 remained NOT MERGED. This section is HISTORICAL: Product's round-2 review of this exact head found 3 further defects, corrected in the current section above.
+- `ACTUAL TEST = NOT YET TESTED`. `PR-A = IMPLEMENTATION READY FOR PRODUCT REVIEW`.
+
+## 2026-09-07 PR-A Canonical Foundation implementation, pre-correction (historical, prior to Product review corrections)
+
+- PLAN 1A Canonical Foundation implemented end-to-end under `foundation/` from approved base `4e006c9512e7665cd9195c42c508435092cb672d`; genuine TDD captured real RED (46 of 53 tests failing on assertion errors, not import/syntax errors) before GREEN.
+- `docs/PUBLICATION_FILES.json` → version 6 (adds 18 tracked `foundation/` files).
+- PR #15 opened at head `23b02f26dbca349157c0d11e8ac513cec1a7c3a7`, NOT MERGED. This section is HISTORICAL: Product's review of this exact head found 10 defects, corrected in the current section above.
+- `ACTUAL TEST = NOT YET TESTED`. `PR-A = IMPLEMENTATION READY FOR PRODUCT REVIEW`.
+
+## Current Team OS status (2026-09-07, final pre-PR-A gate correction) (historical, prior to PR-A implementation)
 
 - Team OS Stage 1/2/3 implementation and the Stage 3 post-merge audit correction = DONE, merged via PR #8, PR #9, PR #10, and PR #11 respectively.
 - D023 (LOCKED EVIDENCE CONTRACT) = LOCKED, merged via PR #12: DECODE's canonical three-dimension evidence contract (Evaluation purpose/mode, Data origin, Execution status); `MODEL_BAKE_OFF` only as SELF-BENCHMARK subtype metadata; no `MIXED` Data origin; the separate `ActualTestStatus` axis removed.
@@ -138,7 +177,7 @@ This is metadata for the excluded local legacy demo, not a runnable stack includ
 2. Team OS Stage 1 (inert scaffold). — DONE, merged via PR #8 at `5c09f6f7108c94fd840797b434f34286da30d8b6`.
 3. Team OS Stage 2 (policy/router activation and reconciliation). — DONE, merged via PR #9 at `f22cceedf369d4b0b2419314f824e12f7563526c`.
 4. Team OS Stage 3 (semantic checker hardening). — This revision; not yet merged. Product independently audits the merged code/contracts after merge.
-5. Only after Stage 1/2/3 all complete does PR-A Canonical Foundation TDD begin, from the exact actual `origin/main` HEAD at that time, externally verified and explicitly Product-approved before PR-A branch creation (D022). PR-A = NOT STARTED.
+5. Only after Stage 1/2/3 all complete does PR-A Canonical Foundation TDD begin, from the exact actual `origin/main` HEAD at that time, externally verified and explicitly Product-approved before PR-A branch creation (D022). — DONE; see the current section above. PR-A implementation is complete and ready for Product review; PR-A is NOT merged.
 6. Product/Research may prepare the 10-Case ACTUAL TEST one gate ahead, but actual-mode execution remains blocked until the protocol/rights/software prerequisites are implemented and verified.
 
 Google bindings remain unresolved. No ACTUAL TEST or 50/150 expansion is authorized by Team OS activation.
