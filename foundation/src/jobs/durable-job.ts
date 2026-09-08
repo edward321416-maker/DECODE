@@ -112,9 +112,12 @@ export class DurableJob {
       throw new DurableJobError(`cannot succeed from state ${this.state}`);
     }
     const attempt = this.currentAttempt();
+    // Failure-atomic: clone (which can throw for a non-cloneable value) BEFORE mutating any
+    // Attempt/Job state, so a throwing clone leaves the job untouched in RUNNING, not stuck
+    // half-transitioned with no stored evidence.
+    const clonedEvidence = deepCloneEvidence(resultEvidence);
     attempt.state = "SUCCEEDED";
-    // Ingress clone: the caller's original object must not alias stored history.
-    attempt.resultEvidence = deepCloneEvidence(resultEvidence);
+    attempt.resultEvidence = clonedEvidence;
     this.state = "SUCCEEDED";
   }
 
@@ -123,9 +126,10 @@ export class DurableJob {
       throw new DurableJobError(`cannot fail from state ${this.state}`);
     }
     const attempt = this.currentAttempt();
+    // Failure-atomic: see succeed() above.
+    const clonedEvidence = deepCloneEvidence(failureEvidence);
     attempt.state = "FAILED";
-    // Ingress clone: the caller's original object must not alias stored history.
-    attempt.failureEvidence = deepCloneEvidence(failureEvidence);
+    attempt.failureEvidence = clonedEvidence;
     this.state = "FAILED";
   }
 

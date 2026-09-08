@@ -243,3 +243,32 @@ test("finding B.5: mutating a Date obtained from a RETURNED reconciliation view 
   view?.externalObservedAt?.setFullYear(1999);
   assert.equal(job.getReconciliations()[0]?.externalObservedAt?.getFullYear(), 2025);
 });
+
+// Round-3 review finding 2: DurableJob completion must be failure-atomic. deepCloneEvidence()
+// (structuredClone) can throw for non-cloneable values (e.g. an object containing a function);
+// if the Attempt/Job state is mutated before that clone completes, a throwing clone leaves the
+// job stuck in a state that looks SUCCEEDED/FAILED-in-progress without stored evidence.
+test("finding round3-2: succeed() is failure-atomic when resultEvidence is non-cloneable", () => {
+  const { job } = makeJob();
+  job.start();
+  const nonCloneable = { fn: () => "not cloneable" };
+  assert.throws(() => job.succeed(nonCloneable));
+  assert.equal(job.getState(), "RUNNING");
+  assert.equal(job.getAttempts()[0]?.state, "RUNNING");
+  assert.equal(job.getAttempts()[0]?.resultEvidence, undefined);
+  // The job must remain genuinely usable afterward — a clean succeed() still works.
+  job.succeed({ ok: true });
+  assert.equal(job.getState(), "SUCCEEDED");
+});
+
+test("finding round3-2: fail() is failure-atomic when failureEvidence is non-cloneable", () => {
+  const { job } = makeJob();
+  job.start();
+  const nonCloneable = { fn: () => "not cloneable" };
+  assert.throws(() => job.fail(nonCloneable));
+  assert.equal(job.getState(), "RUNNING");
+  assert.equal(job.getAttempts()[0]?.state, "RUNNING");
+  assert.equal(job.getAttempts()[0]?.failureEvidence, undefined);
+  job.fail({ error: "real failure" });
+  assert.equal(job.getState(), "FAILED");
+});

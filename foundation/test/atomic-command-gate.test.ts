@@ -207,3 +207,31 @@ test("finding A regression guard: same key + same aggregate + same command concu
   assert.equal(b, "result");
   assert.equal(gate.getAggregateVersion("aggregate-3"), 1);
 });
+
+// Round-3 review finding 1: byte-unambiguous canonical encoding. A length-prefix computed from
+// JavaScript string .length (UTF-16 code units) but hashed via Node's default UTF-8 string
+// encoding lets distinct lone surrogates collapse to the same UTF-8 replacement bytes (U+FFFD),
+// producing identical hashed bytes for genuinely different runtime strings.
+test("finding round3-1: fingerprint distinguishes canonical commands differing only by lone surrogate", () => {
+  const a = fingerprintCommand(baseInput({ aggregateKey: "\uD800", operation: "op" }));
+  const b = fingerprintCommand(baseInput({ aggregateKey: "\uD801", operation: "op" }));
+  assert.notEqual(a, b);
+});
+
+test("finding round3-1: reusing an idempotency key across a lone-surrogate collision conflicts, mutation runs once", async () => {
+  const gate = new AtomicCommandGate();
+  let calls = 0;
+  await gate.execute("key-1", baseInput({ aggregateKey: "\uD800", operation: "op" }), () => {
+    calls += 1;
+    return "first";
+  });
+  await assert.rejects(
+    () =>
+      gate.execute("key-1", baseInput({ aggregateKey: "\uD801", operation: "op" }), () => {
+        calls += 1;
+        return "second";
+      }),
+    CommandConflictError,
+  );
+  assert.equal(calls, 1, "the second (conflicting) command's mutation callback must not execute");
+});

@@ -11,11 +11,17 @@ export interface CanonicalCommandInput {
 export class CommandConflictError extends Error {}
 export class StaleVersionError extends Error {}
 
-// Length-prefixed encoding so distinct field boundaries can never collide on serialized bytes
-// (a plain delimiter-joined concatenation lets a delimiter character inside one field shift a
-// field boundary and collide with a different canonical tuple).
-function encodeField(value: string): string {
-  return `${value.length}:${value}`;
+// Byte-length-prefixed UTF-16LE encoding. Field boundaries can never collide (the prefix states
+// exactly how many following bytes belong to this field), and UTF-16LE preserves every raw
+// UTF-16 code unit byte-for-byte -- including lone (unpaired) surrogates -- unlike a length
+// computed from JS string .length hashed via Node's default UTF-8 string encoding, which
+// substitutes any lone surrogate with the same U+FFFD replacement bytes regardless of which
+// surrogate it was, letting genuinely different runtime strings collapse to identical hash input.
+function encodeField(value: string): Buffer {
+  const bytes = Buffer.from(value, "utf16le");
+  const prefix = Buffer.alloc(4);
+  prefix.writeUInt32BE(bytes.length, 0);
+  return Buffer.concat([prefix, bytes]);
 }
 
 export function fingerprintCommand(input: CanonicalCommandInput): string {
