@@ -93,7 +93,7 @@ test("positive control: changing only a HISTORICAL ACTUAL TEST/PR-A occurrence l
   const results = collectTeamOsSemanticChecks(mutated);
   assert.equal(findCheck(results, "status-actual-test-not-yet-tested").passed, true,
     "a historical-only edit must not affect the current-state ACTUAL TEST check");
-  assert.equal(findCheck(results, "status-pr-a-not-overclaimed").passed, true,
+  assert.equal(findCheck(results, "status-pr-a-merged").passed, true,
     "a historical-only edit must not affect the current-state PR-A check");
 });
 
@@ -218,8 +218,8 @@ const MUTATIONS = [
     mutate: (c) => c.replace("UNKNOWN/null means missing, never zero.", "UNKNOWN/null means zero."),
     expectId: "evidence-unknown-not-zero" },
   { name: "20. Current PR-A phase changed to an unrecognized value", file: "docs/CURRENT_STATUS.md",
-    mutate: (c) => c.replaceAll("PR-A = IMPLEMENTATION READY FOR PRODUCT REVIEW", "PR-A = STARTED"),
-    expectId: "status-pr-a-not-overclaimed" },
+    mutate: (c) => c.replaceAll("PR-A = MERGED", "PR-A = STARTED"),
+    expectId: "status-pr-a-merged" },
   { name: "21. Stale queue instruction inserted into the current executable request", file: "handoff/CHATGPT_TO_CODEX.md",
     mutate: (c) => c + "\nThe first handoff establishes the engineering queue.\n",
     expectId: "stale-first-handoff" },
@@ -234,11 +234,11 @@ const MUTATIONS = [
       .replace("- `ACTUAL TEST = NOT YET TESTED` (current state).\n", "- `ACTUAL TEST = TESTED` (current state).\n")
       .replace("`ACTUAL TEST = NOT YET TESTED` remains explanatory prose for this state.", "`ACTUAL TEST = TESTED` remains explanatory prose for this state."),
     expectId: "status-actual-test-not-yet-tested" },
-  { name: "23. Current PR-A state overclaims a merge, historical occurrences left intact", file: "docs/CURRENT_STATUS.md",
+  { name: "23. Current PR-A state reverts to a stale pre-merge phrase, historical occurrences left intact", file: "docs/CURRENT_STATUS.md",
     mutate: (c) => c.replace(
-      "- `PR-A = IMPLEMENTATION READY FOR PRODUCT REVIEW` (current state).",
-      "- `PR-A = MERGED` (current state)."),
-    expectId: "status-pr-a-not-overclaimed" },
+      "- `PR-A = MERGED` (current state).",
+      "- `PR-A = IMPLEMENTATION READY FOR PRODUCT REVIEW` (current state)."),
+    expectId: "status-pr-a-merged" },
   { name: "24. Destructive-reset prohibition removed while C10's force-push sentence stays intact", file: "docs/COLLABORATION_RULES.md",
     mutate: (c) => c.replace("Force push and destructive reset remain prohibited.", "Force push remains prohibited."),
     expectId: "col-no-destructive-reset" },
@@ -313,13 +313,24 @@ const MUTATIONS = [
       ", GO/REVISE/STOP evidence, and does not authorize 50/150 expansion.",
       "."),
     expectId: "plan1a-preexecution-excluded-from-denominator" },
-  { name: "40. Current status overclaims deployment alongside an otherwise-valid PR-A phase phrase", file: "docs/CURRENT_STATUS.md",
-    // Isolated from #20/#23: the valid phase phrase stays intact, only a forbidden
-    // MERGED/DEPLOYED overclaim is added, proving the negative branch is independently enforced.
+  { name: "40. Current status overclaims deployment alongside an otherwise-valid MERGED PR-A phase phrase", file: "docs/CURRENT_STATUS.md",
+    // Isolated from #20/#23: the valid MERGED phase phrase stays intact, only a forbidden
+    // DEPLOYED overclaim is added, proving the negative branch is independently enforced.
     mutate: (c) => c.replace(
-      "- `PR-A = IMPLEMENTATION READY FOR PRODUCT REVIEW` (current state).",
-      "- `PR-A = IMPLEMENTATION READY FOR PRODUCT REVIEW` (current state). PR-A = DEPLOYED to production."),
-    expectId: "status-pr-a-not-overclaimed" },
+      "- `PR-A = MERGED` (current state).",
+      "- `PR-A = MERGED` (current state). PR-A = DEPLOYED to production."),
+    expectId: "status-pr-a-merged" },
+
+  // --- Post-merge canonical receipt scenarios (41-42) ---
+
+  { name: "41. Current handoff reverts to authorizing the already-completed PR-A implementation", file: "handoff/CHATGPT_TO_CODEX.md",
+    mutate: (c) => c.replace(
+      "No engineering implementation is currently authorized.",
+      "Implement PLAN 1A Canonical Foundation. Start from base 4e006c9512e7665cd9195c42c508435092cb672d."),
+    expectId: "handoff-post-pr-a-gate" },
+  { name: "42. Current status loses the no-next-implementation-authorized statement while remaining otherwise MERGED", file: "docs/CURRENT_STATUS.md",
+    mutate: (c) => c.replaceAll("no next implementation task is currently authorized", "further scope is pending"),
+    expectId: "status-no-next-scope-overclaim" },
 ];
 
 for (const scenario of MUTATIONS) {

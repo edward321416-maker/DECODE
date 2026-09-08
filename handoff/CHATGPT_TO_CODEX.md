@@ -1,28 +1,31 @@
 # ChatGPT → Codex
 
-Handoff ID: DECODE-PR-A-CANONICAL-FOUNDATION-IMPLEMENTATION | Version: 1.0 | Owner: Product/Business Lead
+Handoff ID: DECODE-POST-PR-A-NEXT-SCOPE-GATE | Version: 1.0 | Owner: Product/Business Lead
 
-## Current directive — PR-A Canonical Foundation implementation, GO
+## Current gate — PR-A merged and complete; no engineering implementation currently authorized
 
-Product completed the final independent GitHub audit and explicitly approved the PR-A implementation base under D022: `APPROVED_IMPLEMENTATION_BASE_SHA = 4e006c9512e7665cd9195c42c508435092cb672d`. Engineering is authorized to implement PLAN 1A Canonical Foundation end-to-end, per the exact scope, gates, and boundaries of that plan and its D023/D024 amendments.
+PR-A Canonical Foundation is merged and complete: PR #15 merged into main at `4c8dca77acbae11f435f0d90ee863353ebae8a91` (reviewed head `e20d7f3f21d93328f4fcfb381920353c429f7606`), following Product's `MERGE APPROVED` verdict and independent post-merge audit. No engineering implementation is currently authorized. This is a gate handoff, not an implementation request.
 
-- **Authority:** [PLAN 1A Canonical Foundation](../docs/superpowers/plans/2026-09-06-decode-plan-1a-canonical-foundation.md), amended by D023 (`U-DECODE-EVIDENCE-CONTRACT-2026-09-07`) and D024 (`U-DECODE-ACTUAL-PREEXECUTION-2026-09-07`) in [Decisions](../docs/DECISIONS.md). Integrated Spec and 10-Case ACTUAL TEST Protocol v1.0 remain unchanged authority documents. PR #5 remains OPEN / non-canonical and is not part of this scope.
-- **Scope:** canonical/idempotent command identity; ActorVerifier Port; Policy & Rights permit issuance, binding, and invalidation; durable external-job lifecycle with UNKNOWN_RESULT reconciliation and retry semantics; migration/version compatibility with non-destructive guards; the Provenance contract and its D023/D024 acceptance invariants. TypeScript/Node is LOCKED only for this package.
-- **Evidence boundary:** do not execute ACTUAL TEST; do not treat SIMULATED/SELF-BENCHMARK results as ACTUAL TEST evidence; do not authorize or generate the 50/150 expansion. `ACTUAL TEST = NOT YET TESTED` remains true for the DECODE product regardless of this implementation's own SELF-BENCHMARK verification (typecheck/tests/checker).
-- **Decision gate:** any newly discovered material Product/Architecture/Data/AI-Eval/Security-Rights/Scope-Cost decision returns through D017 as one decision at a time — Engineering does not choose unilaterally. Routine file layout, internal abstractions, naming, and test structure remain C11 Engineering choices.
-- **Integration boundary:** Engineering may implement, test, commit, push, and open the complete main-targeted PR. Engineering **must not merge PR-A**. The maximum Engineering claim before Product review is `PR-A = IMPLEMENTATION READY FOR PRODUCT REVIEW`.
+- **Do not rerun PR-A.** It is merged and complete; PLAN 1A Canonical Foundation's implementation scope (canonical/idempotent command identity, ActorVerifier Port, Policy & Rights, durable job lifecycle, migration guards, Provenance contract) is settled on main.
+- **No engineering task is currently open.** This file does not name a current development request.
+- **Do not start PLAN 1B merely because PR-A merged.** PR-A completing does not automatically authorize PLAN 1B or any other next implementation; per PLAN 1A Section 15, the Evidence/Blind Gold track remains gated by the approved real-test protocol and a separate Product evidence decision.
+- **Do not modify, merge, or close PR #5.** It remains OPEN / non-canonical / untouched by Team OS or PR-A work.
+- **Do not execute ACTUAL TEST.** `ACTUAL TEST = NOT YET TESTED` remains true; no consented real VOD or independent expert session has run for the DECODE product.
+- **Do not authorize the 50/150 expansion.** No such expansion is authorized by PR-A's merge.
+- **await Product's next explicitly approved scope.** Engineering does not select or begin the next product-development task unilaterally.
+- **New material decisions still return through D017.** Any materially unresolved Product/Architecture/Data/AI-Eval/Security-Rights/Scope-Cost choice, whether surfaced during a mechanical correction or during future planning, goes through the one-decision-at-a-time interview before lock or implementation — it is not decided unilaterally by Engineering.
 
-Authority: D021 / U-DECODE-TEAM-OS-2026-09-06, D022 / U-DECODE-TEAM-OS-SEQUENCE-2026-09-06, D023 / U-DECODE-EVIDENCE-CONTRACT-2026-09-07, D024 / U-DECODE-ACTUAL-PREEXECUTION-2026-09-07 (all settled, none reopened by this directive).
+Authority: D021 / U-DECODE-TEAM-OS-2026-09-06, D022 / U-DECODE-TEAM-OS-SEQUENCE-2026-09-06, D023 / U-DECODE-EVIDENCE-CONTRACT-2026-09-07, D024 / U-DECODE-ACTUAL-PREEXECUTION-2026-09-07 (all settled, none reopened by this gate). PLAN 1A Canonical Foundation implementation authority is exhausted by the completed, merged PR-A.
 
-## Explicit exclusions
+## Explicit exclusions (HISTORICAL / DO NOT EXECUTE beyond this scope)
 
-- Do not rerun or reopen D023 or D024 — both are locked and merged.
-- Do not change the three authority documents (Integrated Spec, PLAN 1A, 10-Case ACTUAL TEST Protocol) beyond what PLAN 1A's own amendments already record.
-- Do not execute ACTUAL TEST or generate/authorize the 50/150 case expansion.
-- Do not modify, merge, or close PR #5.
+- PR-A Canonical Foundation implementation is COMPLETE and NOT in scope of this gate — do not reopen it.
+- PLAN 1B implementation is NOT in scope of this gate and is not authorized by PR-A's merge.
+- Any change to the three authority documents (Integrated Spec, PLAN 1A, 10-Case ACTUAL TEST Protocol), ACTUAL TEST execution, or 50/150 case generation is NOT in scope.
+- The earlier M0, Team OS Stage 1/2/3 (+ audit correction), D023, D024, and PR-A implementation/review-round requests remain historical provenance only, per the prior handoff revisions preserved in Git history.
 
 ## Integration
 
-Engineering follows [Collaboration Rules](../docs/COLLABORATION_RULES.md) C1–C11: implement with genuine TDD (RED must demonstrate missing required behavior, not import/syntax/setup failure), verify the whole PR against `APPROVED_IMPLEMENTATION_BASE_SHA..HEAD` per PLAN 1A Section 11, and open — but do not merge — the resulting PR. The reverse handoff ([CODEX_TO_CHATGPT.md](CODEX_TO_CHATGPT.md)) reports measured results once implementation evidence exists.
+No engineering task is currently open under this gate handoff. If/when Product approves a specific next scope and issues a new request, that request will be a separate handoff revision naming its own integration method per [Collaboration Rules](../docs/COLLABORATION_RULES.md).
 
-`PR-A = IMPLEMENTATION READY FOR PRODUCT REVIEW` (once the PR is opened; see [Current Status](../docs/CURRENT_STATUS.md) for the exact current state). `ACTUAL TEST = NOT YET TESTED`.
+`PR-A = MERGED`. `ACTUAL TEST = NOT YET TESTED`.
