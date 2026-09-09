@@ -1,0 +1,162 @@
+{
+  "schemaVersion": "1.0.0",
+  "runId": "readiness_efb4c87a-f762-40b4-842c-2213d40bdc49",
+  "startedAt": "2026-09-09T07:03:09.495Z",
+  "completedAt": "2026-09-09T07:03:09.511Z",
+  "gates": [
+    {
+      "gateId": "simulated-only-input",
+      "mandatory": true,
+      "status": "PASS",
+      "reasonCodes": []
+    },
+    {
+      "gateId": "evidence-anti-promotion",
+      "mandatory": true,
+      "status": "PASS",
+      "reasonCodes": []
+    },
+    {
+      "gateId": "consent-guardian-assent-rehearsal",
+      "mandatory": true,
+      "status": "PASS",
+      "reasonCodes": []
+    },
+    {
+      "gateId": "source-rights-rehearsal",
+      "mandatory": true,
+      "status": "PASS",
+      "reasonCodes": []
+    },
+    {
+      "gateId": "second-expert-qualification-rehearsal",
+      "mandatory": true,
+      "status": "PASS",
+      "reasonCodes": []
+    },
+    {
+      "gateId": "main10-composition-freeze",
+      "mandatory": true,
+      "status": "PASS",
+      "reasonCodes": []
+    },
+    {
+      "gateId": "reserve3-allocation-freeze",
+      "mandatory": true,
+      "status": "PASS",
+      "reasonCodes": []
+    },
+    {
+      "gateId": "reserve-replacement",
+      "mandatory": true,
+      "status": "PASS",
+      "reasonCodes": []
+    },
+    {
+      "gateId": "second-expert-planned-subset",
+      "mandatory": true,
+      "status": "PASS",
+      "reasonCodes": []
+    },
+    {
+      "gateId": "freeze-immutability",
+      "mandatory": true,
+      "status": "PASS",
+      "reasonCodes": []
+    },
+    {
+      "gateId": "measurement-preregistration-freeze",
+      "mandatory": true,
+      "status": "PASS",
+      "reasonCodes": []
+    },
+    {
+      "gateId": "software-schema-protocol-fixture-gate-hashing",
+      "mandatory": true,
+      "status": "PASS",
+      "reasonCodes": []
+    },
+    {
+      "gateId": "timing-pause-interruption-contract",
+      "mandatory": true,
+      "status": "PASS",
+      "reasonCodes": []
+    },
+    {
+      "gateId": "withdrawal-future-use-invalidation",
+      "mandatory": true,
+      "status": "PASS",
+      "reasonCodes": []
+    },
+    {
+      "gateId": "retention-deletion-receipts",
+      "mandatory": true,
+      "status": "PASS",
+      "reasonCodes": []
+    },
+    {
+      "gateId": "foundation-policy-rights-integration",
+      "mandatory": true,
+      "status": "PASS",
+      "reasonCodes": []
+    },
+    {
+      "gateId": "local-transcription-port",
+      "mandatory": true,
+      "status": "NOT_EXECUTED",
+      "reasonCodes": [
+        "LOCAL_TRANSCRIPTION_UNAVAILABLE"
+      ]
+    },
+    {
+      "gateId": "external-egress-default-block",
+      "mandatory": true,
+      "status": "PASS",
+      "reasonCodes": [
+        "EXTERNAL_EGRESS_BLOCKED"
+      ]
+    },
+    {
+      "gateId": "canonical-provenance-anti-promotion",
+      "mandatory": true,
+      "status": "PASS",
+      "reasonCodes": []
+    },
+    {
+      "gateId": "metric-computation-contract",
+      "mandatory": true,
+      "status": "PASS",
+      "reasonCodes": []
+    },
+    {
+      "gateId": "stale-run-detection",
+      "mandatory": true,
+      "status": "PASS",
+      "reasonCodes": []
+    },
+    {
+      "gateId": "end-to-end-synthetic-rehearsal",
+      "mandatory": true,
+      "status": "PASS",
+      "reasonCodes": []
+    }
+  ],
+  "readinessVerdict": "BLOCKED",
+  "evidence": {
+    "evaluationMode": "SELF_BENCHMARK",
+    "dataOrigin": "SIMULATED",
+    "executionStatus": "BLOCKED"
+  },
+  "frozenHashes": {
+    "readinessSource": "dd8a2429fed2e2d4e9279555a427377f6ed29470b4c8ff482b9187ab0c2c862d",
+    "foundationSource": "5b051d9913ba3ce02ab0a9a132f99a2f11c2a1d1b323fe87feb125905327c7ae",
+    "protocol": "11b42a0be56cc761a55929d642c9a5ad1d65d5a0f21d46fdf158f46b23dc2ef0",
+    "schema": "92521fc3cbd964bdc9f584a991b89fddaa5754ed1cc96d6d42445338669c1305",
+    "fixtureSet": "861d8f3e2706f3e647c1712d7cec727907151a52efc6d081615f3f4e0d48e0ee",
+    "gateDefinition": "a38454a16f51b5213dc3d0a3b00cd1bb259c22305db8d5ac7ff8d84329374166"
+  },
+  "staleness": {
+    "stale": false,
+    "reasonCodes": []
+  }
+}

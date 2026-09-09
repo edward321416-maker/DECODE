@@ -33,6 +33,25 @@ const SEMANTIC_FILES = [
   "data/schemas/README.md", "docs/EXPERIMENT_PROTOCOL.md",
   "docs/DECISIONS.md", "docs/CURRENT_STATUS.md",
   "docs/superpowers/plans/2026-09-06-decode-plan-1a-canonical-foundation.md",
+  "foundation/src/index.ts", "foundation/package.json",
+  "readiness/src/cli.ts",
+  "readiness/src/domain/contracts.ts", "readiness/src/domain/frozen-hashes.ts",
+  "readiness/src/domain/frozen-hash-inputs.ts", "readiness/src/domain/run-id.ts",
+  "readiness/src/fixtures/contracts.ts", "readiness/src/fixtures/registry.ts",
+  "readiness/src/foundation-api.ts",
+  "readiness/src/gates/gate-catalog.ts", "readiness/src/gates/gate-catalog-types.ts",
+  "readiness/src/gates/input-gates.ts", "readiness/src/gates/integration-gates.ts",
+  "readiness/src/gates/metric-gates.ts", "readiness/src/gates/operational-gates.ts",
+  "readiness/src/gates/protocol-gates.ts",
+  "readiness/src/index.ts", "readiness/src/persistence/run-artifact.ts",
+  "readiness/src/ports/local-transcription-port.ts",
+  "readiness/src/protocol/composition.ts", "readiness/src/protocol/freeze.ts",
+  "readiness/src/protocol/measurement.ts", "readiness/src/protocol/reserve.ts",
+  "readiness/src/protocol/second-expert.ts", "readiness/src/protocol/timing.ts",
+  "readiness/src/rehearsal/consent.ts", "readiness/src/rehearsal/retention.ts",
+  "readiness/src/rehearsal/second-expert-qualification.ts", "readiness/src/rehearsal/source-rights.ts",
+  "readiness/src/rehearsal/withdrawal.ts",
+  "readiness/src/runner/current-readiness.ts", "readiness/src/runner/readiness-runner.ts",
 ];
 
 const baseline = loadCanonicalTexts(root, SEMANTIC_FILES);
@@ -331,6 +350,32 @@ const MUTATIONS = [
   { name: "42. Current status loses the no-next-implementation-authorized statement while remaining otherwise MERGED", file: "docs/CURRENT_STATUS.md",
     mutate: (c) => c.replaceAll("no next implementation task is currently authorized", "further scope is pending"),
     expectId: "status-no-next-scope-overclaim" },
+
+  // --- DRY Readiness implementation anti-drift scenarios (43-48) ---
+
+  { name: "43. foundation/src/index.ts changes as part of readiness implementation", file: "foundation/src/index.ts",
+    mutate: (c) => c + "\nexport * from \"./extra.js\";\n",
+    expectId: "readiness-foundation-index-unchanged" },
+  { name: "44. foundation/package.json changes as part of readiness implementation", file: "foundation/package.json",
+    mutate: (c) => c.replace("\"version\": \"0.1.0\"", "\"version\": \"0.2.0\""),
+    expectId: "readiness-foundation-package-unchanged" },
+  { name: "45. gate catalog drops a mandatory Section 13 gate ID", file: "readiness/src/gates/gate-catalog-types.ts",
+    mutate: (c) => c.replace("  \"stale-run-detection\",\n", ""),
+    expectId: "readiness-gate-catalog-exact-ids" },
+  { name: "46. CLI adds an arbitrary media/path/URL entry point", file: "readiness/src/cli.ts",
+    mutate: (c) => c.replace(
+      "const KNOWN_FLAGS = new Set([\"--scenario\", \"--output-dir\"]);",
+      "const KNOWN_FLAGS = new Set([\"--scenario\", \"--output-dir\", \"--vod\"]);"),
+    expectId: "readiness-cli-known-flags-exact" },
+  { name: "47. run artifact schema collapses readinessVerdict into evidence/executionStatus", file: "readiness/src/persistence/run-artifact.ts",
+    mutate: (c) => c.replace("readinessVerdict: run.readinessVerdict,\n    evidence: run.evidence,\n", "evidence: run.evidence,\n"),
+    expectId: "readiness-run-artifact-schema-not-collapsed" },
+  { name: "48. readiness domain source introduces an assignable REAL/ACTUAL_TEST provenance literal", file: "readiness/src/domain/contracts.ts",
+    mutate: (c) => c + "\nexport const LEAK = \"ACTUAL_TEST\";\n",
+    expectId: "readiness-no-forbidden-provenance-literal" },
+  { name: "49. relationship provenance enum drifts from the exact Protocol §8 canonical six values", file: "readiness/src/fixtures/contracts.ts",
+    mutate: (c) => c.replace("  \"OTHER\",\n] as const;", "  \"OTHER\",\n  \"INDEPENDENT_ANALYST\",\n] as const;"),
+    expectId: "readiness-relationship-provenance-exact-enum" },
 ];
 
 for (const scenario of MUTATIONS) {

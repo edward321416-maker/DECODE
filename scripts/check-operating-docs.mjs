@@ -7,6 +7,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
 import { execFileSync } from "node:child_process";
+import { createHash } from "node:crypto";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const read = (name) => fs.readFileSync(path.join(root, name), "utf8").replace(/\r\n/g, "\n");
@@ -305,7 +306,62 @@ export function collectTeamOsSemanticChecks(texts) {
     plan1a.includes("GO/REVISE/STOP evidence") &&
     plan1a.includes("does not authorize 50/150 expansion"));
 
+  // K — DRY Readiness implementation (D025-D037) anti-drift guards. These are structural
+  // checks over readiness/ source text and the foundation/ files it must never touch — not a
+  // TypeScript compiler and not a ban on legitimate documentation mentioning REAL/ACTUAL_TEST.
+  {
+    const foundationIndex = get("foundation/src/index.ts");
+    chk("readiness-foundation-index-unchanged",
+      sha256Hex(foundationIndex) === "b07c48e5288b14e0d7c75739e828b6ee5bd40893ddd90295e983be1de9460784");
+    const foundationPackage = get("foundation/package.json");
+    chk("readiness-foundation-package-unchanged",
+      sha256Hex(foundationPackage) === "a644bdaa798948235da60296f82159e49d9c825d8963810a84da3ebfea8f733e");
+
+    const gateCatalogTypes = get("readiness/src/gates/gate-catalog-types.ts");
+    const idsBlock = gateCatalogTypes.match(/MANDATORY_GATE_IDS = \[([\s\S]*?)\] as const;/)?.[1] || "";
+    const ids = [...idsBlock.matchAll(/"([a-z0-9-]+)"/g)].map((m) => m[1]);
+    const expectedGateIds = [
+      "simulated-only-input", "evidence-anti-promotion", "consent-guardian-assent-rehearsal",
+      "source-rights-rehearsal", "second-expert-qualification-rehearsal", "main10-composition-freeze",
+      "reserve3-allocation-freeze", "reserve-replacement", "second-expert-planned-subset",
+      "freeze-immutability", "measurement-preregistration-freeze",
+      "software-schema-protocol-fixture-gate-hashing", "timing-pause-interruption-contract",
+      "withdrawal-future-use-invalidation", "retention-deletion-receipts",
+      "foundation-policy-rights-integration", "local-transcription-port",
+      "external-egress-default-block", "canonical-provenance-anti-promotion",
+      "metric-computation-contract", "stale-run-detection", "end-to-end-synthetic-rehearsal",
+    ];
+    chk("readiness-gate-catalog-exact-ids", same(ids, expectedGateIds));
+
+    const cli = get("readiness/src/cli.ts");
+    const flagsBlock = cli.match(/KNOWN_FLAGS = new Set\(\[([^\]]*)\]\)/)?.[1] || "";
+    const flags = [...flagsBlock.matchAll(/"([^"]+)"/g)].map((m) => m[1]);
+    chk("readiness-cli-known-flags-exact", same(flags, ["--scenario", "--output-dir"]));
+
+    const runArtifact = get("readiness/src/persistence/run-artifact.ts");
+    chk("readiness-run-artifact-schema-not-collapsed",
+      runArtifact.includes("readinessVerdict: run.readinessVerdict,") &&
+      runArtifact.includes("evidence: run.evidence,"));
+
+    const fixturesContracts = get("readiness/src/fixtures/contracts.ts");
+    const relBlock = fixturesContracts.match(/RELATIONSHIP_PROVENANCE_VALUES = \[([\s\S]*?)\] as const;/)?.[1] || "";
+    const relValues = [...relBlock.matchAll(/"([A-Z_]+)"/g)].map((m) => m[1]);
+    chk("readiness-relationship-provenance-exact-enum", same(relValues, [
+      "NONE", "FORMER_TEAMMATE", "CURRENT_TEAMMATE", "FORMER_COACHING_RELATION", "CURRENT_COACHING_RELATION", "OTHER",
+    ]));
+
+    const readinessProductionFiles = [...texts.keys()].filter((f) => f.startsWith("readiness/src/"));
+    const provenanceSurface = readinessProductionFiles.map((f) => get(f)).join("\n");
+    chk("readiness-no-forbidden-provenance-literal",
+      readinessProductionFiles.length > 0 &&
+      !provenanceSurface.includes("\"REAL\"") && !provenanceSurface.includes("\"ACTUAL_TEST\""));
+  }
+
   return c;
+}
+
+function sha256Hex(text) {
+  return createHash("sha256").update(text, "utf8").digest("hex");
 }
 
 /** Parse project CSV rows, including quoted comma/newline values; reject unmatched quotes. */
@@ -340,7 +396,7 @@ try {
   if (!Array.isArray(files) || files.some((f) => typeof f !== "string")) {
     throw new Error("Publication inventory must list file paths");
   }
-  check("inventory-version", inventory.version === 7);
+  check("inventory-version", inventory.version === 8);
   check("inventory-sorted-unique", same(files, [...new Set(files)].sort()));
   const allowed = new Set(files);
   const required = [

@@ -1,6 +1,7 @@
 # dependencies
 /node_modules
 /foundation/node_modules
+/readiness/node_modules
 
 # Next.js build output
 /.next
@@ -24,3 +25,7 @@ next-env.d.ts
 # operating system files
 .DS_Store
 Thumbs.db
+
+# local tool cache state
+.omc/
+**/.omc/
