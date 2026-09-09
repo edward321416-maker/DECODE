@@ -1,6 +1,7 @@
 # dependencies
 /node_modules
 /foundation/node_modules
+/readiness/node_modules
 
 # Next.js build output
 /.next
