@@ -4,7 +4,7 @@ import {
   computeNearestRankP90,
   computeContextInsufficiency,
   computeTaxonomyEscape,
-  computeDirectionalAgreement,
+  computeDirectionalAgreementFromPairs,
   countUnnecessaryFields,
 } from "../protocol/measurement.js";
 import { frozenHashSetsEqual } from "../domain/frozen-hashes.js";
@@ -32,9 +32,9 @@ export const metricComputationContractGate: GateDefinition = {
     const outcomes = context.fixture.founderCaseOutcomes;
     const contextInsufficiency = computeContextInsufficiency(outcomes);
     const taxonomyEscape = computeTaxonomyEscape(outcomes);
-    const directionalAgreement = computeDirectionalAgreement(outcomes);
+    const directionalAgreement = computeDirectionalAgreementFromPairs(context.fixture.secondExpertPairs);
     const unnecessary = countUnnecessaryFields(outcomes);
-    const ratiosValid = [contextInsufficiency.ratio, taxonomyEscape.ratio, directionalAgreement.ratio].every(
+    const ratiosValid = [contextInsufficiency.ratio, taxonomyEscape.ratio, directionalAgreement.directionalAgreementRatio].every(
       (r) => r === null || (r >= 0 && r <= 1),
     );
     if (!ratiosValid || unnecessary < 0) {

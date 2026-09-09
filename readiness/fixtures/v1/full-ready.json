@@ -206,70 +206,60 @@
       "caseId": "C1",
       "contextSufficiency": "SUFFICIENT",
       "taxonomy": "PRINCIPLE_1",
-      "directionalAgreement": "AGREE",
       "unnecessaryCoreFields": 0
     },
     {
       "caseId": "C2",
       "contextSufficiency": "SUFFICIENT",
       "taxonomy": "PRINCIPLE_2",
-      "directionalAgreement": "AGREE",
       "unnecessaryCoreFields": 0
     },
     {
       "caseId": "C3",
       "contextSufficiency": "SUFFICIENT",
       "taxonomy": "PRINCIPLE_1",
-      "directionalAgreement": "DISAGREE",
       "unnecessaryCoreFields": 1
     },
     {
       "caseId": "C4",
       "contextSufficiency": "INSUFFICIENT_CONTEXT",
       "taxonomy": "OTHER",
-      "directionalAgreement": "INSUFFICIENT_CONTEXT",
       "unnecessaryCoreFields": 0
     },
     {
       "caseId": "C5",
       "contextSufficiency": "SUFFICIENT",
       "taxonomy": "PRINCIPLE_3",
-      "directionalAgreement": "AGREE",
       "unnecessaryCoreFields": 0
     },
     {
       "caseId": "C6",
       "contextSufficiency": "SUFFICIENT",
       "taxonomy": "PRINCIPLE_3",
-      "directionalAgreement": "UNCERTAIN",
       "unnecessaryCoreFields": 0
     },
     {
       "caseId": "A1",
       "contextSufficiency": "SUFFICIENT",
       "taxonomy": "NEW_PRINCIPLE_NEEDED",
-      "directionalAgreement": "AGREE",
       "unnecessaryCoreFields": 0
     },
     {
       "caseId": "A2",
       "contextSufficiency": "SUFFICIENT",
       "taxonomy": "PRINCIPLE_2",
-      "directionalAgreement": "AGREE",
       "unnecessaryCoreFields": 0
     },
     {
       "caseId": "A3",
       "contextSufficiency": "SUFFICIENT",
       "taxonomy": "PRINCIPLE_1",
-      "directionalAgreement": "AGREE",
       "unnecessaryCoreFields": 0
     },
     {
       "caseId": "A4",
       "contextSufficiency": "SUFFICIENT",
       "taxonomy": "PRINCIPLE_3",
-      "directionalAgreement": "AGREE",
       "unnecessaryCoreFields": 0
     }
   ],
@@ -279,5 +269,27 @@
     "sampleRateHz": 16000
   },
   "actorId": "synthetic-actor-1",
-  "externalEgressDestination": "synthetic-provider-endpoint"
+  "externalEgressDestination": "synthetic-provider-endpoint",
+  "secondExpertPairs": [
+    {
+      "caseId": "C1",
+      "founderVerdict": "OPTIMAL",
+      "secondExpertVerdict": "OPTIMAL"
+    },
+    {
+      "caseId": "C2",
+      "founderVerdict": "ACCEPTABLE",
+      "secondExpertVerdict": "ACCEPTABLE"
+    },
+    {
+      "caseId": "A1",
+      "founderVerdict": "ACCEPTABLE",
+      "secondExpertVerdict": "OPTIMAL"
+    },
+    {
+      "caseId": "A2",
+      "founderVerdict": "OPTIMAL",
+      "secondExpertVerdict": "ACCEPTABLE"
+    }
+  ]
 }

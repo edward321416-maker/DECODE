@@ -1,5 +1,5 @@
 import { FrozenValue } from "./freeze.js";
-import type { FounderCaseOutcomeFixture } from "../fixtures/contracts.js";
+import type { FounderCaseOutcomeFixture, GoldVerdictLabel, SecondExpertPairFixture } from "../fixtures/contracts.js";
 
 function finiteValues(values: readonly number[]): number[] {
   return values.filter((v) => Number.isFinite(v) && v >= 0);
@@ -51,29 +51,71 @@ export function computeTaxonomyEscape(outcomes: readonly FounderCaseOutcomeFixtu
   return { numerator, denominator, ratio: denominator === 0 ? null : numerator / denominator };
 }
 
-export interface DirectionalAgreementResult {
-  eligibleCount: number;
-  agreeCount: number;
-  ratio: number | null;
-  excludedCount: number;
-  plannedPairCoverage: number;
+const POSITIVE_CATEGORY: readonly GoldVerdictLabel[] = ["OPTIMAL", "ACCEPTABLE"];
+const NEGATIVE_CATEGORY: readonly GoldVerdictLabel[] = ["SUBOPTIMAL", "ERROR"];
+const EXCLUDED_CATEGORY: readonly GoldVerdictLabel[] = ["UNCERTAIN", "INSUFFICIENT_CONTEXT"];
+const PLANNED_SECOND_EXPERT_PAIRS = 4;
+
+function verdictCategory(verdict: GoldVerdictLabel): "POSITIVE" | "NEGATIVE" | "EXCLUDED" {
+  if (POSITIVE_CATEGORY.includes(verdict)) return "POSITIVE";
+  if (NEGATIVE_CATEGORY.includes(verdict)) return "NEGATIVE";
+  return "EXCLUDED";
 }
 
-/** Excludes UNCERTAIN and INSUFFICIENT_CONTEXT (and null/unknown) from the
- * agreement ratio; reports planned-pair coverage (eligible / total planned)
- * as a separate figure so exclusion is visible, never silently dropped. */
-export function computeDirectionalAgreement(
-  outcomes: readonly FounderCaseOutcomeFixture[],
-): DirectionalAgreementResult {
-  const eligible = outcomes.filter((o) => o.directionalAgreement === "AGREE" || o.directionalAgreement === "DISAGREE");
-  const agreeCount = eligible.filter((o) => o.directionalAgreement === "AGREE").length;
-  const eligibleCount = eligible.length;
+export interface DirectionalAgreementReport {
+  plannedPairs: number;
+  completedPairs: number;
+  eligiblePairs: number;
+  excludedPairs: number;
+  directionalAgreementCount: number;
+  directionalAgreementRatio: number | null;
+  exactVerdictMatches: number;
+  exactVerdictDisagreements: number;
+  coverageRatio: number;
+  incompleteCoverage: boolean;
+  reasonCodes: string[];
+}
+
+/**
+ * Protocol §16: directional agreement is computed from the exactly 4
+ * planned Second Expert pairs' real Founder/Second-Expert verdicts, never
+ * from a pre-baked AGREE/DISAGREE field. Positive = OPTIMAL/ACCEPTABLE,
+ * Negative = SUBOPTIMAL/ERROR; UNCERTAIN/INSUFFICIENT_CONTEXT on either
+ * side excludes the pair from the directional denominator. Exact-verdict
+ * matches/disagreements are reported separately from directional
+ * (category-level) agreement. Incomplete Second Expert coverage
+ * (`secondExpertVerdict: null`) is reported explicitly, never silently
+ * dropped or coerced into a disagreement.
+ */
+export function computeDirectionalAgreementFromPairs(
+  pairs: readonly SecondExpertPairFixture[],
+): DirectionalAgreementReport {
+  if (pairs.length !== PLANNED_SECOND_EXPERT_PAIRS) {
+    throw new RangeError(`expected exactly 4 planned Second Expert pairs, got ${pairs.length}`);
+  }
+  const completed = pairs.filter((p): p is SecondExpertPairFixture & { secondExpertVerdict: GoldVerdictLabel } =>
+    p.secondExpertVerdict !== null,
+  );
+  const eligible = completed.filter(
+    (p) => verdictCategory(p.founderVerdict) !== "EXCLUDED" && verdictCategory(p.secondExpertVerdict) !== "EXCLUDED",
+  );
+  const directionalAgreementCount = eligible.filter(
+    (p) => verdictCategory(p.founderVerdict) === verdictCategory(p.secondExpertVerdict),
+  ).length;
+  const exactVerdictMatches = eligible.filter((p) => p.founderVerdict === p.secondExpertVerdict).length;
+  const incompleteCoverage = completed.length < PLANNED_SECOND_EXPERT_PAIRS;
   return {
-    eligibleCount,
-    agreeCount,
-    ratio: eligibleCount === 0 ? null : agreeCount / eligibleCount,
-    excludedCount: outcomes.length - eligibleCount,
-    plannedPairCoverage: outcomes.length === 0 ? 0 : eligibleCount / outcomes.length,
+    plannedPairs: PLANNED_SECOND_EXPERT_PAIRS,
+    completedPairs: completed.length,
+    eligiblePairs: eligible.length,
+    excludedPairs: completed.length - eligible.length,
+    directionalAgreementCount,
+    directionalAgreementRatio: eligible.length === 0 ? null : directionalAgreementCount / eligible.length,
+    exactVerdictMatches,
+    exactVerdictDisagreements: eligible.length - exactVerdictMatches,
+    coverageRatio: completed.length / PLANNED_SECOND_EXPERT_PAIRS,
+    incompleteCoverage,
+    reasonCodes: incompleteCoverage ? ["INCOMPLETE_SECOND_EXPERT_COVERAGE"] : [],
   };
 }
 

@@ -3,7 +3,23 @@ export type PrimaryFamily =
   | "FIGHT_SELECTION"
   | "POST_CONTACT_DECISION"
   | "TRADEABILITY_SPACING";
-export type GoldVerdictLabel = "OPTIMAL" | "ACCEPTABLE" | "SUBOPTIMAL" | "POOR";
+/** Canonical verdict vocabulary (Founder Gold and Second Expert alike). */
+export const CANONICAL_VERDICT_VALUES = [
+  "OPTIMAL",
+  "ACCEPTABLE",
+  "SUBOPTIMAL",
+  "ERROR",
+  "UNCERTAIN",
+  "INSUFFICIENT_CONTEXT",
+] as const;
+
+export type GoldVerdictLabel = (typeof CANONICAL_VERDICT_VALUES)[number];
+
+export function assertValidGoldVerdict(value: string): asserts value is GoldVerdictLabel {
+  if (!(CANONICAL_VERDICT_VALUES as readonly string[]).includes(value)) {
+    throw new FixtureValidationError(`invalid canonical verdict: ${value}`);
+  }
+}
 
 export interface Main10CaseFixture {
   caseId: string;
@@ -78,8 +94,21 @@ export interface FounderCaseOutcomeFixture {
   caseId: string;
   contextSufficiency: "SUFFICIENT" | "INSUFFICIENT_CONTEXT" | null;
   taxonomy: string;
-  directionalAgreement: "AGREE" | "DISAGREE" | "UNCERTAIN" | "INSUFFICIENT_CONTEXT" | null;
   unnecessaryCoreFields: number;
+}
+
+/**
+ * Protocol §16: one of the exactly 4 planned Second Expert slots. Each pair
+ * preserves the Founder verdict and the Second Expert verdict separately —
+ * directional agreement is computed from real verdict pairs, never from a
+ * pre-baked AGREE/DISAGREE field. `secondExpertVerdict: null` means the
+ * pair has not yet completed (incomplete coverage), never treated as a
+ * disagreement or excluded silently.
+ */
+export interface SecondExpertPairFixture {
+  caseId: string;
+  founderVerdict: GoldVerdictLabel;
+  secondExpertVerdict: GoldVerdictLabel | null;
 }
 
 export interface LocalTranscriptionFixtureData {
@@ -102,6 +131,7 @@ export interface SyntheticFixtureSet {
   sourceRecords: SourceRecordFixture[];
   qualificationCandidates: QualificationCandidateFixture[];
   founderCaseOutcomes: FounderCaseOutcomeFixture[];
+  secondExpertPairs: SecondExpertPairFixture[];
   localTranscription: LocalTranscriptionFixtureData | null;
   actorId: string;
   externalEgressDestination: string;
