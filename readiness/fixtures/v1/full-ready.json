@@ -55,7 +55,8 @@
   "qualificationCandidates": [
     { "candidateId": "expert-eligible-1", "relationshipProvenance": "INDEPENDENT_ANALYST", "founderRecommended": false, "evidenceLevel": "SUFFICIENT" },
     { "candidateId": "expert-insufficient-1", "relationshipProvenance": "TRAINING_PARTNER", "founderRecommended": false, "evidenceLevel": "INSUFFICIENT" },
-    { "candidateId": "expert-founder-only-1", "relationshipProvenance": "COACHING_STAFF", "founderRecommended": true, "evidenceLevel": "NONE" }
+    { "candidateId": "expert-founder-only-1", "relationshipProvenance": "COACHING_STAFF", "founderRecommended": true, "evidenceLevel": "NONE" },
+    { "candidateId": "expert-disqualified-1", "relationshipProvenance": "FORMER_COMPETITOR", "founderRecommended": false, "evidenceLevel": "SUFFICIENT", "disqualified": true }
   ],
   "founderCaseOutcomes": [
     { "caseId": "C1", "contextSufficiency": "SUFFICIENT", "taxonomy": "PRINCIPLE_1", "directionalAgreement": "AGREE", "unnecessaryCoreFields": 0 },

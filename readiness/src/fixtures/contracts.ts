@@ -61,6 +61,7 @@ export interface QualificationCandidateFixture {
   relationshipProvenance: RelationshipProvenance;
   founderRecommended: boolean;
   evidenceLevel: "SUFFICIENT" | "INSUFFICIENT" | "NONE";
+  disqualified?: boolean;
 }
 
 export interface FounderCaseOutcomeFixture {

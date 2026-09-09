@@ -186,6 +186,13 @@
       "relationshipProvenance": "COACHING_STAFF",
       "founderRecommended": true,
       "evidenceLevel": "NONE"
+    },
+    {
+      "candidateId": "expert-disqualified-1",
+      "relationshipProvenance": "FORMER_COMPETITOR",
+      "founderRecommended": false,
+      "evidenceLevel": "SUFFICIENT",
+      "disqualified": true
     }
   ],
   "founderCaseOutcomes": [
