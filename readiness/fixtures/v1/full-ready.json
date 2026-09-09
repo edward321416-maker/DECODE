@@ -1,0 +1,79 @@
+{
+  "fixtureVersion": "1.0.0",
+  "evaluationMode": "SELF_BENCHMARK",
+  "dataOrigin": "SIMULATED",
+  "rehearsal": true,
+  "main10": [
+    { "caseId": "C1", "clarity": "CLEAR", "family": "FIGHT_SELECTION", "stratumId": "CLEAR-FIGHT_SELECTION" },
+    { "caseId": "C2", "clarity": "CLEAR", "family": "FIGHT_SELECTION", "stratumId": "CLEAR-FIGHT_SELECTION" },
+    { "caseId": "C3", "clarity": "CLEAR", "family": "POST_CONTACT_DECISION", "stratumId": "CLEAR-POST_CONTACT_DECISION" },
+    { "caseId": "C4", "clarity": "CLEAR", "family": "POST_CONTACT_DECISION", "stratumId": "CLEAR-POST_CONTACT_DECISION" },
+    { "caseId": "C5", "clarity": "CLEAR", "family": "TRADEABILITY_SPACING", "stratumId": "CLEAR-TRADEABILITY_SPACING" },
+    { "caseId": "C6", "clarity": "CLEAR", "family": "TRADEABILITY_SPACING", "stratumId": "CLEAR-TRADEABILITY_SPACING" },
+    { "caseId": "A1", "clarity": "AMBIGUOUS", "family": "FIGHT_SELECTION", "stratumId": "AMBIGUOUS-FIGHT_SELECTION" },
+    { "caseId": "A2", "clarity": "AMBIGUOUS", "family": "FIGHT_SELECTION", "stratumId": "AMBIGUOUS-FIGHT_SELECTION" },
+    { "caseId": "A3", "clarity": "AMBIGUOUS", "family": "POST_CONTACT_DECISION", "stratumId": "AMBIGUOUS-POST_CONTACT_DECISION" },
+    { "caseId": "A4", "clarity": "AMBIGUOUS", "family": "TRADEABILITY_SPACING", "stratumId": "AMBIGUOUS-TRADEABILITY_SPACING" }
+  ],
+  "strata": [
+    { "stratumId": "CLEAR-FIGHT_SELECTION", "clarity": "CLEAR", "family": "FIGHT_SELECTION", "mainCount": 2 },
+    { "stratumId": "CLEAR-POST_CONTACT_DECISION", "clarity": "CLEAR", "family": "POST_CONTACT_DECISION", "mainCount": 2 },
+    { "stratumId": "CLEAR-TRADEABILITY_SPACING", "clarity": "CLEAR", "family": "TRADEABILITY_SPACING", "mainCount": 2 },
+    { "stratumId": "AMBIGUOUS-FIGHT_SELECTION", "clarity": "AMBIGUOUS", "family": "FIGHT_SELECTION", "mainCount": 2 },
+    { "stratumId": "AMBIGUOUS-POST_CONTACT_DECISION", "clarity": "AMBIGUOUS", "family": "POST_CONTACT_DECISION", "mainCount": 1 },
+    { "stratumId": "AMBIGUOUS-TRADEABILITY_SPACING", "clarity": "AMBIGUOUS", "family": "TRADEABILITY_SPACING", "mainCount": 1 }
+  ],
+  "reserveCandidates": [
+    { "caseId": "R-CLEAR-FIGHT_SELECTION-1", "stratumId": "CLEAR-FIGHT_SELECTION", "clarity": "CLEAR", "family": "FIGHT_SELECTION" },
+    { "caseId": "R-CLEAR-POST_CONTACT_DECISION-1", "stratumId": "CLEAR-POST_CONTACT_DECISION", "clarity": "CLEAR", "family": "POST_CONTACT_DECISION" },
+    { "caseId": "R-AMBIGUOUS-FIGHT_SELECTION-1", "stratumId": "AMBIGUOUS-FIGHT_SELECTION", "clarity": "AMBIGUOUS", "family": "FIGHT_SELECTION" }
+  ],
+  "secondExpertSeedHex": "0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef",
+  "goldVerdicts": {
+    "C1": "OPTIMAL",
+    "C2": "ACCEPTABLE",
+    "C3": "SUBOPTIMAL",
+    "C4": "SUBOPTIMAL",
+    "C5": "SUBOPTIMAL",
+    "C6": "SUBOPTIMAL",
+    "A1": "SUBOPTIMAL",
+    "A2": "SUBOPTIMAL",
+    "A3": "SUBOPTIMAL",
+    "A4": "SUBOPTIMAL"
+  },
+  "consentActors": [
+    { "actorId": "consent-adult-1", "kind": "ADULT", "expression": "PARTICIPATE" },
+    { "actorId": "consent-minor-1", "kind": "MINOR", "expression": "PARTICIPATE", "guardianConsent": true, "guardianVerified": true },
+    { "actorId": "consent-refuse-1", "kind": "ADULT", "expression": "DO_NOT_PARTICIPATE" },
+    { "actorId": "consent-ambiguous-1", "kind": "ADULT", "expression": "AMBIGUOUS" }
+  ],
+  "sourceRecords": [
+    { "sourceId": "source-founder-1", "kind": "FOUNDER_OWNED" },
+    { "sourceId": "source-pilot-1", "kind": "CONSENTED_PILOT" },
+    { "sourceId": "source-forbidden-1", "kind": "PUBLIC_SCRAPE" }
+  ],
+  "qualificationCandidates": [
+    { "candidateId": "expert-eligible-1", "relationshipProvenance": "INDEPENDENT_ANALYST", "founderRecommended": false, "evidenceLevel": "SUFFICIENT" },
+    { "candidateId": "expert-insufficient-1", "relationshipProvenance": "TRAINING_PARTNER", "founderRecommended": false, "evidenceLevel": "INSUFFICIENT" },
+    { "candidateId": "expert-founder-only-1", "relationshipProvenance": "COACHING_STAFF", "founderRecommended": true, "evidenceLevel": "NONE" }
+  ],
+  "founderCaseOutcomes": [
+    { "caseId": "C1", "contextSufficiency": "SUFFICIENT", "taxonomy": "PRINCIPLE_1", "directionalAgreement": "AGREE", "unnecessaryCoreFields": 0 },
+    { "caseId": "C2", "contextSufficiency": "SUFFICIENT", "taxonomy": "PRINCIPLE_2", "directionalAgreement": "AGREE", "unnecessaryCoreFields": 0 },
+    { "caseId": "C3", "contextSufficiency": "SUFFICIENT", "taxonomy": "PRINCIPLE_1", "directionalAgreement": "DISAGREE", "unnecessaryCoreFields": 1 },
+    { "caseId": "C4", "contextSufficiency": "INSUFFICIENT_CONTEXT", "taxonomy": "OTHER", "directionalAgreement": "INSUFFICIENT_CONTEXT", "unnecessaryCoreFields": 0 },
+    { "caseId": "C5", "contextSufficiency": "SUFFICIENT", "taxonomy": "PRINCIPLE_3", "directionalAgreement": "AGREE", "unnecessaryCoreFields": 0 },
+    { "caseId": "C6", "contextSufficiency": "SUFFICIENT", "taxonomy": "PRINCIPLE_3", "directionalAgreement": "UNCERTAIN", "unnecessaryCoreFields": 0 },
+    { "caseId": "A1", "contextSufficiency": "SUFFICIENT", "taxonomy": "NEW_PRINCIPLE_NEEDED", "directionalAgreement": "AGREE", "unnecessaryCoreFields": 0 },
+    { "caseId": "A2", "contextSufficiency": "SUFFICIENT", "taxonomy": "PRINCIPLE_2", "directionalAgreement": "AGREE", "unnecessaryCoreFields": 0 },
+    { "caseId": "A3", "contextSufficiency": "SUFFICIENT", "taxonomy": "PRINCIPLE_1", "directionalAgreement": "AGREE", "unnecessaryCoreFields": 0 },
+    { "caseId": "A4", "contextSufficiency": "SUFFICIENT", "taxonomy": "PRINCIPLE_3", "directionalAgreement": "AGREE", "unnecessaryCoreFields": 0 }
+  ],
+  "localTranscription": {
+    "fixtureId": "audio-fixture-1",
+    "pcm16leBase64": "AAAAAAAAAAAAAAAAAAAAAA==",
+    "sampleRateHz": 16000
+  },
+  "actorId": "synthetic-actor-1",
+  "externalEgressDestination": "synthetic-provider-endpoint"
+}
