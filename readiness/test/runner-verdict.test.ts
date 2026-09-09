@@ -3,7 +3,9 @@ import test from "node:test";
 import { MANDATORY_GATE_IDS, getGateCatalog, type GateContext } from "../src/gates/gate-catalog.js";
 import { loadFixtureSet } from "../src/fixtures/registry.js";
 import { computeFrozenHashesForFixture } from "../src/domain/frozen-hash-inputs.js";
-import type { GateResult } from "../src/domain/contracts.js";
+import type { GateResult, GateStatus } from "../src/domain/contracts.js";
+import { runReadiness, classifyExecutionStatus } from "../src/runner/readiness-runner.js";
+import { evaluateCurrentReadiness } from "../src/runner/current-readiness.js";
 
 test("MANDATORY_GATE_IDS is sorted/unique and matches the exact locked Section 13 set", () => {
   const expected = [
@@ -85,4 +87,73 @@ test("on full-ready-v1, every mechanically satisfiable gate PASSes except local-
   const endToEnd = results.find((r) => r.gateId === "end-to-end-synthetic-rehearsal");
   assert.ok(endToEnd);
   assert.equal(endToEnd.status, "PASS");
+});
+
+function stubGates(status: GateStatus | Record<number, GateStatus>): GateResult[] {
+  return MANDATORY_GATE_IDS.map((id, i) => ({
+    gateId: id,
+    mandatory: true,
+    status: typeof status === "string" ? status : (status[i] ?? "PASS"),
+    reasonCodes: [],
+  }));
+}
+
+test("22 PASS gate stubs classify as PASSED + DRY_READY", () => {
+  const result = classifyExecutionStatus(stubGates("PASS"));
+  assert.deepEqual(result, { executionStatus: "PASSED", readinessVerdict: "DRY_READY" });
+});
+
+test("flipping any single mandatory gate to FAIL/UNKNOWN/NOT_EXECUTED flips verdict to BLOCKED", () => {
+  const flips: GateStatus[] = ["FAIL", "UNKNOWN", "NOT_EXECUTED"];
+  for (const status of flips) {
+    for (let i = 0; i < MANDATORY_GATE_IDS.length; i++) {
+      const result = classifyExecutionStatus(stubGates({ [i]: status }));
+      assert.equal(
+        result.readinessVerdict,
+        "BLOCKED",
+        `${status} at index ${i} (${MANDATORY_GATE_IDS[i]}) did not flip verdict to BLOCKED`,
+      );
+    }
+  }
+});
+
+test("D037: an executed defect (FAIL) wins over an unavailable gate (NOT_EXECUTED) when both occur", () => {
+  const result = classifyExecutionStatus(stubGates({ 0: "FAIL", 1: "NOT_EXECUTED" }));
+  assert.equal(result.executionStatus, "FAILED");
+  assert.equal(result.readinessVerdict, "BLOCKED");
+});
+
+test("D037: no demonstrated defect but an unavailable mandatory gate maps to BLOCKED, not FAILED", () => {
+  const result = classifyExecutionStatus(stubGates({ 0: "UNKNOWN" }));
+  assert.equal(result.executionStatus, "BLOCKED");
+  assert.equal(result.readinessVerdict, "BLOCKED");
+});
+
+test("runReadiness against full-ready-v1 with normal wiring produces a valid completed BLOCKED run", async () => {
+  const run = await runReadiness({ fixtureId: "full-ready-v1" });
+  assert.equal(run.state, "COMPLETED");
+  assert.equal(run.gates.length, MANDATORY_GATE_IDS.length);
+  assert.equal(run.evidence.evaluationMode, "SELF_BENCHMARK");
+  assert.equal(run.evidence.dataOrigin, "SIMULATED");
+  assert.equal(run.evidence.executionStatus, "BLOCKED");
+  assert.equal(run.readinessVerdict, "BLOCKED");
+  const localTranscription = run.gates.find((g) => g.gateId === "local-transcription-port");
+  assert.ok(localTranscription);
+  assert.equal(localTranscription.status, "NOT_EXECUTED");
+});
+
+test("evaluateCurrentReadiness detects staleness without mutating the historical run", async () => {
+  const run = await runReadiness({ fixtureId: "full-ready-v1" });
+  const originalVerdict = run.readinessVerdict;
+  const staleHashes = { ...run.frozenHashes!, protocol: "0".repeat(64) };
+  const current = evaluateCurrentReadiness(run, staleHashes);
+  assert.equal(current.readinessVerdict, "BLOCKED");
+  assert.equal(current.executionStatus, "BLOCKED");
+  assert.deepEqual(current.reasonCodes, ["STALE_RUN"]);
+  // the historical run itself is untouched.
+  assert.equal(run.readinessVerdict, originalVerdict);
+
+  const fresh = evaluateCurrentReadiness(run, run.frozenHashes!);
+  assert.equal(fresh.readinessVerdict, run.readinessVerdict);
+  assert.equal(fresh.executionStatus, run.evidence.executionStatus);
 });
