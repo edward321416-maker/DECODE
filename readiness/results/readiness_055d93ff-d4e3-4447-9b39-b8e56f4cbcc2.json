@@ -1,0 +1,162 @@
+{
+  "schemaVersion": "1.0.0",
+  "runId": "readiness_055d93ff-d4e3-4447-9b39-b8e56f4cbcc2",
+  "startedAt": "2026-09-09T03:44:39.980Z",
+  "completedAt": "2026-09-09T03:44:39.990Z",
+  "gates": [
+    {
+      "gateId": "simulated-only-input",
+      "mandatory": true,
+      "status": "PASS",
+      "reasonCodes": []
+    },
+    {
+      "gateId": "evidence-anti-promotion",
+      "mandatory": true,
+      "status": "PASS",
+      "reasonCodes": []
+    },
+    {
+      "gateId": "consent-guardian-assent-rehearsal",
+      "mandatory": true,
+      "status": "PASS",
+      "reasonCodes": []
+    },
+    {
+      "gateId": "source-rights-rehearsal",
+      "mandatory": true,
+      "status": "PASS",
+      "reasonCodes": []
+    },
+    {
+      "gateId": "second-expert-qualification-rehearsal",
+      "mandatory": true,
+      "status": "PASS",
+      "reasonCodes": []
+    },
+    {
+      "gateId": "main10-composition-freeze",
+      "mandatory": true,
+      "status": "PASS",
+      "reasonCodes": []
+    },
+    {
+      "gateId": "reserve3-allocation-freeze",
+      "mandatory": true,
+      "status": "PASS",
+      "reasonCodes": []
+    },
+    {
+      "gateId": "reserve-replacement",
+      "mandatory": true,
+      "status": "PASS",
+      "reasonCodes": []
+    },
+    {
+      "gateId": "second-expert-planned-subset",
+      "mandatory": true,
+      "status": "PASS",
+      "reasonCodes": []
+    },
+    {
+      "gateId": "freeze-immutability",
+      "mandatory": true,
+      "status": "PASS",
+      "reasonCodes": []
+    },
+    {
+      "gateId": "measurement-preregistration-freeze",
+      "mandatory": true,
+      "status": "PASS",
+      "reasonCodes": []
+    },
+    {
+      "gateId": "software-schema-protocol-fixture-gate-hashing",
+      "mandatory": true,
+      "status": "PASS",
+      "reasonCodes": []
+    },
+    {
+      "gateId": "timing-pause-interruption-contract",
+      "mandatory": true,
+      "status": "PASS",
+      "reasonCodes": []
+    },
+    {
+      "gateId": "withdrawal-future-use-invalidation",
+      "mandatory": true,
+      "status": "PASS",
+      "reasonCodes": []
+    },
+    {
+      "gateId": "retention-deletion-receipts",
+      "mandatory": true,
+      "status": "PASS",
+      "reasonCodes": []
+    },
+    {
+      "gateId": "foundation-policy-rights-integration",
+      "mandatory": true,
+      "status": "PASS",
+      "reasonCodes": []
+    },
+    {
+      "gateId": "local-transcription-port",
+      "mandatory": true,
+      "status": "NOT_EXECUTED",
+      "reasonCodes": [
+        "LOCAL_TRANSCRIPTION_UNAVAILABLE"
+      ]
+    },
+    {
+      "gateId": "external-egress-default-block",
+      "mandatory": true,
+      "status": "PASS",
+      "reasonCodes": [
+        "EXTERNAL_EGRESS_BLOCKED"
+      ]
+    },
+    {
+      "gateId": "canonical-provenance-anti-promotion",
+      "mandatory": true,
+      "status": "PASS",
+      "reasonCodes": []
+    },
+    {
+      "gateId": "metric-computation-contract",
+      "mandatory": true,
+      "status": "PASS",
+      "reasonCodes": []
+    },
+    {
+      "gateId": "stale-run-detection",
+      "mandatory": true,
+      "status": "PASS",
+      "reasonCodes": []
+    },
+    {
+      "gateId": "end-to-end-synthetic-rehearsal",
+      "mandatory": true,
+      "status": "PASS",
+      "reasonCodes": []
+    }
+  ],
+  "readinessVerdict": "BLOCKED",
+  "evidence": {
+    "evaluationMode": "SELF_BENCHMARK",
+    "dataOrigin": "SIMULATED",
+    "executionStatus": "BLOCKED"
+  },
+  "frozenHashes": {
+    "readinessSource": "84988e485155d991505804bd9006c0f4f9c986c9719a363d769b671d8fb1b554",
+    "foundationSource": "fef51f84cb35c850d6442ad8d5fef75aeacce2045461b55761f95229c3379b13",
+    "protocol": "08c94b3020ca42c7e8dc7f1a7b2d537e11ef0eea511323da658519afadbff85b",
+    "schema": "92521fc3cbd964bdc9f584a991b89fddaa5754ed1cc96d6d42445338669c1305",
+    "fixtureSet": "956da4d951205b32fa1a74574c366916a76307842325b83a898f1cff427a59b3",
+    "gateDefinition": "d01231302b1b1cd674502bc50ed3f9f5aaba88d0d30dadd2a7b7316cea6ff8e4"
+  },
+  "staleness": {
+    "stale": false,
+    "reasonCodes": []
+  }
+}
