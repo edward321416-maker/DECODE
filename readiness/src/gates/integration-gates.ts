@@ -1,10 +1,16 @@
 import {
   InMemoryPolicyRightsGate,
+  InMemoryRightsStore,
+  TestClock,
+  validateEvidenceRecord,
+  EvidenceRecordError,
   type ActorVerifier,
   type AuthorizationRequest,
   type PolicySnapshot,
   type ProtectedAction,
+  type EvidenceRecord,
 } from "../foundation-api.js";
+import type { GateDefinition } from "./gate-catalog-types.js";
 
 export const REHEARSED_PROTECTED_ACTIONS: readonly ProtectedAction[] = [
   "EVIDENCE_INGESTION",
@@ -82,3 +88,154 @@ export async function rehearseExternalEgressDefaultBlock(
     return { status: "PASS", reasonCodes: ["EXTERNAL_EGRESS_BLOCKED"] };
   }
 }
+
+function buildRehearsalHarness(context: { fixture: { actorId: string; externalEgressDestination: string } }) {
+  const clock = new TestClock(new Date("2026-01-01T00:00:00.000Z"));
+  const rightsStore = new InMemoryRightsStore();
+  rightsStore.set(context.fixture.actorId, { eligibility: "EXECUTABLE", revision: 1 });
+  const gate = new InMemoryPolicyRightsGate(
+    buildSyntheticActorVerifier(context.fixture.actorId),
+    rightsStore,
+    buildSyntheticPolicySnapshot(context.fixture.externalEgressDestination),
+    clock,
+  );
+  return { clock, rightsStore, gate };
+}
+
+export const foundationPolicyRightsIntegrationGate: GateDefinition = {
+  id: "foundation-policy-rights-integration",
+  mandatory: true,
+  async execute(context) {
+    const { gate } = buildRehearsalHarness(context);
+    for (const action of REHEARSED_PROTECTED_ACTIONS) {
+      const request = buildAuthorizationRequest(context.fixture.actorId, action, context.fixture.externalEgressDestination);
+      const outcome = await rehearseProtectedAction(gate, request);
+      if (outcome.status !== "PASS") {
+        return {
+          gateId: "foundation-policy-rights-integration",
+          mandatory: true,
+          status: "FAIL",
+          reasonCodes: ["PROTECTED_ACTION_REHEARSAL_FAILED"],
+          detail: action,
+        };
+      }
+    }
+    // Negative path: an unauthorized actor must be denied.
+    const { rightsStore, clock } = buildRehearsalHarness(context);
+    const unauthorizedGate = new InMemoryPolicyRightsGate(
+      buildSyntheticActorVerifier("someone-else"),
+      rightsStore,
+      buildSyntheticPolicySnapshot(context.fixture.externalEgressDestination),
+      clock,
+    );
+    try {
+      await unauthorizedGate.authorize(
+        buildAuthorizationRequest(context.fixture.actorId, "EVIDENCE_INGESTION", undefined),
+      );
+      return {
+        gateId: "foundation-policy-rights-integration",
+        mandatory: true,
+        status: "FAIL",
+        reasonCodes: ["UNAUTHORIZED_ACTOR_NOT_DENIED"],
+      };
+    } catch {
+      return { gateId: "foundation-policy-rights-integration", mandatory: true, status: "PASS", reasonCodes: [] };
+    }
+  },
+};
+
+export const localTranscriptionPortGate: GateDefinition = {
+  id: "local-transcription-port",
+  mandatory: true,
+  async execute(context) {
+    // Structural: the CLI's normal wiring never configures a qualifying
+    // local adapter (C11 LocalTranscription choice). A test-only port
+    // injected into GateContext.localTranscription for isolated
+    // port-contract unit tests is never treated as satisfying this gate.
+    if (context.hasQualifyingLocalAdapter === true) {
+      return {
+        gateId: "local-transcription-port",
+        mandatory: true,
+        status: "FAIL",
+        reasonCodes: ["UNEXPECTED_QUALIFYING_ADAPTER_CLAIM"],
+      };
+    }
+    return {
+      gateId: "local-transcription-port",
+      mandatory: true,
+      status: "NOT_EXECUTED",
+      reasonCodes: ["LOCAL_TRANSCRIPTION_UNAVAILABLE"],
+    };
+  },
+};
+
+export const externalEgressDefaultBlockGate: GateDefinition = {
+  id: "external-egress-default-block",
+  mandatory: true,
+  async execute(context) {
+    const { gate } = buildRehearsalHarness(context);
+    const blocked = await rehearseExternalEgressDefaultBlock(gate, context.fixture.actorId);
+    if (blocked.status !== "PASS") {
+      return {
+        gateId: "external-egress-default-block",
+        mandatory: true,
+        status: "FAIL",
+        reasonCodes: ["DEFAULT_BLOCK_NOT_ENFORCED"],
+      };
+    }
+    const { gate: satisfiedGate } = buildRehearsalHarness(context);
+    const positive = await rehearseProtectedAction(
+      satisfiedGate,
+      buildAuthorizationRequest(context.fixture.actorId, "EXTERNAL_EGRESS", context.fixture.externalEgressDestination),
+    );
+    if (positive.status !== "PASS") {
+      return {
+        gateId: "external-egress-default-block",
+        mandatory: true,
+        status: "FAIL",
+        reasonCodes: ["SATISFIED_PERMIT_CHAIN_REJECTED"],
+      };
+    }
+    return {
+      gateId: "external-egress-default-block",
+      mandatory: true,
+      status: "PASS",
+      reasonCodes: ["EXTERNAL_EGRESS_BLOCKED"],
+    };
+  },
+};
+
+export const canonicalProvenanceAntiPromotionGate: GateDefinition = {
+  id: "canonical-provenance-anti-promotion",
+  mandatory: true,
+  async execute() {
+    const validRecord: EvidenceRecord = {
+      evaluationMode: "SELF_BENCHMARK",
+      dataOrigin: "SIMULATED",
+      executionStatus: "NOT_TESTED",
+    };
+    try {
+      validateEvidenceRecord(validRecord);
+    } catch {
+      return {
+        gateId: "canonical-provenance-anti-promotion",
+        mandatory: true,
+        status: "FAIL",
+        reasonCodes: ["CANONICAL_EVIDENCE_REJECTED"],
+      };
+    }
+    const forbiddenRecord = { ...validRecord, evaluationMode: "ACTUAL_TEST" } as EvidenceRecord;
+    try {
+      validateEvidenceRecord(forbiddenRecord);
+      return {
+        gateId: "canonical-provenance-anti-promotion",
+        mandatory: true,
+        status: "FAIL",
+        reasonCodes: ["ACTUAL_TEST_PROMOTION_ALLOWED"],
+      };
+    } catch (err) {
+      if (!(err instanceof EvidenceRecordError)) throw err;
+      return { gateId: "canonical-provenance-anti-promotion", mandatory: true, status: "PASS", reasonCodes: [] };
+    }
+  },
+};
