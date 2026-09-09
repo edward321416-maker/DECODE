@@ -1,4 +1,5 @@
 import type { SourceRecordFixture, SyntheticSourceKind } from "../fixtures/contracts.js";
+import { REHEARSAL_ARTIFACT, type RehearsalArtifact } from "./artifact.js";
 
 const ALLOWED_KINDS: readonly SyntheticSourceKind[] = [
   "FOUNDER_OWNED",
@@ -9,15 +10,16 @@ const ALLOWED_KINDS: readonly SyntheticSourceKind[] = [
 export interface SourceRightsResult {
   accepted: boolean;
   reasonCodes: string[];
+  artifact: RehearsalArtifact;
 }
 
 /** Protocol §3-4: only the explicitly allowed source pool is accepted;
  * arbitrary public scraping and unconsented Pilot sources are rejected. */
 export function rehearseSourceRights(record: SourceRecordFixture): SourceRightsResult {
   if (ALLOWED_KINDS.includes(record.kind)) {
-    return { accepted: true, reasonCodes: [] };
+    return { accepted: true, reasonCodes: [], artifact: REHEARSAL_ARTIFACT };
   }
-  return { accepted: false, reasonCodes: ["FORBIDDEN_SOURCE"] };
+  return { accepted: false, reasonCodes: ["FORBIDDEN_SOURCE"], artifact: REHEARSAL_ARTIFACT };
 }
 
 /** Enumerates the allowed subset of a synthetic source pool. No rule here

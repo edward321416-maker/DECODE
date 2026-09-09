@@ -44,6 +44,26 @@ export interface ReserveCandidateFixture {
 
 export type ConsentExpression = "PARTICIPATE" | "DO_NOT_PARTICIPATE" | "AMBIGUOUS";
 
+/** Protocol §23 Pilot Operator checklist categories, mirrored here to
+ * avoid a fixtures<->rehearsal import cycle; kept in exact sync with
+ * PILOT_OPERATOR_CHECKLIST_ITEMS in rehearsal/pilot-operator-checklist.ts. */
+export const PILOT_OPERATOR_CHECKLIST_ITEM_VALUES = [
+  "AGE_STATUS",
+  "VOD_SOURCE_RIGHT",
+  "ACTUAL_TEST_PURPOSE",
+  "RETENTION_SCOPE",
+  "DATASET_RETENTION_CHOICE",
+  "EVALUATION_REUSE_CHOICE",
+  "MODEL_TRAINING_CHOICE",
+  "WITHDRAWAL_NOTICE",
+  "GUARDIAN_CONSENT",
+  "PARTICIPANT_ASSENT",
+  "GUARDIAN_VERIFICATION",
+  "UNRESOLVED_LEGAL_PRIVACY_BLOCKER",
+] as const;
+
+export type PilotOperatorChecklistItemName = (typeof PILOT_OPERATOR_CHECKLIST_ITEM_VALUES)[number];
+
 export interface ConsentActorFixture {
   actorId: string;
   kind: "ADULT" | "MINOR";
@@ -132,6 +152,7 @@ export interface SyntheticFixtureSet {
   qualificationCandidates: QualificationCandidateFixture[];
   founderCaseOutcomes: FounderCaseOutcomeFixture[];
   secondExpertPairs: SecondExpertPairFixture[];
+  pilotOperatorChecklistCompletedItems: PilotOperatorChecklistItemName[];
   localTranscription: LocalTranscriptionFixtureData | null;
   actorId: string;
   externalEgressDestination: string;

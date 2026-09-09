@@ -1,10 +1,12 @@
 import type { ConsentActorFixture } from "../fixtures/contracts.js";
+import { REHEARSAL_ARTIFACT, type RehearsalArtifact } from "./artifact.js";
 
 export type ConsentDecision = "ACCEPTED" | "REJECTED" | "PAUSED";
 
 export interface ConsentRehearsalResult {
   decision: ConsentDecision;
   reasonCodes: string[];
+  artifact: RehearsalArtifact;
 }
 
 /**
@@ -14,18 +16,18 @@ export interface ConsentRehearsalResult {
  */
 export function rehearseConsent(actor: ConsentActorFixture): ConsentRehearsalResult {
   if (actor.expression === "DO_NOT_PARTICIPATE") {
-    return { decision: "REJECTED", reasonCodes: ["PARTICIPANT_REFUSED"] };
+    return { decision: "REJECTED", reasonCodes: ["PARTICIPANT_REFUSED"], artifact: REHEARSAL_ARTIFACT };
   }
   if (actor.expression === "AMBIGUOUS") {
-    return { decision: "PAUSED", reasonCodes: ["AMBIGUOUS_EXPRESSION_PAUSED"] };
+    return { decision: "PAUSED", reasonCodes: ["AMBIGUOUS_EXPRESSION_PAUSED"], artifact: REHEARSAL_ARTIFACT };
   }
   if (actor.kind === "MINOR") {
     if (actor.guardianConsent === true && actor.guardianVerified === true) {
-      return { decision: "ACCEPTED", reasonCodes: [] };
+      return { decision: "ACCEPTED", reasonCodes: [], artifact: REHEARSAL_ARTIFACT };
     }
-    return { decision: "REJECTED", reasonCodes: ["GUARDIAN_CONSENT_INCOMPLETE"] };
+    return { decision: "REJECTED", reasonCodes: ["GUARDIAN_CONSENT_INCOMPLETE"], artifact: REHEARSAL_ARTIFACT };
   }
-  return { decision: "ACCEPTED", reasonCodes: [] };
+  return { decision: "ACCEPTED", reasonCodes: [], artifact: REHEARSAL_ARTIFACT };
 }
 
 export type PausedResolution = "CONTINUE" | "WITHDRAW";
@@ -34,7 +36,7 @@ export type PausedResolution = "CONTINUE" | "WITHDRAW";
  * resolution is applied; WITHDRAW always stops future affected processing. */
 export function resolvePausedConsent(resolution: PausedResolution): ConsentRehearsalResult {
   if (resolution === "WITHDRAW") {
-    return { decision: "REJECTED", reasonCodes: ["WITHDRAWN"] };
+    return { decision: "REJECTED", reasonCodes: ["WITHDRAWN"], artifact: REHEARSAL_ARTIFACT };
   }
-  return { decision: "ACCEPTED", reasonCodes: ["RESOLVED_CONTINUE"] };
+  return { decision: "ACCEPTED", reasonCodes: ["RESOLVED_CONTINUE"], artifact: REHEARSAL_ARTIFACT };
 }

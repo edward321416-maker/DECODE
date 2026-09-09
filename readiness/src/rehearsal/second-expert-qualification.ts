@@ -1,10 +1,12 @@
 import { assertValidRelationshipProvenance, type QualificationCandidateFixture } from "../fixtures/contracts.js";
+import { REHEARSAL_ARTIFACT, type RehearsalArtifact } from "./artifact.js";
 
 export type QualificationVerdict = "ELIGIBLE" | "NOT_ELIGIBLE" | "INSUFFICIENT_EVIDENCE";
 
 export interface QualificationResult {
   verdict: QualificationVerdict;
   reasonCodes: string[];
+  artifact: RehearsalArtifact;
 }
 
 /**
@@ -15,7 +17,7 @@ export interface QualificationResult {
 export function qualifySecondExpertCandidate(candidate: QualificationCandidateFixture): QualificationResult {
   assertValidRelationshipProvenance(candidate.relationshipProvenance);
   if (candidate.disqualified) {
-    return { verdict: "NOT_ELIGIBLE", reasonCodes: ["DISQUALIFIED"] };
+    return { verdict: "NOT_ELIGIBLE", reasonCodes: ["DISQUALIFIED"], artifact: REHEARSAL_ARTIFACT };
   }
   if (candidate.evidenceLevel === "NONE") {
     return {
@@ -23,10 +25,11 @@ export function qualifySecondExpertCandidate(candidate: QualificationCandidateFi
       reasonCodes: candidate.founderRecommended
         ? ["FOUNDER_RECOMMENDATION_INSUFFICIENT_ALONE"]
         : ["NO_EVIDENCE"],
+      artifact: REHEARSAL_ARTIFACT,
     };
   }
   if (candidate.evidenceLevel === "INSUFFICIENT") {
-    return { verdict: "INSUFFICIENT_EVIDENCE", reasonCodes: ["EVIDENCE_INSUFFICIENT"] };
+    return { verdict: "INSUFFICIENT_EVIDENCE", reasonCodes: ["EVIDENCE_INSUFFICIENT"], artifact: REHEARSAL_ARTIFACT };
   }
-  return { verdict: "ELIGIBLE", reasonCodes: [] };
+  return { verdict: "ELIGIBLE", reasonCodes: [], artifact: REHEARSAL_ARTIFACT };
 }

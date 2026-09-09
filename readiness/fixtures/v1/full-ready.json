@@ -291,5 +291,19 @@
       "founderVerdict": "OPTIMAL",
       "secondExpertVerdict": "ACCEPTABLE"
     }
+  ],
+  "pilotOperatorChecklistCompletedItems": [
+    "AGE_STATUS",
+    "VOD_SOURCE_RIGHT",
+    "ACTUAL_TEST_PURPOSE",
+    "RETENTION_SCOPE",
+    "DATASET_RETENTION_CHOICE",
+    "EVALUATION_REUSE_CHOICE",
+    "MODEL_TRAINING_CHOICE",
+    "WITHDRAWAL_NOTICE",
+    "GUARDIAN_CONSENT",
+    "PARTICIPANT_ASSENT",
+    "GUARDIAN_VERIFICATION",
+    "UNRESOLVED_LEGAL_PRIVACY_BLOCKER"
   ]
 }

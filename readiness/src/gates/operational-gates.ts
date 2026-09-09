@@ -1,5 +1,6 @@
 import type { GateDefinition } from "./gate-catalog-types.js";
 import { rehearseConsent, resolvePausedConsent } from "../rehearsal/consent.js";
+import { rehearsePilotOperatorChecklist } from "../rehearsal/pilot-operator-checklist.js";
 import { rehearseSourceRights } from "../rehearsal/source-rights.js";
 import { qualifySecondExpertCandidate } from "../rehearsal/second-expert-qualification.js";
 import {
@@ -46,6 +47,20 @@ export const consentGuardianAssentRehearsalGate: GateDefinition = {
         mandatory: true,
         status: "FAIL",
         reasonCodes: [...new Set(invariantViolations)],
+      };
+    }
+    // Protocol §23: Pilot Operator readiness checklist rehearsal — a
+    // missing required item blocks this gate; there is no override.
+    const checklist = rehearsePilotOperatorChecklist({
+      completedItems: context.fixture.pilotOperatorChecklistCompletedItems,
+    });
+    if (checklist.status !== "READY") {
+      return {
+        gateId: "consent-guardian-assent-rehearsal",
+        mandatory: true,
+        status: "FAIL",
+        reasonCodes: checklist.reasonCodes,
+        detail: `missing: ${checklist.missingItems.join(", ")}`,
       };
     }
     return { gateId: "consent-guardian-assent-rehearsal", mandatory: true, status: "PASS", reasonCodes: [] };
