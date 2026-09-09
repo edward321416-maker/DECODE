@@ -343,10 +343,10 @@ export function collectTeamOsSemanticChecks(texts) {
       runArtifact.includes("readinessVerdict: run.readinessVerdict,") &&
       runArtifact.includes("evidence: run.evidence,"));
 
-    const provenanceSurface = [
-      get("readiness/src/index.ts"), get("readiness/src/domain/contracts.ts"), get("readiness/src/domain/run-id.ts"),
-    ].join("\n");
+    const readinessProductionFiles = [...texts.keys()].filter((f) => f.startsWith("readiness/src/"));
+    const provenanceSurface = readinessProductionFiles.map((f) => get(f)).join("\n");
     chk("readiness-no-forbidden-provenance-literal",
+      readinessProductionFiles.length > 0 &&
       !provenanceSurface.includes("\"REAL\"") && !provenanceSurface.includes("\"ACTUAL_TEST\""));
   }
 
