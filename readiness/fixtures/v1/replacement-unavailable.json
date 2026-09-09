@@ -171,25 +171,25 @@
   "qualificationCandidates": [
     {
       "candidateId": "expert-eligible-1",
-      "relationshipProvenance": "INDEPENDENT_ANALYST",
+      "relationshipProvenance": "NONE",
       "founderRecommended": false,
       "evidenceLevel": "SUFFICIENT"
     },
     {
       "candidateId": "expert-insufficient-1",
-      "relationshipProvenance": "TRAINING_PARTNER",
+      "relationshipProvenance": "CURRENT_TEAMMATE",
       "founderRecommended": false,
       "evidenceLevel": "INSUFFICIENT"
     },
     {
       "candidateId": "expert-founder-only-1",
-      "relationshipProvenance": "COACHING_STAFF",
+      "relationshipProvenance": "CURRENT_COACHING_RELATION",
       "founderRecommended": true,
       "evidenceLevel": "NONE"
     },
     {
       "candidateId": "expert-disqualified-1",
-      "relationshipProvenance": "FORMER_COMPETITOR",
+      "relationshipProvenance": "OTHER",
       "founderRecommended": false,
       "evidenceLevel": "SUFFICIENT",
       "disqualified": true

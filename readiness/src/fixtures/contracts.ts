@@ -48,13 +48,23 @@ export interface SourceRecordFixture {
   kind: SyntheticSourceKind;
 }
 
-export type RelationshipProvenance =
-  | "TRAINING_PARTNER"
-  | "COACHING_STAFF"
-  | "SANCTIONING_OFFICIAL"
-  | "INDEPENDENT_ANALYST"
-  | "FORMER_COMPETITOR"
-  | "OTHER_QUALIFIED";
+/** Protocol §8's exact canonical relationship-provenance enum — six values only. */
+export const RELATIONSHIP_PROVENANCE_VALUES = [
+  "NONE",
+  "FORMER_TEAMMATE",
+  "CURRENT_TEAMMATE",
+  "FORMER_COACHING_RELATION",
+  "CURRENT_COACHING_RELATION",
+  "OTHER",
+] as const;
+
+export type RelationshipProvenance = (typeof RELATIONSHIP_PROVENANCE_VALUES)[number];
+
+export function assertValidRelationshipProvenance(value: string): asserts value is RelationshipProvenance {
+  if (!(RELATIONSHIP_PROVENANCE_VALUES as readonly string[]).includes(value)) {
+    throw new FixtureValidationError(`invalid RelationshipProvenance: ${value}`);
+  }
+}
 
 export interface QualificationCandidateFixture {
   candidateId: string;

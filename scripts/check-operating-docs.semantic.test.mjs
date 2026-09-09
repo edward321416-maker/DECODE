@@ -373,6 +373,9 @@ const MUTATIONS = [
   { name: "48. readiness domain source introduces an assignable REAL/ACTUAL_TEST provenance literal", file: "readiness/src/domain/contracts.ts",
     mutate: (c) => c + "\nexport const LEAK = \"ACTUAL_TEST\";\n",
     expectId: "readiness-no-forbidden-provenance-literal" },
+  { name: "49. relationship provenance enum drifts from the exact Protocol §8 canonical six values", file: "readiness/src/fixtures/contracts.ts",
+    mutate: (c) => c.replace("  \"OTHER\",\n] as const;", "  \"OTHER\",\n  \"INDEPENDENT_ANALYST\",\n] as const;"),
+    expectId: "readiness-relationship-provenance-exact-enum" },
 ];
 
 for (const scenario of MUTATIONS) {

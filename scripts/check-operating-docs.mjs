@@ -343,6 +343,13 @@ export function collectTeamOsSemanticChecks(texts) {
       runArtifact.includes("readinessVerdict: run.readinessVerdict,") &&
       runArtifact.includes("evidence: run.evidence,"));
 
+    const fixturesContracts = get("readiness/src/fixtures/contracts.ts");
+    const relBlock = fixturesContracts.match(/RELATIONSHIP_PROVENANCE_VALUES = \[([\s\S]*?)\] as const;/)?.[1] || "";
+    const relValues = [...relBlock.matchAll(/"([A-Z_]+)"/g)].map((m) => m[1]);
+    chk("readiness-relationship-provenance-exact-enum", same(relValues, [
+      "NONE", "FORMER_TEAMMATE", "CURRENT_TEAMMATE", "FORMER_COACHING_RELATION", "CURRENT_COACHING_RELATION", "OTHER",
+    ]));
+
     const readinessProductionFiles = [...texts.keys()].filter((f) => f.startsWith("readiness/src/"));
     const provenanceSurface = readinessProductionFiles.map((f) => get(f)).join("\n");
     chk("readiness-no-forbidden-provenance-literal",

@@ -1,4 +1,4 @@
-import type { QualificationCandidateFixture } from "../fixtures/contracts.js";
+import { assertValidRelationshipProvenance, type QualificationCandidateFixture } from "../fixtures/contracts.js";
 
 export type QualificationVerdict = "ELIGIBLE" | "NOT_ELIGIBLE" | "INSUFFICIENT_EVIDENCE";
 
@@ -13,6 +13,7 @@ export interface QualificationResult {
  * evidenceLevel and any explicit disqualification.
  */
 export function qualifySecondExpertCandidate(candidate: QualificationCandidateFixture): QualificationResult {
+  assertValidRelationshipProvenance(candidate.relationshipProvenance);
   if (candidate.disqualified) {
     return { verdict: "NOT_ELIGIBLE", reasonCodes: ["DISQUALIFIED"] };
   }
